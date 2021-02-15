@@ -12,6 +12,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using View.Windows;
+using View.Wndows;
 
 namespace View.UserControls
 {
@@ -23,6 +25,30 @@ namespace View.UserControls
         public MenuPane()
         {
             InitializeComponent();
+        }
+
+        
+        private void BtnCloseMenu_Click(object sender, RoutedEventArgs e)
+        {
+            this.Visibility = Visibility.Collapsed;
+        }
+
+        private void TxtCreateAccountMenu_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            CreateAccount createAccount = new CreateAccount();
+            createAccount.ShowDialog();
+        }
+
+        private void TxtCreateProjectMenu_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            CreateProject createProject = new CreateProject();
+            createProject.ShowDialog();
+        }
+
+        private void TxtShareProjectMenu_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            ShareProject shareProject = new ShareProject();
+            shareProject.ShowDialog();
         }
     }
 }

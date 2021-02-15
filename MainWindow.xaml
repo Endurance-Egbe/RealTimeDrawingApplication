@@ -4,8 +4,9 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:View"
+        xmlns:local1="clr-namespace:View.UserControls"
         mc:Ignorable="d"
-        Title="Real Time Drawing Application" MinHeight="450" MinWidth="800" >
+        Title="Real Time Drawing Application" MinHeight="450" MinWidth="800" WindowStartupLocation="CenterScreen">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="auto"/>
@@ -18,10 +19,10 @@
         </Grid.RowDefinitions> 
         <StackPanel Grid.RowSpan="2" Width="50" Background="#FF454B84">
             <StackPanel Margin="5,5">
-                <Button Background="Transparent" BorderBrush="Transparent" >
+                <Button x:Name="Menubtn" Background="Transparent" BorderBrush="Transparent" Click="Menubtn_Click" >
                     <Path Fill="Black" Data="M3,15H21V13H3V15M3,19H21V17H3V19M3,
                   11H21V9H3V11M3,5V7H21V5H3Z" 
-                  Height="30" Width="30" Stretch="Fill"/>
+                  Height="30" Width="30" Stretch="Fill" />
                 </Button>
                 <Path Fill="#787878" Data="M19,13H5V11H19V13Z" Width="40" Height="0.8" Stretch="Fill"/>
                 
@@ -94,10 +95,25 @@
         </StackPanel>
         <StackPanel Grid.Row="1" Grid.Column="2" Width="200"
                     Background="#FF454B84">
+            <Button Background="Transparent" DockPanel.Dock="Left" VerticalAlignment="Top"
+                
+                BorderBrush="Transparent" 
+                        HorizontalAlignment="Center" HorizontalContentAlignment="Stretch">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                    <TextBlock Text="Property Window" Foreground="WhiteSmoke"
+                               FontSize="15"/>
+                    <Path Fill="WhiteSmoke" Data="M7,10L12,15L17,10H7Z" />
+                </StackPanel>
 
+            </Button>
+                <local1:ShareUserControl Visibility="Collapsed" x:Name="ShareUserControl"/>
+           
         </StackPanel>
         <Canvas Grid.Row="1" Grid.Column="1" Background="WhiteSmoke" >
 
         </Canvas>
+        <local1:MenuPane Grid.RowSpan="2" x:Name="MenuPaneUc"
+                         Visibility="Collapsed" />
+        
     </Grid>
 </Window>

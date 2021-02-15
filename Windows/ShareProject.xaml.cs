@@ -10,26 +10,18 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace View
+namespace View.Windows
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    /// Interaction logic for ShareProject.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class ShareProject : Window
     {
-        public MainWindow()
+        public ShareProject()
         {
             InitializeComponent();
         }
-
-        private void Menubtn_Click(object sender, RoutedEventArgs e)
-        {
-            MenuPaneUc.Visibility = Visibility.Visible;
-        }
-
-       
     }
 }

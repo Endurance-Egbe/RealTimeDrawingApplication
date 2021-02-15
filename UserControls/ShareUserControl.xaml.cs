@@ -13,23 +13,16 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace View
+namespace View.UserControls
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    /// Interaction logic for ShareUserControl.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class ShareUserControl : UserControl
     {
-        public MainWindow()
+        public ShareUserControl()
         {
             InitializeComponent();
         }
-
-        private void Menubtn_Click(object sender, RoutedEventArgs e)
-        {
-            MenuPaneUc.Visibility = Visibility.Visible;
-        }
-
-       
     }
 }

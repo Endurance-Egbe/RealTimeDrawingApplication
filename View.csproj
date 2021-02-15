@@ -58,6 +58,18 @@
     <Compile Include="UserControls\MenuPane.xaml.cs">
       <DependentUpon>MenuPane.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\ShareUserControl.xaml.cs">
+      <DependentUpon>ShareUserControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\CreateAccount.xaml.cs">
+      <DependentUpon>CreateAccount.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\CreateProject.xaml.cs">
+      <DependentUpon>CreateProject.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\ShareProject.xaml.cs">
+      <DependentUpon>ShareProject.xaml</DependentUpon>
+    </Compile>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -71,6 +83,22 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="UserControls\MenuPane.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\ShareUserControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\CreateAccount.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\CreateProject.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\ShareProject.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
