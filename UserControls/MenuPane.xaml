@@ -1,0 +1,30 @@
+﻿<UserControl x:Class="View.UserControls.MenuPane"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:View.UserControls"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="200" Background="#FF454B84">
+    <DockPanel>
+        <StackPanel DockPanel.Dock="Top" Margin="10,20">
+            <TextBlock  Text="Create Account" TextAlignment="Left" FontSize="15" Name="txtCreateAccountMenu" />
+            <TextBlock  Text="Create Project" TextAlignment="Left" FontSize="15" Name="txtCreateProjectMenu" />
+            <TextBlock  Text="Share Project                  &gt;" TextAlignment="Left" FontSize="15" Name="txtShareProjectMenu"/>
+            <TextBlock  Text="Open Project                  &gt;" TextAlignment="Left" FontSize="15" Name="txtOpenProjectMenu"/>
+            <TextBlock  Text="Save Project" TextAlignment="Left" FontSize="15" Name="txtSaveProjectMenu"/>
+            <TextBlock  Text="Delete Project" TextAlignment="Left" FontSize="15" Name="txtDeleteProjectMenu"/>
+            <TextBlock  Text="Export                            &gt;" TextAlignment="Left" FontSize="15" Name="txtExportMenu"/>
+            <TextBlock  Text="Import                            &gt;" TextAlignment="Left" FontSize="15" Name="txtImportMenu"/>
+        </StackPanel>
+
+        <DockPanel DockPanel.Dock="Bottom" VerticalAlignment="Bottom">
+            <TextBlock  Text="Close" TextAlignment="Left" VerticalAlignment="Bottom" 
+                    FontSize="15" Foreground="Red" Name="txtCloseMenu"
+                    DockPanel.Dock="Bottom"/>
+        </DockPanel>
+    </DockPanel>
+
+   
+    
+</UserControl>
