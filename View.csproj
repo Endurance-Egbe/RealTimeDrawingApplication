@@ -58,6 +58,9 @@
     <Compile Include="UserControls\MenuPane.xaml.cs">
       <DependentUpon>MenuPane.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\PropertyWindow.xaml.cs">
+      <DependentUpon>PropertyWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\ShareUserControl.xaml.cs">
       <DependentUpon>ShareUserControl.xaml</DependentUpon>
     </Compile>
@@ -83,6 +86,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="UserControls\MenuPane.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\PropertyWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

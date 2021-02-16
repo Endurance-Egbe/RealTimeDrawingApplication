@@ -11,6 +11,7 @@
             <Setter Property="FontSize" Value="20" />
             <Setter Property="FontWeight" Value="Bold"/>
             <Setter Property="Margin" Value="0,5"/>
+            <Setter Property="Foreground" Value="WhiteSmoke"/>
         </Style>
     </UserControl.Resources>
     <DockPanel>
@@ -24,8 +25,10 @@
             <TextBlock  Text="Open Project                  &gt;" TextAlignment="Left" FontSize="15" Name="txtOpenProjectMenu"/>
             <TextBlock  Text="Save Project" TextAlignment="Left" FontSize="15" Name="txtSaveProjectMenu"/>
             <TextBlock  Text="Delete Project" TextAlignment="Left" FontSize="15" Name="txtDeleteProjectMenu"/>
-            <TextBlock  Text="Export                            &gt;" TextAlignment="Left" FontSize="15" Name="txtExportMenu"/>
-            <TextBlock  Text="Import                            &gt;" TextAlignment="Left" FontSize="15" Name="txtImportMenu"/>
+            <TextBlock  Text="Export                            &gt;" TextAlignment="Left" FontSize="15" Name="txtExportMenu"
+                        MouseDown="TxtExportMenu_MouseDown"/>
+            <TextBlock  Text="Import                            &gt;" TextAlignment="Left" FontSize="15" Name="txtImportMenu"
+                        MouseDown="TxtImportMenu_MouseDown"/>
         </StackPanel>
 
         <DockPanel DockPanel.Dock="Bottom" VerticalAlignment="Bottom">
@@ -36,6 +39,14 @@
                      Background="Transparent" BorderBrush="Transparent"
                      HorizontalContentAlignment="Stretch"/>
         </DockPanel>
+        <Popup IsOpen="False" x:Name="XmlJasonPopup" Placement="Mouse"
+               StaysOpen="False" PopupAnimation="Slide">
+            <StackPanel Background="#FF454B84" >
+                <TextBlock Text="XML" Foreground="WhiteSmoke"/>
+                <TextBlock Text="Jason" Foreground="WhiteSmoke"/>
+
+            </StackPanel>
+        </Popup>
     </DockPanel>
 
    

@@ -30,6 +30,9 @@ namespace View
             MenuPaneUc.Visibility = Visibility.Visible;
         }
 
-       
+        private void BtnPropertyWindow_Click(object sender, RoutedEventArgs e)
+        {
+            PropMenuPopup.IsOpen = true;
+        }
     }
 }

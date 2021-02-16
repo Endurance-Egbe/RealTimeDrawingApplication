@@ -50,5 +50,15 @@ namespace View.UserControls
             ShareProject shareProject = new ShareProject();
             shareProject.ShowDialog();
         }
+
+        private void TxtExportMenu_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            XmlJasonPopup.IsOpen = true;
+        }
+
+        private void TxtImportMenu_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            XmlJasonPopup.IsOpen = true;
+        }
     }
 }
