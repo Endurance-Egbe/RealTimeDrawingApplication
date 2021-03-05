@@ -1,0 +1,62 @@
+﻿<UserControl x:Class="View.UserControls.MenuPane"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:View.UserControls"
+             mc:Ignorable="d" 
+            d:DesignHeight="450" d:DesignWidth="200" Background="#FF454B84">
+    <UserControl.Resources>
+        <Style TargetType="TextBlock">
+            
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Margin" Value="0,10"/>
+            <Setter Property="Foreground" Value="WhiteSmoke"/>
+        </Style>
+    </UserControl.Resources>
+    <DockPanel>
+        <StackPanel DockPanel.Dock="Top" Margin="10,20">
+            <TextBlock  Text="{Binding AccountName}" TextAlignment="Left" 
+                        FontSize="15" Cursor="Hand"/>
+            <TextBlock  Text="{Binding AccountEmail}" TextAlignment="Left" 
+                        FontSize="10" Cursor="Hand" Foreground="AliceBlue"/>
+            <TextBlock  Text="User" TextAlignment="Left" FontSize="15" Name="txtCreateAccountMenu" 
+                        MouseDown="TxtCreateAccountMenu_MouseDown" Cursor="Hand"/>
+            <TextBlock  Text="Create Project" TextAlignment="Left" 
+                        FontSize="15" Name="txtCreateProjectMenu" 
+                        MouseDown="TxtCreateProjectMenu_MouseDown" Cursor="Hand"/>
+            <TextBlock  Text="Share Project                  &gt;"
+                        TextAlignment="Left" FontSize="15" Name="txtShareProjectMenu"
+                        MouseDown="TxtShareProjectMenu_MouseDown" Cursor="Hand"/>
+            <TextBlock  Text="Save Project" TextAlignment="Left" Cursor="Hand"
+                        FontSize="15" Name="txtSaveProjectMenu"/>
+            <TextBlock  Text="Delete Project" Cursor="Hand"
+                        TextAlignment="Left" FontSize="15" Name="txtDeleteProjectMenu"/>
+            <TextBlock  Text="Export                            &gt;" TextAlignment="Left" FontSize="15" Name="txtExportMenu"
+                        MouseDown="TxtExportMenu_MouseDown" Cursor="Hand"/>
+            <TextBlock  Text="Import                            &gt;" TextAlignment="Left" FontSize="15" Name="txtImportMenu"
+                        MouseDown="TxtImportMenu_MouseDown" Cursor="Hand"/>
+        </StackPanel>
+
+        <DockPanel DockPanel.Dock="Bottom" VerticalAlignment="Bottom">
+
+            <Button  Content="Close" HorizontalAlignment="Left" VerticalAlignment="Bottom" 
+                    FontSize="20" Foreground="Red" x:Name="btnCloseMenu"
+                    DockPanel.Dock="Bottom" Click="BtnCloseMenu_Click"
+                     Background="Transparent" BorderBrush="Transparent"
+                     HorizontalContentAlignment="Stretch" Cursor="Hand"/>
+        </DockPanel>
+        <Popup IsOpen="False" x:Name="XmlJsonPopup" Placement="Mouse"
+               StaysOpen="False" PopupAnimation="Slide" Width="80"
+               >
+            <StackPanel Background="#FF454B84" >
+                <Button Content="XML" Foreground="WhiteSmoke" Background="Transparent" 
+                        FontSize="20" BorderBrush="WhiteSmoke" Cursor="Hand"/>
+                <Button Content="Json" Foreground="WhiteSmoke" Background="Transparent" 
+                        FontSize="20" BorderBrush="WhiteSmoke" Cursor="Hand"/>
+
+            </StackPanel>
+        </Popup>
+    </DockPanel>
+
+</UserControl>
