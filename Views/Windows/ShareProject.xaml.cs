@@ -11,6 +11,8 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using View.ViewModels;
+using View.ViewModels.ProxyModel;
 
 namespace View.Windows
 {
@@ -22,6 +24,7 @@ namespace View.Windows
         public ShareProject()
         {
             InitializeComponent();
+            //DataContext = new ShareUserViewModel();
         }
     }
 }

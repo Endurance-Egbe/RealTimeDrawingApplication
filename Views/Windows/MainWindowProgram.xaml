@@ -31,7 +31,8 @@
         </Grid.RowDefinitions>
         <StackPanel Grid.RowSpan="3" Width="50" Background="#FF454B84" >
             <StackPanel Margin="5,5">
-                <Button x:Name="Menubtn" Background="Transparent" BorderBrush="Transparent" Click="Menubtn_Click" >
+                <Button x:Name="Menubtn" Background="Transparent" 
+                        BorderBrush="Transparent" Command="{Binding OpenMenuPaneCommand}" >
                     <Path Fill="WhiteSmoke" Data="M3,15H21V13H3V15M3,19H21V17H3V19M3,
                   11H21V9H3V11M3,5V7H21V5H3Z" 
                   Height="30" Width="30" Stretch="Fill" />
@@ -137,18 +138,27 @@
 
             </Button>
             <ContentControl Content="{Binding CurrentWindow}" />
-            <!--<local1:ShareUserControl Visibility="Collapsed" x:Name="ShareUserControl"/>
-            <local1:PropertyWindow Visibility="Collapsed" x:Name="PropertyWindowControl"/>
-            <local1:ProjectWindow Visibility="Collapsed" x:Name="ProjectWindowControl"/>-->
+            
+                <!--<ContentControl Content="{Binding PropertyWindow}" Visibility="Visible" />
+                <ContentControl Content="{Binding ShareUserControl}" />
+                <ContentControl Content="{Binding ProjectWindow}" />-->
+            
+
+
 
         </StackPanel>
 
 
-
-        <ContentControl Content="{Binding MenuPane}" Grid.RowSpan="3" x:Name="MenuPaneUc"
-                           />
         <ContentControl Content="{Binding CustomCanvas}" Grid.Column="1"
-                            Grid.Row="1" Grid.RowSpan="2"/>
+                            Grid.Row="1" Grid.RowSpan="2"
+                        />
+
+        <ContentControl Content="{Binding MenuPane}" Grid.RowSpan="3"
+                        x:Name="MenuPaneUc"
+                        Grid.ColumnSpan="2"
+                        HorizontalAlignment="Left"
+                           />
+       
 
         <Popup IsOpen="False" x:Name="PropMenuPopup" Placement="Mouse"
                StaysOpen="False" PopupAnimation="Slide">

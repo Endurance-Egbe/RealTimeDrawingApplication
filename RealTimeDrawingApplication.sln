@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28307.1340
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "View", "View.csproj", "{D7A42239-3F8B-420E-AE20-DB985224FAAC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RealTimeDrawingApplication", "RealTimeDrawingApplication.csproj", "{D7A42239-3F8B-420E-AE20-DB985224FAAC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -20,6 +20,6 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {6C3D7B14-4C1A-46A7-89D2-FF073E60DBFF}
+		SolutionGuid = {4C6903DF-5E67-4BDE-B0ED-EF86FFD322C2}
 	EndGlobalSection
 EndGlobal

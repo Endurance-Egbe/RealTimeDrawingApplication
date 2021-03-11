@@ -7,53 +7,96 @@
              mc:Ignorable="d" 
             d:DesignHeight="450" d:DesignWidth="200" Background="#FF454B84">
     <UserControl.Resources>
-        <Style TargetType="TextBlock">
+        <Style TargetType="Button">
             
             <Setter Property="FontWeight" Value="Bold"/>
-            <Setter Property="Margin" Value="0,10"/>
+            <Setter Property="Margin" Value="0,5"/>
             <Setter Property="Foreground" Value="WhiteSmoke"/>
+            <Setter Property="FontSize" Value="15"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Style.Triggers>
+                <Trigger Property="Background" Value="Transparent" />
+            </Style.Triggers>
         </Style>
     </UserControl.Resources>
     <DockPanel>
-        <StackPanel DockPanel.Dock="Top" Margin="10,20">
+        <StackPanel DockPanel.Dock="Top" Margin="10">
             <TextBlock  Text="{Binding AccountName}" TextAlignment="Left" 
-                        FontSize="15" Cursor="Hand"/>
+                        FontSize="15" FontWeight="Bold"
+                        Foreground="Maroon"/>
             <TextBlock  Text="{Binding AccountEmail}" TextAlignment="Left" 
-                        FontSize="10" Cursor="Hand" Foreground="AliceBlue"/>
-            <TextBlock  Text="User" TextAlignment="Left" FontSize="15" Name="txtCreateAccountMenu" 
-                        MouseDown="TxtCreateAccountMenu_MouseDown" Cursor="Hand"/>
-            <TextBlock  Text="Create Project" TextAlignment="Left" 
-                        FontSize="15" Name="txtCreateProjectMenu" 
-                        MouseDown="TxtCreateProjectMenu_MouseDown" Cursor="Hand"/>
-            <TextBlock  Text="Share Project                  &gt;"
-                        TextAlignment="Left" FontSize="15" Name="txtShareProjectMenu"
-                        MouseDown="TxtShareProjectMenu_MouseDown" Cursor="Hand"/>
-            <TextBlock  Text="Save Project" TextAlignment="Left" Cursor="Hand"
-                        FontSize="15" Name="txtSaveProjectMenu"/>
-            <TextBlock  Text="Delete Project" Cursor="Hand"
-                        TextAlignment="Left" FontSize="15" Name="txtDeleteProjectMenu"/>
-            <TextBlock  Text="Export                            &gt;" TextAlignment="Left" FontSize="15" Name="txtExportMenu"
-                        MouseDown="TxtExportMenu_MouseDown" Cursor="Hand"/>
-            <TextBlock  Text="Import                            &gt;" TextAlignment="Left" FontSize="15" Name="txtImportMenu"
-                        MouseDown="TxtImportMenu_MouseDown" Cursor="Hand"/>
+                        FontSize="10"  Foreground="AliceBlue"/>
+            <Button Background="Transparent" BorderBrush="Transparent"
+                    HorizontalAlignment="Stretch"
+                    HorizontalContentAlignment="Stretch"
+                    Content="LogOut"
+                    Command="{Binding LogOutCommand}"
+                    CommandParameter="Log Out">
+            </Button>
+            <Button Background="Transparent" BorderBrush="Transparent"
+                    HorizontalAlignment="Stretch"
+                    HorizontalContentAlignment="Stretch"
+                    Content="Create Project"
+                    Command="{Binding CreateProjectCommand}"
+                    CommandParameter="Create Project">
+            </Button>
+            <Button Background="Transparent" BorderBrush="Transparent"
+                    HorizontalAlignment="Stretch"
+                    HorizontalContentAlignment="Stretch"
+                    Content="Share Project                 &gt;"
+                    Command="{Binding ShareProjectCommand}"
+                    CommandParameter="Share Project">
+            </Button>
+            <Button Background="Transparent" BorderBrush="Transparent"
+                    HorizontalAlignment="Stretch"
+                    HorizontalContentAlignment="Stretch"
+                    Content="Save Project                   &gt;"
+                    Command="{Binding SaveProjectCommand}"
+                    CommandParameter="Save Project">
+            </Button>
+            <Button Background="Transparent" BorderBrush="Transparent"
+                    HorizontalAlignment="Stretch"
+                    HorizontalContentAlignment="Stretch"
+                    Content="Delete Project                &gt;"
+                    Command="{Binding DeleteProjectCommand}"
+                    CommandParameter="Delete Project">
+            </Button>
+            <Button Background="Transparent" BorderBrush="Transparent"
+                    HorizontalAlignment="Stretch"
+                    HorizontalContentAlignment="Stretch"
+                    Content="Export                             &gt;"
+                    Command="{Binding ExportProjectCommand}"
+                    CommandParameter="Export">
+            </Button>
+            <Button Background="Transparent" BorderBrush="Transparent"
+                    HorizontalAlignment="Stretch"
+                    HorizontalContentAlignment="Stretch"
+                    Content="Import                            &gt;"
+                    Command="{Binding ImportProjectCommand}"
+                    CommandParameter="Import">
+            </Button>
+            
         </StackPanel>
 
         <DockPanel DockPanel.Dock="Bottom" VerticalAlignment="Bottom">
 
             <Button  Content="Close" HorizontalAlignment="Left" VerticalAlignment="Bottom" 
-                    FontSize="20" Foreground="Red" x:Name="btnCloseMenu"
+                    FontSize="20" Foreground="Maroon" x:Name="btnCloseMenu"
                     DockPanel.Dock="Bottom" Click="BtnCloseMenu_Click"
                      Background="Transparent" BorderBrush="Transparent"
                      HorizontalContentAlignment="Stretch" Cursor="Hand"/>
         </DockPanel>
-        <Popup IsOpen="False" x:Name="XmlJsonPopup" Placement="Mouse"
+        <Popup IsOpen="{Binding IsOpen}" Placement="Mouse"
                StaysOpen="False" PopupAnimation="Slide" Width="80"
                >
             <StackPanel Background="#FF454B84" >
                 <Button Content="XML" Foreground="WhiteSmoke" Background="Transparent" 
-                        FontSize="20" BorderBrush="WhiteSmoke" Cursor="Hand"/>
+                        FontSize="20" BorderBrush="WhiteSmoke" Cursor="Hand"
+                        Margin="0"
+                        />
                 <Button Content="Json" Foreground="WhiteSmoke" Background="Transparent" 
-                        FontSize="20" BorderBrush="WhiteSmoke" Cursor="Hand"/>
+                        FontSize="20" BorderBrush="WhiteSmoke" Cursor="Hand"
+                         Margin="0"/>
 
             </StackPanel>
         </Popup>

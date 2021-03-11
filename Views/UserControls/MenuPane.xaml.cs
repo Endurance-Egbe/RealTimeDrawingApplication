@@ -24,9 +24,11 @@ namespace View.UserControls
     /// </summary>
     public partial class MenuPane : UserControl
     {
+        
         public MenuPane(AccountProxyModel accountProxy)
         {
             InitializeComponent();
+
             DataContext = new MenuPaneViewModel(accountProxy);
         }
 
@@ -36,32 +38,5 @@ namespace View.UserControls
             this.Visibility = Visibility.Collapsed;
         }
 
-        private void TxtCreateAccountMenu_MouseDown(object sender, MouseButtonEventArgs e)
-        {
-            CreateAccount createAccount = new CreateAccount();
-            createAccount.ShowDialog();
-        }
-
-        private void TxtCreateProjectMenu_MouseDown(object sender, MouseButtonEventArgs e)
-        {
-            CreateProject createProject = new CreateProject();
-            createProject.ShowDialog();
-        }
-
-        private void TxtShareProjectMenu_MouseDown(object sender, MouseButtonEventArgs e)
-        {
-            ShareProject shareProject = new ShareProject();
-            shareProject.ShowDialog();
-        }
-
-        private void TxtExportMenu_MouseDown(object sender, MouseButtonEventArgs e)
-        {
-            XmlJsonPopup.IsOpen = true;
-        }
-
-        private void TxtImportMenu_MouseDown(object sender, MouseButtonEventArgs e)
-        {
-            XmlJsonPopup.IsOpen = true;
-        }
     }
 }

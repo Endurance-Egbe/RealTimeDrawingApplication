@@ -5,8 +5,27 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:MainViews.UserControls"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
-            
+             d:DesignHeight="450" d:DesignWidth="250">
+
+    <Grid Margin="10">
+        <ListBox Background="Transparent"
+                     ItemsSource="{Binding ProjectList}"
+                      SelectedItem="{Binding SelectedProject}">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <DockPanel >
+                        <TextBlock Text="{Binding ProjectName}"
+                                 FontSize="15" Margin="0,5" Foreground="WhiteSmoke"
+                                 Cursor="Hand" DockPanel.Dock="Left"
+                                   HorizontalAlignment="Left"/>
+                        <Ellipse Fill="Azure" Width="10" Height="10" DockPanel.Dock="Right"
+                                 HorizontalAlignment="Right"
+                                 VerticalAlignment="Center"/>
+                    </DockPanel>
+
+                                 
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
     </Grid>
 </UserControl>

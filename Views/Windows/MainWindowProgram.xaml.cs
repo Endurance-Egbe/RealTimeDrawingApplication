@@ -11,7 +11,10 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using Prism.Ioc;
+using View;
 using View.ViewModels;
+using View.ViewModels.Common;
 using View.ViewModels.ProxyModel;
 using View.ViewModels.ShapeServices;
 
@@ -22,11 +25,13 @@ namespace MainViews.Windows
     /// </summary>
     public partial class MainWindowProgram : Window
     {
-        public MainWindowProgram(AccountProxyModel accountProxyModel)
+        public MainWindowProgram()//AccountProxyModel accountProxyModel)
         {
             InitializeComponent();
-            DataContext = new MainWindowViewModel(accountProxyModel);
-            
+
+            //DataContext = new MainWindowViewModel(accountProxyModel);
+            //DataContext = GenericServiceLocator.ShellContainer.Resolve<MainWindowViewModel>();
+
         }
 
         private void BtnPropertyWindow_Click(object sender, RoutedEventArgs e)

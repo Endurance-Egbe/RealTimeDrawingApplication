@@ -1,0 +1,15 @@
+﻿using Prism.Events;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows;
+using View.ViewModels.ProxyModel;
+
+namespace View.ViewModels.Common.Event_Container
+{
+    public class CanvasComponentEvent:PubSubEvent<ProjectProxyModel>
+    {
+    }
+}

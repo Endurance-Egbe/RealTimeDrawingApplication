@@ -37,7 +37,7 @@
         <Button Grid.Row="2" Grid.ColumnSpan="2" Margin="40,10,20,40" 
                 FontWeight="Bold" Background="Transparent" HorizontalContentAlignment="Stretch"
                 VerticalContentAlignment="Stretch" BorderBrush="Transparent"
-                Name="btnCreateProject">
+                Command="{Binding CreateProjectCommand}">
             <Border Background="#FF454B84" CornerRadius="30">
                 <TextBlock Text="Create" FontSize="30" HorizontalAlignment="Center" 
                            Foreground="WhiteSmoke"/>

@@ -24,10 +24,13 @@
         <TextBlock Grid.Row="1" Text="Shared User Emails" VerticalAlignment="Bottom" Foreground="WhiteSmoke"
                    FontFamily="Century" FontSize="20" FontWeight="Bold" Margin="20,0,0,10"/>
 
-        <TextBox Grid.Column="1" Grid.Row="1" Margin="10,0,50,0" VerticalContentAlignment="Center"/>
+        <TextBox Grid.Column="1" Grid.Row="1" Margin="10,0,50,0" 
+                 VerticalContentAlignment="Center"
+                 Text="{Binding Email}"/>
         <Button Grid.Row="2" Grid.ColumnSpan="2"  HorizontalContentAlignment="Stretch"
                 VerticalContentAlignment="Stretch"  Margin="80,20,80,50"
-                FontSize="20"  Background="Transparent" BorderBrush="Transparent">
+                FontSize="20"  Command="{Binding ShareUserCommand}"
+                Background="Transparent" BorderBrush="Transparent">
             <Border Background="#FF454B84" CornerRadius="20">
                 <TextBlock Text="Share" FontSize="30" HorizontalAlignment="Center" 
                           FontWeight="Bold" VerticalAlignment="Center" Foreground="WhiteSmoke"/>

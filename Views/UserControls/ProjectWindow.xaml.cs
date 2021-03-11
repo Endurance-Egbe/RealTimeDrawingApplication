@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using View.ViewModels;
 
 namespace MainViews.UserControls
 {
@@ -23,6 +24,7 @@ namespace MainViews.UserControls
         public ProjectWindow()
         {
             InitializeComponent();
+            DataContext = new ProjectWindowViewModel();
         }
     }
 }
