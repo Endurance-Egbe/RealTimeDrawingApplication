@@ -52,7 +52,7 @@ namespace View.ViewModels.DatabaseServices
             //component.
             return drawingModel;
         }
-        private static IEnumerable<DrawingComponentModel> ComponentValidationToDatabase(IEnumerable<DrawingComponentProxyModel> drawingComponentProxy)
+        public static IEnumerable<DrawingComponentModel> ComponentValidationToDatabase(IEnumerable<DrawingComponentProxyModel> drawingComponentProxy)
         {
             List<DrawingComponentModel> drawingModel = new List<DrawingComponentModel>();
             foreach (var drawing in drawingComponentProxy)
@@ -74,7 +74,7 @@ namespace View.ViewModels.DatabaseServices
             
             return drawingModel;
         }
-        private static IEnumerable<DrawingComponentProxyModel> ComponentValidationFromDatabase(IEnumerable<DrawingComponentModel> drawingComponents)
+        public static IEnumerable<DrawingComponentProxyModel> ComponentValidationFromDatabase(IEnumerable<DrawingComponentModel> drawingComponents)
         {
             List<DrawingComponentProxyModel> drawingComponentModel = new List<DrawingComponentProxyModel>();
             foreach (var drawing in drawingComponents)
@@ -97,16 +97,14 @@ namespace View.ViewModels.DatabaseServices
            
             return drawingComponentModel;
         }
-        //public static IEnumerable<DrawingComponentProxyModel> Drawings(ProjectProxyModel projectProxy)
-        //{
-        //    IEnumerable<DrawingComponentProxyModel> drawingModel = new List<DrawingComponentProxyModel>();
-        //    var sqlite = new SQLiteEFCore();
-        //    var model = new DrawingComponentEFCoreRepository(sqlite);
-        //    ProjectModel projectModel = model.GetCurrentProject(projectProxy.ProjectName);
-        //    IEnumerable<DrawingComponentModel> drawingComponents = model.GetDrawingComponents(projectModel);
-        //    drawingModel = ComponentValidationFromDatabase(drawingComponents);
-        //    //component.
-        //    return drawingModel;
-        //}
+        public static IEnumerable<DrawingComponentModel> GetDrawingComponentModels(ProjectProxyModel projectProxy)
+        {
+            IEnumerable<DrawingComponentProxyModel> drawingModel = new List<DrawingComponentProxyModel>();
+            var sqlite = new SQLiteEFCore();
+            var model = new DrawingComponentEFCoreRepository(sqlite);
+            ProjectModel projectModel = model.GetCurrentProject(projectProxy.ProjectName);
+            IEnumerable<DrawingComponentModel> drawingComponents = model.GetDrawingComponents(projectModel);
+            return drawingComponents;
+        }
     }
 }

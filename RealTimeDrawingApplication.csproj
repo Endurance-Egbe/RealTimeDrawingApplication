@@ -201,6 +201,8 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Export_Import\JsonServices.cs" />
+    <Compile Include="Export_Import\XmlServices.cs" />
     <Compile Include="Infrastructure\IRepository.cs" />
     <Compile Include="Infrastructure\Query\AccountModelEFCoreRepository.cs" />
     <Compile Include="Infrastructure\EFCoreRepository.cs" />
