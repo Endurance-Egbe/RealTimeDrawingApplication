@@ -15,10 +15,10 @@ namespace View.Models
 
 
         //Navigation Property
-        public virtual IList<ProjectModel> Projects { get; set; }
-        public AccountModel()
-        {
-            Projects = new List<ProjectModel>();
-        }
+        public virtual List<ProjectModel> Projects { get; set; }
+        //public AccountModel()
+        //{
+        //    Projects = new List<ProjectModel>();
+        //}
     }
 }

@@ -28,6 +28,7 @@ namespace View.ViewModels
             EventAggregator = GenericServiceLocator.ShellContainer.Resolve<IEventAggregator>();
             EventAggregator.GetEvent<ComponentPropertyPubSubEvent>().Subscribe(UpdateCanvasElement);
             EventAggregator.GetEvent<DrawingComponentEvent>().Subscribe(LoadDrawingComponents);
+            EventAggregator.GetEvent<JsonImportedProxiesEvent>().Subscribe(LoadDrawingComponents);
         }
         //public IEnumerable<DrawingComponentProxyModel> DrawingComponentProxies  { get; set; }
         private void LoadDrawingComponents(IEnumerable<DrawingComponentProxyModel> drawingComponents)

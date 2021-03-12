@@ -18,6 +18,7 @@ using System.Windows;
 using View.ViewModels.ShapeServices;
 using System.Windows.Controls;
 using System.Windows.Shapes;
+using View.Export_Import;
 
 namespace View.ViewModels
 {
@@ -47,13 +48,19 @@ namespace View.ViewModels
             SaveProjectCommand = new DelegateCommand<string>(OpenWindow);
             ExportProjectCommand = new DelegateCommand<string>(OpenWindow);
             ImportProjectCommand = new DelegateCommand<string>(OpenWindow);
+            ExportXmlCommand = new DelegateCommand<string>(ExportDrawing);
+            ExportJsonCommand = new DelegateCommand<string>(ExportDrawing);
+            ImportXmlCommand = new DelegateCommand<string>(ImportDrawing);
+            ImportJsonCommand = new DelegateCommand<string>(ImportDrawing);
 
         }
         public ProjectProxyModel CurrentProjectModel { get; set; }
         public AccountProxyModel AccountProxy { get; set; }
         public string AccountName { get => accountName; set { accountName = value; RaisePropertyChanged(); } }
         public string AccountEmail { get => accountEmail; set { accountEmail = value; RaisePropertyChanged(); } }
-        public bool IsOpen { get => isOpen; set { isOpen = value; RaisePropertyChanged(); } }
+        public int MyProperty { get; set; }
+        public bool IsOpenImport { get => isOpen; set { isOpen = value; RaisePropertyChanged(); } }
+        public bool IsOpenExport { get => isOpen; set { isOpen = value; RaisePropertyChanged(); } }
         public IEnumerable<DrawingComponentProxyModel> DrawingComponentProxys { get; set; }
         public IEventAggregator EventAggregator { get; set; }
         public DelegateCommand<string> LogOutCommand { get; set; }
@@ -63,6 +70,10 @@ namespace View.ViewModels
         public DelegateCommand<string> OpenProjectCommand { get; set; }
         public DelegateCommand<string> ImportProjectCommand { get; set; }
         public DelegateCommand<string> ExportProjectCommand { get; set; }
+        public DelegateCommand<string> ExportXmlCommand { get; set; }
+        public DelegateCommand<string> ExportJsonCommand { get; set; }
+        public DelegateCommand<string> ImportXmlCommand { get; set; }
+        public DelegateCommand<string> ImportJsonCommand { get; set; }
 
 
         private void CurrentSaveProject(ProjectProxyModel project)
@@ -102,130 +113,48 @@ namespace View.ViewModels
                     mainWindow.ShowDialog();
                     break;
                 case "Import":
-                    IsOpen = true;
+                    IsOpenImport = true;
                     break;
                 case "Export":
-                    IsOpen = true;
+                    IsOpenExport = true;
                     break;
                 default:
                     break;
             }
         }
-        void UpdatePropertyWindowEvent(ComponentModel property)
+       // public IEnumerable<DrawingComponentProxyModel> ImportedDrawingComponents { get; set; }
+        void ImportDrawing(string parameter)
         {
-            //foreach (var component in DrawingComponentProxys)
-            //{
-            //    component.Title= property.Value.ToString();
-            //    component.X = (double)property.Value;
-            //    component.Y = (double)property.Value;
-            //    component.Width = (double)property.Value;
-            //    component.Height = (double)property.Value;
-            //    component.StrokeThickness = (int)property.Value;
-            //    component.SelectedStroke = ColorCollectionsClass.ColorCollections
-            //            .FirstOrDefault(x => x.ColorType == property.Value as SolidColorBrush);
-            //    component.SelectedFillColor = ColorCollectionsClass.ColorCollections
-            //           .FirstOrDefault(x => x.ColorType == property.Value as SolidColorBrush);
-            //    component.SelectedBorderColor = ColorCollectionsClass.ColorCollections
-            //            .FirstOrDefault(x => x.ColorType == property.Value as SolidColorBrush);
-            //}
-            //switch (property.PropertyType)
-            //{
-            //    case PropertyType.Title:
-            //        DrawingComponentProxy.Title = property.Value.ToString();
-            //        break;
-            //    case PropertyType.X:
-            //        DrawingComponentProxy.X = (double)property.Value;
-            //        break;
-            //    case PropertyType.Y:
-            //        DrawingComponentProxy.Y = (double)property.Value;
-            //        break;
-            //    case PropertyType.Width:
-            //        DrawingComponentProxy.Width = (double)property.Value;
-            //        break;
-            //    case PropertyType.Height:
-            //        DrawingComponentProxy.Height = (double)property.Value;
-            //        break;
-            //    case PropertyType.StrokeThickness:
-            //        DrawingComponentProxy.StrokeThickness = (int)property.Value;
-            //        break;
-            //    case PropertyType.Stroke:
-            //        DrawingComponentProxy.SelectedStroke = ColorCollectionsClass.ColorCollections
-            //            .FirstOrDefault(x => x.ColorType == property.Value as SolidColorBrush);
-            //        break;
-            //    case PropertyType.FillColor:
-            //        DrawingComponentProxy.SelectedFillColor = ColorCollectionsClass.ColorCollections
-            //            .FirstOrDefault(x => x.ColorType == property.Value as SolidColorBrush);
-            //        break;
-            //    case PropertyType.BorderColor:
-            //        DrawingComponentProxy.SelectedBorderColor = ColorCollectionsClass.ColorCollections
-            //            .FirstOrDefault(x => x.ColorType == property.Value as SolidColorBrush);
-            //        break;
-
-            //    default:
-            //        break;
+            switch (parameter)
+            {
+                case "ImportXml":
+                    DrawingComponentProxies = XmlServices.ImportWithXml();
+                    EventAggregator.GetEvent<JsonImportedProxiesEvent>().Publish(DrawingComponentProxies);
+                    break;
+                case "ImportJson":
+                    DrawingComponentProxies = JsonServices.ImportWithJson();
+                    EventAggregator.GetEvent<JsonImportedProxiesEvent>().Publish(DrawingComponentProxies);
+                    break;
+                default:
+                    break;
+            }
+        }
+        public IEnumerable<DrawingComponentProxyModel> DrawingComponentProxies { get; set; }
+        void ExportDrawing(string parameter)
+        {
+            switch (parameter)
+            {
+                case "ExportXml":
+                    XmlServices.ExportWithXml(CurrentProjectModel);
+                    break;
+                case "ExportJson":
+                    JsonServices.ExportWithJson(CurrentProjectModel);
+                    break;
+                default:
+                    break;
+            }
         }
         
-        void UpdateCanvasElementEvent(ComponentModel property)
-        {
-            //foreach (var component in DrawingComponentProxys)
-            //{
-            //    component.Title = property.Value.ToString();
-            //    component.X = (double)property.Value;
-            //    component.Y = (double)property.Value;
-            //    component.Width = (double)property.Value;
-            //    component.Height = (double)property.Value;
-            //    component.StrokeThickness = (int)property.Value;
-            //    component.SelectedStroke = ColorCollectionsClass.ColorCollections
-            //            .FirstOrDefault(x => x.ColorType == property.Value as SolidColorBrush);
-            //    component.SelectedFillColor = ColorCollectionsClass.ColorCollections
-            //           .FirstOrDefault(x => x.ColorType == property.Value as SolidColorBrush);
-            //    component.SelectedBorderColor = ColorCollectionsClass.ColorCollections
-            //            .FirstOrDefault(x => x.ColorType == property.Value as SolidColorBrush);
-            //}
-        //switch (property.PropertyType)
-        //{
-        //    case PropertyType.Title:
-        //        DrawingComponentProxy.Title = (string)property.Value;
-        //        break;
-        //    case PropertyType.X:
-        //        DrawingComponentProxy.X = (double)property.Value;
-        //        break;
-        //    case PropertyType.Y:
-        //        DrawingComponentProxy.Y = (double)property.Value;
-        //        break;
-        //    case PropertyType.Width:
-        //        DrawingComponentProxy.Width = (double)property.Value;
-        //        break;
-        //    case PropertyType.Height:
-        //        DrawingComponentProxy.Height = (double)property.Value;
-        //        break;
-        //    case PropertyType.StrokeThickness:
-        //        DrawingComponentProxy.StrokeThickness = (int)property.Value;
-        //        break;
-        //    case PropertyType.Stroke:
-        //        DrawingComponentProxy.SelectedStroke = ColorCollectionsClass.ColorCollections
-        //            .FirstOrDefault(x => x.ColorType == property.Value as SolidColorBrush);
-        //        break;
-        //    case PropertyType.FillColor:
-        //        DrawingComponentProxy.SelectedFillColor = ColorCollectionsClass.ColorCollections
-        //            .FirstOrDefault(x => x.ColorType == property.Value as SolidColorBrush);
-        //        break;
-        //    case PropertyType.BorderColor:
-        //        DrawingComponentProxy.SelectedBorderColor = ColorCollectionsClass.ColorCollections
-        //            .FirstOrDefault(x => x.ColorType == property.Value as SolidColorBrush);
-        //        break;
-
-        //    default:
-        //        break;
-    }
-        
-
-            
-        
-        void OpenProject()
-        {
-
-        }
     }
 }
 

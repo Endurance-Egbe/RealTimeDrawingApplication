@@ -86,17 +86,33 @@
                      Background="Transparent" BorderBrush="Transparent"
                      HorizontalContentAlignment="Stretch" Cursor="Hand"/>
         </DockPanel>
-        <Popup IsOpen="{Binding IsOpen}" Placement="Mouse"
+        <Popup IsOpen="{Binding IsOpenExport}" Placement="Mouse"
                StaysOpen="False" PopupAnimation="Slide" Width="80"
                >
             <StackPanel Background="#FF454B84" >
                 <Button Content="XML" Foreground="WhiteSmoke" Background="Transparent" 
                         FontSize="20" BorderBrush="WhiteSmoke" Cursor="Hand"
-                        Margin="0"
-                        />
+                        Margin="0" Command="{Binding ExportXmlCommand}"
+                        CommandParameter="ExportXml"/>
                 <Button Content="Json" Foreground="WhiteSmoke" Background="Transparent" 
                         FontSize="20" BorderBrush="WhiteSmoke" Cursor="Hand"
-                         Margin="0"/>
+                        Margin="0" Command="{Binding ExportJsonCommand}"
+                        CommandParameter="ExportJson"/>
+
+            </StackPanel>
+        </Popup>
+        <Popup IsOpen="{Binding IsOpenImport}" Placement="Mouse"
+               StaysOpen="False" PopupAnimation="Slide" Width="80"
+               >
+            <StackPanel Background="#FF454B84" >
+                <Button Content="XML" Foreground="WhiteSmoke" Background="Transparent" 
+                        FontSize="20" BorderBrush="WhiteSmoke" Cursor="Hand"
+                        Margin="0" Command="{Binding ImportXmlCommand}"
+                        CommandParameter="ImportXml"/>
+                <Button Content="Json" Foreground="WhiteSmoke" Background="Transparent" 
+                        FontSize="20" BorderBrush="WhiteSmoke" Cursor="Hand"
+                         Margin="0" Command="{Binding ImportJsonCommand}"
+                        CommandParameter="ImportJson"/>
 
             </StackPanel>
         </Popup>

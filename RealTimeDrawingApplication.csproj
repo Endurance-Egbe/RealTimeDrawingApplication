@@ -201,6 +201,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Export_Import\FileServices.cs" />
     <Compile Include="Export_Import\JsonServices.cs" />
     <Compile Include="Export_Import\XmlServices.cs" />
     <Compile Include="Infrastructure\IRepository.cs" />
@@ -213,6 +214,7 @@
     <Compile Include="Infrastructure\UserDbContext.cs" />
     <Compile Include="Models\AccountModel.cs" />
     <Compile Include="Models\DrawingComponentModel.cs" />
+    <Compile Include="Models\PartialDrawingComponentModel.cs" />
     <Compile Include="Models\ProjectModel.cs" />
     <Compile Include="Models\ShareUserProject.cs" />
     <Compile Include="ViewModels\AccountViewModel.cs" />
@@ -227,6 +229,7 @@
     <Compile Include="ViewModels\Common\Event_Container\CurrentProjectEvent.cs" />
     <Compile Include="ViewModels\Common\Event_Container\DrawingComponentEvent.cs" />
     <Compile Include="ViewModels\Common\Event_Container\GenericServiceLocator.cs" />
+    <Compile Include="ViewModels\Common\Event_Container\JsonImportedProxiesEvent.cs" />
     <Compile Include="ViewModels\Common\Event_Container\UpdatePropertyWindow.cs" />
     <Compile Include="ViewModels\ComponentServices\TextBoxComponent.cs" />
     <Compile Include="ViewModels\CreateProjectViewModel.cs" />

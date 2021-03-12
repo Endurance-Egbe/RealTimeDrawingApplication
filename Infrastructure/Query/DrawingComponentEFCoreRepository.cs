@@ -20,7 +20,7 @@ namespace View.Infrastructure.Query
             ProjectModel model = userContext.Set<ProjectModel>().FirstOrDefault(x => x.ProjectName == projectName);
             return model;
         }
-        public IEnumerable<DrawingComponentModel> GetDrawingComponents(ProjectModel projectModel)
+        public List<DrawingComponentModel> GetDrawingComponents(ProjectModel projectModel)
         {
             //var components = userContext.Projects.FirstOrDefault(x => x.ProjectId == projectModel.ProjectId);
             //IEnumerable<DrawingComponentModel> components = from component in userContext.DrawingComponentModels

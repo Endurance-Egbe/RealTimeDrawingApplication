@@ -85,7 +85,7 @@ namespace View.ViewModels
         {
             CustomCanvas.Children.Clear();
         }
-        public IList<DrawingComponentProxyModel> DrawingComponentProxies { get; set; }
+        public List<DrawingComponentProxyModel> DrawingComponentProxies { get; set; }
         public ProjectProxyModel CurrentProjectModel { get; set; }
         public void DrawingComponents(ProjectProxyModel currentProject)
         {

@@ -13,8 +13,8 @@ namespace View.Models
 
         //Navigation Property
         public virtual AccountModel User { get; set; }
-        public virtual ICollection<ShareUserProject> ShareUsers { get; set; }
-        public virtual ICollection<DrawingComponentModel> ShapeComponents { get; set; }
+        public virtual List<ShareUserProject> ShareUsers { get; set; }
+        public virtual List<DrawingComponentModel> ShapeComponents { get; set; }
         //public ProjectModel()
         //{
         //    ShareUsers = new List<ShareUserProject>();

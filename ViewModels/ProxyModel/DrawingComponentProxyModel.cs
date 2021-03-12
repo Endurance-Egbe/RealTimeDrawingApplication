@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media;
@@ -8,7 +9,8 @@ using View.ViewModels.Common.CustomColor;
 
 namespace View.ViewModels.ProxyModel
 {
-    public class DrawingComponentProxyModel
+    //[Serializable()]
+    public class DrawingComponentProxyModel//:ISerializable
     {
         public string Title { get; set; }
         public double X { get; set; }
@@ -21,6 +23,6 @@ namespace View.ViewModels.ProxyModel
         public CustomColor SelectedStroke { get; set; }
         public CustomColor SelectedFillColor { get; set; }
         public CustomColor SelectedBorderColor { get; set; }
-        //public ProjectProxyModel ProjectProxyModel  { get; set; }
+        
     }
 }

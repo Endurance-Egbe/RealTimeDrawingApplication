@@ -13,15 +13,16 @@ namespace View.ViewModels.DatabaseServices
 {
     public class DrawingComponentService
     {
-        public static void CreateDrawings(ProjectProxyModel projectProxy, IEnumerable<DrawingComponentProxyModel> drawingComponent)
+        private static int projectId;
+        public static void CreateDrawings(ProjectProxyModel projectProxy, List<DrawingComponentProxyModel> drawingComponent)
         {
-            IEnumerable<DrawingComponentModel> drawingModels = new List<DrawingComponentModel>();
+            List<DrawingComponentModel> drawingModels = new List<DrawingComponentModel>();
             drawingModels= ComponentValidationToDatabase(drawingComponent);
             var sqlite = new SQLiteEFCore();
             var model = new DrawingComponentEFCoreRepository(sqlite);
             ProjectModel projectModel = model.GetCurrentProject(projectProxy.ProjectName);
             IEnumerable<DrawingComponentModel> drawingComponentModel = model.GetDrawingComponents(projectModel);            
-            if (drawingComponentModel != null)
+            if (projectId==projectModel.ProjectId)
             {
                 foreach (var item in drawingComponentModel)
                 {
@@ -34,6 +35,7 @@ namespace View.ViewModels.DatabaseServices
                 {
                     drawing.Project = projectModel;
                     model.CreateModel(drawing);
+
                 }
             }
 
@@ -43,16 +45,16 @@ namespace View.ViewModels.DatabaseServices
         }
         public static IEnumerable<DrawingComponentProxyModel> GetDrawings(ProjectProxyModel projectProxy)
         {
-            IEnumerable<DrawingComponentProxyModel> drawingModel = new List<DrawingComponentProxyModel>();
+            List<DrawingComponentProxyModel> drawingModel = new List<DrawingComponentProxyModel>();
             var sqlite = new SQLiteEFCore();
             var model = new DrawingComponentEFCoreRepository(sqlite);
             ProjectModel projectModel = model.GetCurrentProject(projectProxy.ProjectName);
-            IEnumerable<DrawingComponentModel> drawingComponents  = model.GetDrawingComponents(projectModel);
+            List<DrawingComponentModel> drawingComponents  = model.GetDrawingComponents(projectModel);
             drawingModel=ComponentValidationFromDatabase(drawingComponents);
             //component.
             return drawingModel;
         }
-        public static IEnumerable<DrawingComponentModel> ComponentValidationToDatabase(IEnumerable<DrawingComponentProxyModel> drawingComponentProxy)
+        public static List<DrawingComponentModel> ComponentValidationToDatabase(List<DrawingComponentProxyModel> drawingComponentProxy)
         {
             List<DrawingComponentModel> drawingModel = new List<DrawingComponentModel>();
             foreach (var drawing in drawingComponentProxy)
@@ -74,7 +76,7 @@ namespace View.ViewModels.DatabaseServices
             
             return drawingModel;
         }
-        public static IEnumerable<DrawingComponentProxyModel> ComponentValidationFromDatabase(IEnumerable<DrawingComponentModel> drawingComponents)
+        public static List<DrawingComponentProxyModel> ComponentValidationFromDatabase(List<DrawingComponentModel> drawingComponents)
         {
             List<DrawingComponentProxyModel> drawingComponentModel = new List<DrawingComponentProxyModel>();
             foreach (var drawing in drawingComponents)
@@ -97,13 +99,13 @@ namespace View.ViewModels.DatabaseServices
            
             return drawingComponentModel;
         }
-        public static IEnumerable<DrawingComponentModel> GetDrawingComponentModels(ProjectProxyModel projectProxy)
+        public static List<DrawingComponentModel> GetDrawingComponentModels(ProjectProxyModel projectProxy)
         {
-            IEnumerable<DrawingComponentProxyModel> drawingModel = new List<DrawingComponentProxyModel>();
+            List<DrawingComponentProxyModel> drawingModel = new List<DrawingComponentProxyModel>();
             var sqlite = new SQLiteEFCore();
             var model = new DrawingComponentEFCoreRepository(sqlite);
             ProjectModel projectModel = model.GetCurrentProject(projectProxy.ProjectName);
-            IEnumerable<DrawingComponentModel> drawingComponents = model.GetDrawingComponents(projectModel);
+            List<DrawingComponentModel> drawingComponents = model.GetDrawingComponents(projectModel);
             return drawingComponents;
         }
     }
