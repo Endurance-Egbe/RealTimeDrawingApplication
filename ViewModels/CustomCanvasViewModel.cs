@@ -14,12 +14,18 @@ using View.ViewModels.ComponentServices;
 using Prism.Ioc;
 using View.ViewModels.ProxyModel;
 using View.ViewModels.ShapeServices;
+using Prism.Mvvm;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 //using View.ViewModels.ShapeServices;
 
 namespace View.ViewModels
 {
-    public class CustomCanvasViewModel : Canvas
+    public class CustomCanvasViewModel : Canvas, INotifyPropertyChanged
     {
+        private FrameworkElement selectedElement;
+        private ComponentModel currentSelectedItem;
+
         public CustomCanvasViewModel()
         {
             AllowDrop = true;
@@ -33,19 +39,19 @@ namespace View.ViewModels
         //public IEnumerable<DrawingComponentProxyModel> DrawingComponentProxies  { get; set; }
         private void LoadDrawingComponents(IEnumerable<DrawingComponentProxyModel> drawingComponents)
         {
-           
+
             //FrameworkElement component1 = null;
             //var component = component1 as IPropertyWindow;
-            
+
             Children.Clear();
-            if (drawingComponents!=null)
+            if (drawingComponents != null)
             {
                 List<DrawingComponentProxyModel> drawingComponentsModel = new List<DrawingComponentProxyModel>();
                 drawingComponentsModel = drawingComponents.ToList();
                 ComponentEnum componentEnum = ComponentEnum.TextBox;
                 foreach (var drawing in drawingComponentsModel)
                 {
-                    
+
                     switch (drawing.Title)
                     {
                         case "Triangle":
@@ -68,7 +74,7 @@ namespace View.ViewModels
                     }
 
                     ShapeServices.ShapeServices shapeServices = new ShapeServices.ShapeServices();
-                    var getDefaultComponent=shapeServices.GetDefaultControl(componentEnum);
+                    var getDefaultComponent = shapeServices.GetDefaultControl(componentEnum);
                     var _component = getDefaultComponent as IPropertyWindow;
                     _component.Title = drawing.Title;
                     _component.Width = drawing.Width;
@@ -84,9 +90,9 @@ namespace View.ViewModels
                     SetLeft(getDefaultComponent, drawing.X);
                     SetTop(getDefaultComponent, drawing.Y);
                 }
-                
+
             }
-            
+
         }
         private void UpdateCanvasElement(ComponentModel property)
         {
@@ -154,9 +160,14 @@ namespace View.ViewModels
             }
         }
 
-        private FrameworkElement SelectedElement { get; set; }
+        private FrameworkElement SelectedElement { get => selectedElement; set { selectedElement = value; OnPropertyChanged(); } }
         public IEventAggregator EventAggregator { get; set; }
-        public ComponentModel CurrentSelectedItem { get; set; }
+        public ComponentModel CurrentSelectedItem { get => currentSelectedItem; set { currentSelectedItem = value; OnPropertyChanged(); } }
+        public event PropertyChangedEventHandler PropertyChanged;
+        public void OnPropertyChanged([CallerMemberName] string propertyName = "")
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
         protected override void OnDrop(DragEventArgs e)
         {
             var item = e.Data.GetData("toolboxitem") as FrameworkElement;
@@ -204,7 +215,7 @@ namespace View.ViewModels
                 CurrentSelectedItem.PropertyType = PropertyType.Y;
                 CurrentSelectedItem.Value = (double)yValue;
                 EventAggregator.GetEvent<UpdatePropertyWindow>().Publish(CurrentSelectedItem);
-
+                
             }
         }
         protected override void OnMouseMove(MouseEventArgs e)
@@ -223,8 +234,10 @@ namespace View.ViewModels
                     CurrentSelectedItem.PropertyType = PropertyType.Y;
                     CurrentSelectedItem.Value = (double)position.Y;
                     EventAggregator.GetEvent<UpdatePropertyWindow>().Publish(CurrentSelectedItem);
+                   
 
                 }
+                ResetPreviousComponent();
             }
 
         }
@@ -242,23 +255,29 @@ namespace View.ViewModels
                     ComponentEnum = component.ComponentEnum,
 
                 };
-                ResetPreviousComponent();
+
                 component.ShowBorder = true;
                 SelectedElement = component.GetComponent() as FrameworkElement;
+               
+               
                 EventAggregator.GetEvent<UpdatePropertyWindow>().Publish(CurrentSelectedItem);
-
+               
+                
             }
+            
             base.OnMouseLeftButtonDown(e);
         }
 
         protected override void OnMouseLeftButtonUp(MouseButtonEventArgs e)
         {
             SelectedElement = null;
+            ResetPreviousComponent();
             base.OnMouseLeftButtonUp(e);
         }
         private void SelectedElement_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
             SelectedElement = null;
+            
             base.OnMouseLeftButtonUp(e);
         }
         private FrameworkElement GetParent(FrameworkElement frameworkElement)
@@ -282,10 +301,10 @@ namespace View.ViewModels
             foreach (FrameworkElement item in Children)
             {
 
-                if (item is IPropertyWindow component && component.ShowBorder)
+                if (item is IPropertyWindow component && component.ShowBorder==true)
                 {
                     _component = item;
-                    //break;
+                    break;
                 }
             }
             if (_component != null)
@@ -298,5 +317,5 @@ namespace View.ViewModels
 
 
     }
-    
+
 }

@@ -42,7 +42,7 @@ namespace View
             
             CreateAccount accountWindow = new CreateAccount();
             accountWindow.ShowDialog();
-           ;
+           
         }
     }
 }

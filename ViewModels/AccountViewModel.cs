@@ -68,7 +68,7 @@ namespace View.ViewModels
 
                 MessageBox.Show("Account Created Successfully!",
                     "Success Message", MessageBoxButton.OK);
-                OpenMainWindowProgram();
+                //OpenMainWindowProgram();
                 return;
             }
 

@@ -13,7 +13,7 @@ namespace View.ViewModels.DatabaseServices
 {
     public class DrawingComponentService
     {
-        private static int projectId;
+        
         public static void CreateDrawings(ProjectProxyModel projectProxy, List<DrawingComponentProxyModel> drawingComponent)
         {
             List<DrawingComponentModel> drawingModels = new List<DrawingComponentModel>();
@@ -22,22 +22,21 @@ namespace View.ViewModels.DatabaseServices
             var model = new DrawingComponentEFCoreRepository(sqlite);
             ProjectModel projectModel = model.GetCurrentProject(projectProxy.ProjectName);
             IEnumerable<DrawingComponentModel> drawingComponentModel = model.GetDrawingComponents(projectModel);            
-            if (projectId==projectModel.ProjectId)
+            if (drawingComponentModel!=null)
             {
                 foreach (var item in drawingComponentModel)
                 {
                     model.DeleteModel(item);
                 }              
             }
-            else
-            {
+          
                 foreach (var drawing in drawingModels)
                 {
                     drawing.Project = projectModel;
                     model.CreateModel(drawing);
 
                 }
-            }
+            
 
 
 
