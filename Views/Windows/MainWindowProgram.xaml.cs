@@ -17,6 +17,11 @@ using View.ViewModels;
 using View.ViewModels.Common;
 using View.ViewModels.ProxyModel;
 using View.ViewModels.ShapeServices;
+using Prism.Events;
+using Prism.Mvvm;
+using View.Helper.Common.Event_Container;
+using View.Wndows;
+
 
 namespace MainViews.Windows
 {
@@ -31,9 +36,14 @@ namespace MainViews.Windows
 
             //DataContext = new MainWindowViewModel(accountProxyModel);
             //DataContext = GenericServiceLocator.ShellContainer.Resolve<MainWindowViewModel>();
-
+            EventAggregator = GenericServiceLocator.ShellContainer.Resolve<IEventAggregator>();
+            EventAggregator.GetEvent<CloseMainWindowEvent>().Subscribe(CloseMainWindow);
         }
-
+        public IEventAggregator EventAggregator { get; set; }
+        void CloseMainWindow()
+        {
+            this.Close();
+        }
         private void BtnPropertyWindow_Click(object sender, RoutedEventArgs e)
         {
             PropMenuPopup.IsOpen = true;
@@ -97,5 +107,7 @@ namespace MainViews.Windows
 
 
         }
+
+       
     }
 }

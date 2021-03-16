@@ -15,11 +15,6 @@ namespace View.Models
         public virtual AccountModel User { get; set; }
         public virtual List<ShareUserProject> ShareUsers { get; set; }
         public virtual List<DrawingComponentModel> ShapeComponents { get; set; }
-        //public ProjectModel()
-        //{
-        //    ShareUsers = new List<ShareUserProject>();
-        //    ShapeComponents = new List<DrawingComponentModel>();
-        //}
-
+       
     }
 }

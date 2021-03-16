@@ -25,6 +25,7 @@ namespace View.ViewModels
         private CustomColor _selectedBorderColor = new CustomColor(); //{ ColorName = "Red", ColorType = Brushes.Red };
         private int _strokeThickness;
         private CustomColor _selectedStrokeColor = new CustomColor();// { ColorName = "Red", ColorType = Brushes.Red };
+        private int _lineThickness;
 
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -39,6 +40,7 @@ namespace View.ViewModels
             { nameof(SelectedBorderColor),PropertyType.BorderColor},
             {nameof(SelectedStrokeColor), PropertyType.Stroke },
             { nameof(StrokeThickness),PropertyType.StrokeThickness},
+            { nameof(LineThickness),PropertyType.LineThickness}
         };
 
 
@@ -63,6 +65,8 @@ namespace View.ViewModels
                     return SelectedStrokeColor.ColorType;
                 case nameof(StrokeThickness):
                     return StrokeThickness;
+                    case nameof(LineThickness):
+                    return LineThickness;
                 default:
                     return null;
             }
@@ -135,6 +139,9 @@ namespace View.ViewModels
                         //SelectedBorderColor = (SolidColorBrush)property.Value;
                         SelectedBorderColor = ColorCollections.FirstOrDefault(x => x.ColorType == property.Value as SolidColorBrush);
                         break;
+                    case PropertyType.LineThickness:
+                        LineThickness = (int)property.Value;
+                        break;
                     default:
                         break;
                 }
@@ -197,6 +204,15 @@ namespace View.ViewModels
             set
             {
                 _strokeThickness = value;
+                OnPropertyChanged();
+            }
+        }
+        public int LineThickness
+        {
+            get => _lineThickness;
+            set
+            {
+                _lineThickness = value;
                 OnPropertyChanged();
             }
         }

@@ -11,6 +11,9 @@ using System.Windows;
 using View.ViewModels.Common.Event_Container;
 using View.ViewModels.DatabaseServices;
 using View.ViewModels.ProxyModel;
+using View.ViewModels.Common;
+using View.Helper.Common.Event_Container;
+using Prism.Ioc;
 
 namespace View.ViewModels
 {
@@ -22,11 +25,12 @@ namespace View.ViewModels
         //private AccountProxyModel user=new AccountProxyModel();
         //private Window window;
 
-        public LoginViewModel()//IEventAggregator eventAggregator)
+        public LoginViewModel(IEventAggregator eventAggregator)
         {
             //EventAggregator = eventAggregator;
             LoginAccountCommand = new DelegateCommand(LoginAccount);
-
+            EventAggregator = GenericServiceLocator.ShellContainer.Resolve<IEventAggregator>();
+            
         }
         public AccountProxyModel User { get; set; }
         public string Email { get => email; set { email = value; RaisePropertyChanged(); } }

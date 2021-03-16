@@ -10,7 +10,7 @@ using View.ViewModels.ProxyModel;
 
 namespace View.Export_Import
 {
-    public class JsonServices
+    public class JsonService
     {
         private  static string JsonSerializedObject (ProjectProxyModel projectProxyModel)
         {
@@ -27,11 +27,11 @@ namespace View.Export_Import
         public static void ExportWithJson(ProjectProxyModel projectProxyModel)
         {
             string serializedDrawing = JsonSerializedObject(projectProxyModel);
-            FileServices.SaveFile(serializedDrawing);
+            FileService.SaveFile(serializedDrawing);
         }
         public static IEnumerable<DrawingComponentProxyModel> ImportWithJson()
         {
-            string filePath = FileServices.OpenFile();
+            string filePath = FileService.OpenFile();
             var drawingProxyModel = JsonDeserializedObject(filePath);
             return drawingProxyModel;
         }

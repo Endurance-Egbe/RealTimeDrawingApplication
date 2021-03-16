@@ -12,7 +12,7 @@ using View.ViewModels.ProxyModel;
 
 namespace View.Export_Import
 {
-    public class XmlServices
+    public class XmlService
     {
        
         public static void ExportWithXml(ProjectProxyModel projectProxyModel)

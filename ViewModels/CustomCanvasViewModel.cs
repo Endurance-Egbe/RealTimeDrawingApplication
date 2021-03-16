@@ -182,12 +182,9 @@ namespace View.ViewModels
             if (item is IPropertyWindow componentProperty)
             {
                 ResetPreviousComponent();
-                componentProperty.ShowBorder = true;
-                CurrentSelectedItem.PropertyType = PropertyType.ShowBorder;
-                CurrentSelectedItem.Value = componentProperty.ShowBorder;
-                EventAggregator.GetEvent<UpdatePropertyWindow>().Publish(CurrentSelectedItem);
-                CurrentSelectedItem.PropertyType = PropertyType.Title;
-                CurrentSelectedItem.Value = (string)componentProperty.Title;
+                
+                CurrentSelectedItem.PropertyType = PropertyType.StrokeThickness;
+                CurrentSelectedItem.Value = (int)componentProperty.LineThickness;
                 EventAggregator.GetEvent<UpdatePropertyWindow>().Publish(CurrentSelectedItem);
                 CurrentSelectedItem.PropertyId = componentProperty.Id;
                 CurrentSelectedItem.ComponentEnum = componentProperty.ComponentEnum;
@@ -214,18 +211,25 @@ namespace View.ViewModels
                 EventAggregator.GetEvent<UpdatePropertyWindow>().Publish(CurrentSelectedItem);
                 CurrentSelectedItem.PropertyType = PropertyType.Y;
                 CurrentSelectedItem.Value = (double)yValue;
+                EventAggregator.GetEvent<UpdatePropertyWindow>().Publish(CurrentSelectedItem);//componentProperty.ShowBorder = true;
+                CurrentSelectedItem.PropertyType = PropertyType.ShowBorder;
+                componentProperty.ShowBorder=true;
+                CurrentSelectedItem.Value = componentProperty.ShowBorder;
                 EventAggregator.GetEvent<UpdatePropertyWindow>().Publish(CurrentSelectedItem);
-                
             }
         }
         protected override void OnMouseMove(MouseEventArgs e)
         {
+           
             if (SelectedElement != null)
             {
+                //var item = e.GetData("toolboxitem") as FrameworkElement;
                 var position = e.GetPosition(this);
+                
                 if (position.X < ActualWidth - SelectedElement.ActualWidth &&
                     position.Y < ActualHeight - SelectedElement.ActualHeight)
                 {
+
                     SetLeft(SelectedElement, position.X);
                     SetTop(SelectedElement, position.Y);
                     CurrentSelectedItem.PropertyType = PropertyType.X;
@@ -234,17 +238,17 @@ namespace View.ViewModels
                     CurrentSelectedItem.PropertyType = PropertyType.Y;
                     CurrentSelectedItem.Value = (double)position.Y;
                     EventAggregator.GetEvent<UpdatePropertyWindow>().Publish(CurrentSelectedItem);
-                   
+                    
 
                 }
                 ResetPreviousComponent();
             }
-
+            
         }
         protected override void OnMouseLeftButtonDown(MouseButtonEventArgs e)
         {
             SelectedElement = e.Source as FrameworkElement;
-            SelectedElement.MouseLeftButtonUp += SelectedElement_MouseLeftButtonUp;
+            //SelectedElement.MouseLeftButtonUp += SelectedElement_MouseLeftButtonUp;
 
             if (GetParent(SelectedElement) is IPropertyWindow component)
             {
@@ -256,13 +260,33 @@ namespace View.ViewModels
 
                 };
 
-                component.ShowBorder = true;
+                CurrentSelectedItem.PropertyType = PropertyType.Width;
+                CurrentSelectedItem.Value = (double)component.Width;
+                EventAggregator.GetEvent<UpdatePropertyWindow>().Publish(CurrentSelectedItem);
+                CurrentSelectedItem.PropertyType = PropertyType.Height;
+                CurrentSelectedItem.Value = (double)component.Height;
+                EventAggregator.GetEvent<UpdatePropertyWindow>().Publish(CurrentSelectedItem);
+                CurrentSelectedItem.PropertyType = PropertyType.Title;
+                CurrentSelectedItem.Value = (string)component.Title;
+                EventAggregator.GetEvent<UpdatePropertyWindow>().Publish(CurrentSelectedItem);
+                CurrentSelectedItem.PropertyType = PropertyType.BorderColor;
+                CurrentSelectedItem.Value = (SolidColorBrush)component.SelectedBorderColor;
+                EventAggregator.GetEvent<UpdatePropertyWindow>().Publish(CurrentSelectedItem);
+                CurrentSelectedItem.PropertyType = PropertyType.FillColor;
+                CurrentSelectedItem.Value = (SolidColorBrush)component.SelectedFillColor;
+                EventAggregator.GetEvent<UpdatePropertyWindow>().Publish(CurrentSelectedItem);
+                CurrentSelectedItem.PropertyType = PropertyType.Stroke;
+                CurrentSelectedItem.Value = (SolidColorBrush)component.SelectedStroke;
+                EventAggregator.GetEvent<UpdatePropertyWindow>().Publish(CurrentSelectedItem);
+                CurrentSelectedItem.PropertyType = PropertyType.StrokeThickness;
+                CurrentSelectedItem.Value = (int)component.LineThickness;
+                EventAggregator.GetEvent<UpdatePropertyWindow>().Publish(CurrentSelectedItem);
                 SelectedElement = component.GetComponent() as FrameworkElement;
                
                
                 EventAggregator.GetEvent<UpdatePropertyWindow>().Publish(CurrentSelectedItem);
                
-                
+               
             }
             
             base.OnMouseLeftButtonDown(e);
@@ -304,14 +328,18 @@ namespace View.ViewModels
                 if (item is IPropertyWindow component && component.ShowBorder==true)
                 {
                     _component = item;
-                    break;
+
+                    component.ShowBorder = false;
+                    //break;
                 }
+               
             }
             if (_component != null)
             {
                 var __component = (_component as IPropertyWindow);
-                __component.ShowBorder = false;
+
                 _component = __component.GetComponent() as FrameworkElement;
+                __component.ShowBorder = false;
             }
         }
 

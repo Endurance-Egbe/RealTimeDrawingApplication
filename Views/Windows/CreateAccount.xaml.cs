@@ -12,6 +12,11 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using View.ViewModels;
+using Prism.Ioc;
+using Prism.Mvvm;
+using Prism.Events;
+using View.Helper.Common.Event_Container;
+using View.ViewModels.Common;
 
 namespace View.Wndows
 {
@@ -24,6 +29,13 @@ namespace View.Wndows
         {
             InitializeComponent();
             DataContext = new AccountViewModel();
+            EventAggregator = GenericServiceLocator.ShellContainer.Resolve<IEventAggregator>();
+            EventAggregator.GetEvent<CloseAccountWindowEvent>().Subscribe(CloseWindow);
+        }
+        public IEventAggregator EventAggregator { get; set; }
+        void CloseWindow()
+        {
+            this.Close();
         }
     }
 }

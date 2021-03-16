@@ -6,74 +6,81 @@
              xmlns:local="clr-namespace:View.UserControls"
              mc:Ignorable="d" 
             d:DesignHeight="450" d:DesignWidth="200" Background="#FF454B84">
-    <UserControl.Resources>
-        <Style TargetType="Button">
-            
-            <Setter Property="FontWeight" Value="Bold"/>
-            <Setter Property="Margin" Value="0,5"/>
-            <Setter Property="Foreground" Value="WhiteSmoke"/>
-            <Setter Property="FontSize" Value="15"/>
-            <Setter Property="Cursor" Value="Hand"/>
-            <Style.Triggers>
-                <Trigger Property="Background" Value="Transparent" />
-            </Style.Triggers>
-        </Style>
-    </UserControl.Resources>
+    
     <DockPanel>
         <StackPanel DockPanel.Dock="Top" Margin="10">
-            <TextBlock  Text="{Binding AccountName}" TextAlignment="Left" 
-                        FontSize="15" FontWeight="Bold"
-                        Foreground="Maroon"/>
+                <TextBlock  Text="{Binding AccountName}" TextAlignment="Left" 
+                        FontSize="20" FontWeight="Bold" FontFamily="Century Gucci"
+                        Foreground="Wheat" TextWrapping="Wrap"/>
             <TextBlock  Text="{Binding AccountEmail}" TextAlignment="Left" 
                         FontSize="10"  Foreground="AliceBlue"/>
             <Button Background="Transparent" BorderBrush="Transparent"
-                    HorizontalAlignment="Stretch"
+                    HorizontalAlignment="Stretch"  Cursor="Hand"
                     HorizontalContentAlignment="Stretch"
-                    Content="LogOut"
+                    Content="LogOut" FontSize="15" Margin="0,10"
+                    FontWeight="Bold" Foreground="WhiteSmoke"
                     Command="{Binding LogOutCommand}"
-                    CommandParameter="Log Out">
+                    CommandParameter="Log Out" FontFamily="Century Gucci">
             </Button>
             <Button Background="Transparent" BorderBrush="Transparent"
                     HorizontalAlignment="Stretch"
                     HorizontalContentAlignment="Stretch"
                     Content="Create Project"
                     Command="{Binding CreateProjectCommand}"
-                    CommandParameter="Create Project">
+                    CommandParameter="Create Project"
+                    FontSize="15" Margin="0,10"  Cursor="Hand"
+                    FontWeight="Bold" Foreground="WhiteSmoke"
+                    FontFamily="Century Gucci">
             </Button>
             <Button Background="Transparent" BorderBrush="Transparent"
                     HorizontalAlignment="Stretch"
                     HorizontalContentAlignment="Stretch"
                     Content="Share Project                 &gt;"
                     Command="{Binding ShareProjectCommand}"
-                    CommandParameter="Share Project">
+                    CommandParameter="Share Project"
+                    FontSize="15" Margin="0,10"  Cursor="Hand"
+                    FontWeight="Bold" Foreground="WhiteSmoke"
+                    FontFamily="Century Gucci">
             </Button>
             <Button Background="Transparent" BorderBrush="Transparent"
                     HorizontalAlignment="Stretch"
                     HorizontalContentAlignment="Stretch"
                     Content="Save Project                   &gt;"
                     Command="{Binding SaveProjectCommand}"
-                    CommandParameter="Save Project">
+                    CommandParameter="Save Project"
+                    FontSize="15" Margin="0,10"  Cursor="Hand"
+                    FontWeight="Bold" Foreground="WhiteSmoke"
+                    FontFamily="Century Gucci">
             </Button>
             <Button Background="Transparent" BorderBrush="Transparent"
                     HorizontalAlignment="Stretch"
                     HorizontalContentAlignment="Stretch"
                     Content="Delete Project                &gt;"
                     Command="{Binding DeleteProjectCommand}"
-                    CommandParameter="Delete Project">
+                    CommandParameter="Delete Project"
+                    FontSize="15" Margin="0,10"  Cursor="Hand"
+                    FontWeight="Bold" Foreground="WhiteSmoke"
+                    FontFamily="Century Gucci">
             </Button>
             <Button Background="Transparent" BorderBrush="Transparent"
                     HorizontalAlignment="Stretch"
                     HorizontalContentAlignment="Stretch"
                     Content="Export                             &gt;"
                     Command="{Binding ExportProjectCommand}"
-                    CommandParameter="Export">
+                    CommandParameter="Export"
+                    FontSize="15" Margin="0,10"  Cursor="Hand"
+                    FontWeight="Bold" Foreground="WhiteSmoke"
+                    FontFamily="Century Gucci">
             </Button>
             <Button Background="Transparent" BorderBrush="Transparent"
                     HorizontalAlignment="Stretch"
                     HorizontalContentAlignment="Stretch"
                     Content="Import                            &gt;"
                     Command="{Binding ImportProjectCommand}"
-                    CommandParameter="Import">
+                    CommandParameter="Import"
+                    FontSize="15" Margin="0,10" Cursor="Hand"
+                    FontWeight="Bold" Foreground="WhiteSmoke"
+                    FontFamily="Century Gucci">
             </Button>
             
         </StackPanel>
@@ -81,21 +88,23 @@
         <DockPanel DockPanel.Dock="Bottom" VerticalAlignment="Bottom">
 
             <Button  Content="Close" HorizontalAlignment="Left" VerticalAlignment="Bottom" 
-                    FontSize="20" Foreground="Maroon" x:Name="btnCloseMenu"
+                    FontSize="20" Foreground="Wheat" x:Name="btnCloseMenu"
                     DockPanel.Dock="Bottom" Click="BtnCloseMenu_Click"
                      Background="Transparent" BorderBrush="Transparent"
-                     HorizontalContentAlignment="Stretch" Cursor="Hand"/>
+                     HorizontalContentAlignment="Stretch" Cursor="Hand"
+                     Margin="0,5"
+                    FontWeight="Bold" />
         </DockPanel>
         <Popup IsOpen="{Binding IsOpenExport}" Placement="Mouse"
                StaysOpen="False" PopupAnimation="Slide" Width="80"
                >
             <StackPanel Background="#FF454B84" >
                 <Button Content="XML" Foreground="WhiteSmoke" Background="Transparent" 
-                        FontSize="20" BorderBrush="WhiteSmoke" Cursor="Hand"
+                        FontSize="15" BorderBrush="WhiteSmoke" Cursor="Hand"
                         Margin="0" Command="{Binding ExportXmlCommand}"
                         CommandParameter="ExportXml"/>
                 <Button Content="Json" Foreground="WhiteSmoke" Background="Transparent" 
-                        FontSize="20" BorderBrush="WhiteSmoke" Cursor="Hand"
+                        FontSize="15" BorderBrush="WhiteSmoke" Cursor="Hand"
                         Margin="0" Command="{Binding ExportJsonCommand}"
                         CommandParameter="ExportJson"/>
 
@@ -106,11 +115,11 @@
                >
             <StackPanel Background="#FF454B84" >
                 <Button Content="XML" Foreground="WhiteSmoke" Background="Transparent" 
-                        FontSize="20" BorderBrush="WhiteSmoke" Cursor="Hand"
+                        FontSize="15" BorderBrush="WhiteSmoke" Cursor="Hand"
                         Margin="0" Command="{Binding ImportXmlCommand}"
                         CommandParameter="ImportXml"/>
                 <Button Content="Json" Foreground="WhiteSmoke" Background="Transparent" 
-                        FontSize="20" BorderBrush="WhiteSmoke" Cursor="Hand"
+                        FontSize="15" BorderBrush="WhiteSmoke" Cursor="Hand"
                          Margin="0" Command="{Binding ImportJsonCommand}"
                         CommandParameter="ImportJson"/>
 

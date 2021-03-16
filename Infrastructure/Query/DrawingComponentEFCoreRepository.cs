@@ -9,10 +9,10 @@ namespace View.Infrastructure.Query
 {
     public class DrawingComponentEFCoreRepository : EFCoreRepository<DrawingComponentModel>
     {
-        private UserDbContext userContext;
+        //private UserDbContext userContext;
         public DrawingComponentEFCoreRepository(UserDbContext _userContext) : base(_userContext)
         {
-            userContext = _userContext;
+            //userContext = _userContext;
         }
         public ProjectModel GetCurrentProject(string projectName)
         {
@@ -22,17 +22,12 @@ namespace View.Infrastructure.Query
         }
         public List<DrawingComponentModel> GetDrawingComponents(ProjectModel projectModel)
         {
-            //var components = userContext.Projects.FirstOrDefault(x => x.ProjectId == projectModel.ProjectId);
-            //IEnumerable<DrawingComponentModel> components = from component in userContext.DrawingComponentModels
-            //                 where component.Project.ProjectId == projectModel.ProjectId
-            //                 select component;
-            ////var test=userContext.Find<DrawingComponentModel>().Where
 
-            var test = userContext.DrawingComponentModels
+            var components = userContext.DrawingComponentModels
                 .Where(x => x.Project == projectModel)
                 .ToList();
 
-            return test;
+            return components;
         }
     }
 }

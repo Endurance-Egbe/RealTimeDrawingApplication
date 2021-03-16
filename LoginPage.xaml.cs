@@ -17,21 +17,29 @@ using View.ViewModels;
 using View.ViewModels.Common;
 using View.Wndows;
 using Prism.Ioc;
+using Prism.Events;
+using Prism.Mvvm;
+using View.Helper.Common.Event_Container;
 
 namespace View
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class LoginPage : Window
     {
-        public MainWindow()
+        public LoginPage()
         {
             InitializeComponent();
             DataContext = GenericServiceLocator.ShellContainer.Resolve<LoginViewModel>();
-            
+            EventAggregator = GenericServiceLocator.ShellContainer.Resolve<IEventAggregator>();
+            EventAggregator.GetEvent<CloseWindowEvent>().Subscribe(CloseWindow);
         }
-
+        public IEventAggregator EventAggregator  { get; set; }
+        void CloseWindow()
+        {
+            this.Close();
+        }
         private void btnLogin_Click(object sender, RoutedEventArgs e)
         {
            
@@ -42,7 +50,7 @@ namespace View
             
             CreateAccount accountWindow = new CreateAccount();
             accountWindow.ShowDialog();
-           
+            
         }
     }
 }

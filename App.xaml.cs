@@ -15,11 +15,11 @@ namespace View
         {
 
         }
-        
+
         protected override Window CreateShell()
         {
             GenericServiceLocator.ShellContainer = Container;
-            return Container.Resolve<MainWindow>();
+            return Container.Resolve<LoginPage>();
         }
 
         protected override void RegisterTypes(IContainerRegistry containerRegistry)

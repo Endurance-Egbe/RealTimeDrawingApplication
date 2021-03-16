@@ -14,6 +14,7 @@ using System.Windows;
 using Prism.Commands;
 using System.Windows.Controls;
 using View.ViewModels.DatabaseServices;
+using View.Helper.Common.Event_Container;
 
 namespace View.ViewModels
 {
@@ -27,9 +28,9 @@ namespace View.ViewModels
         {
             EventAggregator = GenericServiceLocator.ShellContainer.Resolve<IEventAggregator>();
             EventAggregator.GetEvent<CurrentProjectEvent>().Subscribe(CurrentProjectModel);
-            EventAggregator.GetEvent<CurrentAccountModelEvent>().Subscribe(CurrentAccountModel);
+            
             ProjectList = new ObservableCollection<ProjectProxyModel>();
-
+            EventAggregator.GetEvent<GetAllUserProjectsEvent>().Subscribe(SetAllProjects);
         }
         public ObservableCollection<ProjectProxyModel> ProjectList { get; set; }
         public bool IsChecked { get => isChecked; set { isChecked = value; RaisePropertyChanged(); } }
@@ -66,6 +67,16 @@ namespace View.ViewModels
         {
            GetDrawingComponents =  DrawingComponentService.GetDrawings(project);
             EventAggregator.GetEvent<DrawingComponentEvent>().Publish(GetDrawingComponents);
+        }
+        void SetAllProjects(ObservableCollection<string> projectNames)
+        {
+
+            foreach (var item in projectNames)
+            {
+                ProjectProxyModel projects = new ProjectProxyModel();
+                projects.ProjectName = item;
+                ProjectList.Add(projects);
+            }
         }
     }
     //public class Project

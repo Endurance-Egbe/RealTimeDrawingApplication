@@ -9,10 +9,10 @@ namespace View.Infrastructure.Query
 {
     public class ProjectModelEFCoreRepository : EFCoreRepository<ProjectModel>
     {
-        private UserDbContext userContext;
+        //private UserDbContext userContext;
         public ProjectModelEFCoreRepository(UserDbContext _userContext) : base(_userContext)
         {
-            userContext = _userContext;
+            //userContext = _userContext;
         }
         public void CreateProjectModel(string email, ProjectModel projectModel)
         {
@@ -21,16 +21,26 @@ namespace View.Infrastructure.Query
             userContext.Add(projectModel);
             userContext.SaveChanges();
         }
-        //public List<ProjectModel> GetProjectModels(string email)
-        //{
-        //    AccountModel accountModel = userContext.Set<AccountModel>().FirstOrDefault(x => x.Email == email);
-        //    ProjectModel model = userContext.Set<ProjectModel>().FirstOrDefault(x => x.User == accountModel);
-            
-        //    if (model != null)
-        //    {
-        //        return model.ProjectName;
-        //    }
-        //    return null;
-        //}
+        public List<ProjectModel> GetProjectModels(string email)
+        {
+            AccountModel accountModel = userContext.Set<AccountModel>().FirstOrDefault(x => x.Email == email);
+            var model = userContext.Projects
+               .Where(x => x.User == accountModel)
+               .ToList();
+            //ProjectModel model = userContext.Set<ProjectModel>().Find(x => x.User == accountModel);
+
+            if (model != null)
+            {
+                return model;
+            }
+            return null;
+        }
+        public ProjectModel GetProjectModel(string projectName)
+        {
+
+            ProjectModel model = userContext.Set<ProjectModel>().FirstOrDefault(x => x.ProjectName == projectName);
+
+                return model;
+        }
     }
 }

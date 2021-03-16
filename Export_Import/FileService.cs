@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace View.Export_Import
 {
-    public class FileServices
+    public class FileService
     {
 
         public static void SaveFile(string serialized)
@@ -17,7 +17,7 @@ namespace View.Export_Import
             {
                 Title="Save File",
                 Filter="Text Document(*.txt) | *.txt",
-                FileName=" "
+                //FileName=" "
             };
             if (saveFile.ShowDialog()==true)
             {
@@ -34,7 +34,7 @@ namespace View.Export_Import
             {
                 Title = "Open File",
                 Filter = "Text Document(*.txt) | *.txt",
-                FileName = " "
+                //FileName = " "
             };
             if (openFile.ShowDialog()==true)
             {

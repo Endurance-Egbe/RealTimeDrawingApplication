@@ -16,18 +16,22 @@ using Prism.Ioc;
 using View.ViewModels.ProxyModel;
 using View.ViewModels.Common.CustomColor;
 using View.ViewModels.DatabaseServices;
+using View.Helper.Common.Event_Container;
+using System.Collections.ObjectModel;
+using View.Windows;
 
 namespace View.ViewModels
 {
     public class MainWindowViewModel : BindableBase
     {
-        private string _currentWindowTitle = "Project Window";
-        private UserControl s_currentWindow;//= new ProjectWindow();
+        private string _currentWindowTitle = "Property Window";
+        private UserControl s_currentWindow = new PropertyWindow();
         private CustomCanvasViewModel customCanvas = new CustomCanvasViewModel();
         private FrameworkElement menuPane;
         private UserControl propertyWindow ;
         private UserControl projectWindow ;
         private UserControl shareUserControl;
+        private bool isOpen;
 
         public MainWindowViewModel(AccountProxyModel accountProxy)
         {
@@ -38,12 +42,19 @@ namespace View.ViewModels
             shareUserControl = new ShareUserControl();
             UpdateWindowCommand = new DelegateCommand<string>(UpdateWindow);
             OpenMenuPaneCommand = new DelegateCommand(OpenMenuPane);
+            OpenExportPopUpCommand = new DelegateCommand(OpenExportPopUp);
+            ExportXmlCommand = new DelegateCommand<string>(ExportDrawings);
+            ExportJsonCommand = new DelegateCommand<string>(ExportDrawings);
+            ShareProjectCommand = new DelegateCommand(OpenShareUserProjectWindow);
             //EventAggregator = new EventAggregator();
-            //EventAggregator.GetEvent<CurrentAccountModelEvent>().Publish(accountProxy);
-            MenuPane = new MenuPane(accountProxy);
+            User = accountProxy;
+            MenuPane = new MenuPane(User);
+            
             EventAggregator = GenericServiceLocator.ShellContainer.Resolve<IEventAggregator>();
             EventAggregator.GetEvent<CanvasComponentEvent>().Subscribe(DrawingComponents);
             EventAggregator.GetEvent<ClearDrawingCanvasEvent>().Subscribe(ClearCanvasElements);
+            EventAggregator.GetEvent<CloseWindowEvent>().Publish();
+            GetAllUserProjects();
             //EventAggregator.GetEvent<CurrentAccountModelEvent>().Subscribe(CurrentUser);
         }
         public string CurrentWindowTitle { get { return _currentWindowTitle; } set { _currentWindowTitle = value; RaisePropertyChanged(); } }
@@ -55,12 +66,36 @@ namespace View.ViewModels
         public UserControl ShareUserControl { get => shareUserControl; set { shareUserControl = value; RaisePropertyChanged(); } }
         public DelegateCommand<string> UpdateWindowCommand { get; set; }
         public DelegateCommand OpenMenuPaneCommand { get; set; }
+        public DelegateCommand ShareProjectCommand { get; set; }
+        public DelegateCommand OpenExportPopUpCommand { get; set; }
+        public DelegateCommand<string> ExportXmlCommand { get; set; }
+        public DelegateCommand<string> ExportJsonCommand { get; set; }
         public IEventAggregator EventAggregator { get; set; }
+        public AccountProxyModel  User { get; set; }
+        public bool IsOpen { get=>isOpen; set { isOpen = value; RaisePropertyChanged(); } }
 
-        
+        void OpenExportPopUp()
+        {
+            IsOpen = true;
+        }
+        void ExportDrawings(string parameter)
+        {
+            EventAggregator.GetEvent<ExportDrawingsEvent>().Publish(parameter);
+        }
+        void OpenShareUserProjectWindow()
+        {
+            if (CurrentProjectModel!=null)
+            {
+                ShareProject shareProject = new ShareProject();
+                shareProject.DataContext = new ShareUserViewModel(CurrentProjectModel);
+                shareProject.ShowDialog();
+            }
+            
+        }
         private void OpenMenuPane()
         {
             menuPane.Visibility = Visibility.Visible;
+            
         }
         void UpdateWindow(string property)
         {
@@ -83,7 +118,11 @@ namespace View.ViewModels
         }
         private void ClearCanvasElements()
         {
-            CustomCanvas.Children.Clear();
+            if (CurrentProjectModel!=null)
+            {
+                CustomCanvas.Children.Clear();
+            }
+            
         }
         public List<DrawingComponentProxyModel> DrawingComponentProxies { get; set; }
         public ProjectProxyModel CurrentProjectModel { get; set; }
@@ -129,10 +168,20 @@ namespace View.ViewModels
         }
         void SaveProject()
         {
-            DrawingComponentService.CreateDrawings(CurrentProjectModel, DrawingComponentProxies);
-            MessageBox.Show("Project Saved Successfully!", "Success Message", MessageBoxButton.OK);
+            if (CurrentProjectModel!=null)
+            {
+                DrawingComponentService.CreateDrawings(CurrentProjectModel, DrawingComponentProxies);
+                MessageBox.Show("Project Saved Successfully!", "Success Message", MessageBoxButton.OK);
+                return;
+            }
+            EventAggregator.GetEvent<OpenWindowEvent>().Publish();
         }
-
+        void GetAllUserProjects()
+        {
+            ObservableCollection<string> getAllUserProjects = new ObservableCollection<string>();
+            getAllUserProjects = ProjectService.GetAllProjects(User);
+            EventAggregator.GetEvent<GetAllUserProjectsEvent>().Publish(getAllUserProjects);
+        }
     }
 }
 

@@ -15,6 +15,6 @@ namespace View.ViewModels.Common
     }
     public enum PropertyType
     {
-        Title, X, Y, Width, Height, StrokeThickness, Stroke, FillColor, BorderColor, ShowBorder
+        Title, X, Y, Width, Height, StrokeThickness, Stroke, FillColor, BorderColor, ShowBorder, LineThickness
     }
 }

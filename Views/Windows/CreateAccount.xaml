@@ -24,13 +24,16 @@
             <ColumnDefinition Width="2*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="auto"/>
             <RowDefinition Height="3*"/>
             <RowDefinition Height="3*"/>
             <RowDefinition Height="3*"/>
             <RowDefinition Height="3*"/>
             <RowDefinition Height="3*"/>
         </Grid.RowDefinitions>
+        <TextBlock Grid.ColumnSpan="2" Text="Create an Account"
+                   HorizontalAlignment="Center" FontSize="35"
+                   FontWeight="DemiBold"/>
         <TextBlock Grid.Row="1" Text="Fullname" 
                    HorizontalAlignment="Left" FontSize="25" 
                    />
@@ -46,18 +49,18 @@
         <TextBox Grid.Row="1" Grid.Column="1" Margin="10,15" 
                  FontFamily="Century" Name="txtFullname" 
                  VerticalContentAlignment="Center" 
-                 Text="{Binding FullName}"/>
+                 Text="{Binding FullName}" FontSize="15"/>
         <TextBox Grid.Row="2" Grid.Column="1" Margin="10,15" FontFamily="Century" Name="txtEmail" 
-                 VerticalContentAlignment="Center" 
+                 VerticalContentAlignment="Center" FontSize="15"
                  Text="{Binding Email}"/>
-        <TextBox Grid.Row="3" Grid.Column="1" Margin="10,15,100,15" FontFamily="Century" Name="txtPassword"
+        <TextBox Grid.Row="3" Grid.Column="1" Margin="10,15" FontFamily="Century" Name="txtPassword"
                  VerticalContentAlignment="Center"
-                 Text="{Binding Password}" />
+                 Text="{Binding Password}" FontSize="15" />
         <TextBox Grid.Row="4" Grid.Column="1" VerticalContentAlignment="Center"
-                 Margin="10,15,100,15" FontFamily="Century" 
+                 Margin="10,15" FontFamily="Century" 
                  Text="{Binding ComfirmPassword}"
-                 Name="txtConfirmPassword" />
-        <Button Grid.Row="5" Grid.ColumnSpan="2" Margin="60,0,60,0" Height="40" Width="400" 
+                 Name="txtConfirmPassword" FontSize="15" />
+        <Button Grid.Row="5" Grid.ColumnSpan="2" Margin="60,0,60,0" Height="40" Width="350" 
                HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch"
                  Background="Transparent" BorderBrush="Transparent"
                 Command="{Binding CreateAccountCommand}"

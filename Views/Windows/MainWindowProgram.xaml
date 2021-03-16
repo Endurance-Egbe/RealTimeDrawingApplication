@@ -8,16 +8,12 @@
         xmlns:prism="http://prismlibrary.com/" 
         prism:ViewModelLocator.AutoWireViewModel="True"
         mc:Ignorable="d"
-        Title="Real Time Drawing Application" Height="450" 
-        Width="800" 
+        Title="Real Time Drawing Application" Height="650" 
+        Width="1300" 
         BorderBrush="Transparent" WindowStyle="ThreeDBorderWindow"
              
         WindowStartupLocation="CenterScreen" >
-    <Window.Resources>
-        <Style TargetType="Button">
-           
-        </Style>
-    </Window.Resources>
+    
     <Grid HorizontalAlignment="Stretch" >
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="auto"/>
@@ -37,54 +33,55 @@
                   11H21V9H3V11M3,5V7H21V5H3Z" 
                   Height="30" Width="30" Stretch="Fill" />
                 </Button>
-                <Path Fill="#787878" Data="M19,13H5V11H19V13Z" Width="40" Height="0.8" Stretch="Fill"/>
+                <Path Fill="#787878" Data="M19,13H5V11H19V13Z" Margin="0,5"
+                      Width="40" Height="0.8" Stretch="Fill"/>
 
                 <Button Background="Transparent" BorderBrush="Transparent"
                         HorizontalContentAlignment="Stretch"
-                        VerticalContentAlignment="Stretch"
+                        VerticalContentAlignment="Stretch" Margin="0,15"
                         >
                     <Path Fill="WhiteSmoke" Data="M12,2L4.5,20.29L5.21,21L12,18L18.79,
                       21L19.5,20.29L12,2Z" 
-                       Height="30" Width="30" Stretch="Fill" Margin="0,10,0,0" 
+                       Height="30" Width="30" Stretch="Fill"  
                       />
                 </Button>
 
                 <Button Background="Transparent" BorderBrush="Transparent"
                         HorizontalContentAlignment="Stretch"
-                        VerticalContentAlignment="Stretch"
+                        VerticalContentAlignment="Stretch" Margin="0,15"
                         >
                     <!--<Path Fill="WhiteSmoke" Data="M4,6V19H20V6H4M18,17H6V8H18V17Z" 
                       MouseLeftButtonDown="Path_MouseLeftButtonDown"
                       Height="30" Width="30" Stretch="Fill" Margin="0,10,0,0" />-->
                     <Rectangle Fill="WhiteSmoke" 
                                Height="30" Width="30" 
-                               Stretch="Fill" Margin="0,10,0,0"
+                               Stretch="Fill" 
                                MouseLeftButtonDown="Path_MouseLeftButtonDown"/>
 
                 </Button>
                 <Button Background="Transparent" BorderBrush="Transparent"
                         HorizontalContentAlignment="Stretch"
-                        VerticalContentAlignment="Stretch">
+                        VerticalContentAlignment="Stretch" Margin="0,15">
                     <!--<Path Fill="WhiteSmoke" Data="M12,20A8,8 0 0,1 4,12A8,8 0 0,1 12,4A8,
                       8 0 0,1 20,12A8,8 0 0,1 12,20M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,
                       12A10,10 0 0,0 12,2Z" Height="30" Width="30" Stretch="Fill" 
                       Margin="0,10,0,0" MouseLeftButtonDown="Path_MouseLeftButtonDown"/>-->
                     <Ellipse Fill="WhiteSmoke" Height="30" Width="30" Stretch="Fill" 
-                      Margin="0,10,0,0" MouseLeftButtonDown="Path_MouseLeftButtonDown"/>
+                       MouseLeftButtonDown="Path_MouseLeftButtonDown"/>
 
                 </Button>
                 
                 <Button Background="Transparent" BorderBrush="Transparent"
                         HorizontalContentAlignment="Stretch"
-                        VerticalContentAlignment="Stretch">
+                        VerticalContentAlignment="Stretch" Margin="0,15">
                     <Path Fill="WhiteSmoke" Data="M15,15 L30,30 L0,30 Z" 
-                      Height="30" Width="30" Stretch="Fill" Margin="0,10,0,0" 
+                      Height="30" Width="30" Stretch="Fill"  
                       MouseLeftButtonDown="Path_MouseLeftButtonDown"/>
                     
                 </Button>
                 <Button Background="Transparent" BorderBrush="Transparent"
                         HorizontalContentAlignment="Stretch"
-                        VerticalContentAlignment="Stretch">
+                        VerticalContentAlignment="Stretch" Margin="0,15">
                     <!--<Path Fill="WhiteSmoke" Data="M7 21L14.9 3H17L9.1 21H7Z" 
                       Height="30" Width="30" Stretch="Fill" Margin="0,10,0,0"
                       MouseLeftButtonDown="Path_MouseLeftButtonDown"/>-->
@@ -94,7 +91,7 @@
                           MouseLeftButtonDown="Path_MouseLeftButtonDown"/>
 
                 </Button>
-                <TextBlock Margin="0,10,0,0" MouseLeftButtonDown="Path_MouseLeftButtonDown">
+                <TextBlock Margin="0,15" MouseLeftButtonDown="Path_MouseLeftButtonDown">
                     <Run Text="T" FontSize="40" Foreground="WhiteSmoke"/>
                     <Run Text="T" FontSize="20" Foreground="WhiteSmoke"/>
                 </TextBlock>
@@ -102,13 +99,15 @@
             </StackPanel>
 
         </StackPanel>
+        
         <StackPanel Grid.Column="1" Height="40" 
                     Grid.ColumnSpan="2"  Background="#FFDDDDDD" >
             <DockPanel HorizontalAlignment="Right" Margin="10,5,20,5">
                 <DockPanel DockPanel.Dock="Right">
                     <Button Background="Transparent" BorderBrush="Transparent"
                             HorizontalContentAlignment="Stretch"
-                            VerticalContentAlignment="Stretch"
+                            VerticalContentAlignment="Stretch" Cursor="Hand"
+                            Command="{Binding ShareProjectCommand}"
                             >
                         <Path Fill="Black" Data="M15,14C12.33,14 7,15.33 7,18V20H23V18C23,
                       15.33 17.67,14 15,14M6,10V7H4V10H1V12H4V15H6V12H9V10M15,
@@ -117,7 +116,8 @@
                     </Button>
                     <Button Background="Transparent" BorderBrush="Transparent"
                             HorizontalContentAlignment="Stretch"
-                            VerticalContentAlignment="Stretch">
+                            VerticalContentAlignment="Stretch"
+                            Cursor="Hand" Command="{Binding OpenExportPopUpCommand}">
                         <Path Fill="Black" Data="M18,16.08C17.24,16.08 16.56,16.38 16.04,16.85L8.91,
                           12.7C8.96,12.47 9,12.24 9,12C9,11.76 8.96,11.53 8.91,11.3L15.96,
                           7.19C16.5,7.69 17.21,8 18,8A3,3 0 0,0 21,5A3,3 0 0,0 18,2A3,3 0 0,
@@ -132,7 +132,7 @@
             </DockPanel>
 
         </StackPanel>
-        <StackPanel Grid.Row="1" Grid.Column="2" Width="200"
+        <StackPanel Grid.Row="1" Grid.Column="2" Width="250"
                     Background="#FF454B84" Grid.RowSpan="2">
             <Button Background="Transparent" DockPanel.Dock="Left" VerticalAlignment="Top"
                 Name="btnPropertyWindow" Click="BtnPropertyWindow_Click"
@@ -144,19 +144,33 @@
                                FontSize="15"/>
                     <Path Fill="WhiteSmoke" Data="M7,10L12,15L17,10H7Z" />
                 </StackPanel>
+                
 
             </Button>
-            <ContentControl Content="{Binding CurrentWindow}" />
             
-                <!--<ContentControl Content="{Binding PropertyWindow}" Visibility="Visible" />
-                <ContentControl Content="{Binding ShareUserControl}" />
-                <ContentControl Content="{Binding ProjectWindow}" />-->
-            
+            <ContentControl Content="{Binding CurrentWindow}" Height="400" Margin="10"
+                            BorderBrush="Wheat" BorderThickness="3"/>
+
+            <Popup IsOpen="{Binding IsOpen}" Placement="Left"
+               StaysOpen="False" PopupAnimation="Slide" Width="80">
+                <StackPanel Background="#FF454B84" >
+                    <Button Content="XML" Foreground="WhiteSmoke" Background="Transparent" 
+                        FontSize="20" BorderBrush="WhiteSmoke" Cursor="Hand"
+                        Margin="0" Command="{Binding ExportXmlCommand}"
+                        CommandParameter="ExportXml"/>
+                    <Button Content="Json" Foreground="WhiteSmoke" Background="Transparent" 
+                        FontSize="20" BorderBrush="WhiteSmoke" Cursor="Hand"
+                         Margin="0" Command="{Binding ExportJsonCommand}"
+                        CommandParameter="ExportJson"/>
+
+                </StackPanel>
+            </Popup>
+
 
 
 
         </StackPanel>
-
+        
 
         <ContentControl Content="{Binding CustomCanvas}" Grid.Column="1"
                             Grid.Row="1" Grid.RowSpan="2"
@@ -190,6 +204,7 @@
                              CommandParameter="Project Window"/>
             </StackPanel>
         </Popup>
+        
         
     </Grid>
 </Window>

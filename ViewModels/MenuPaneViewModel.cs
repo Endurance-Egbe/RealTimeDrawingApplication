@@ -19,6 +19,7 @@ using View.ViewModels.ShapeServices;
 using System.Windows.Controls;
 using System.Windows.Shapes;
 using View.Export_Import;
+using View.Helper.Common.Event_Container;
 
 namespace View.ViewModels
 {
@@ -37,14 +38,15 @@ namespace View.ViewModels
             EventAggregator = GenericServiceLocator.ShellContainer.Resolve<IEventAggregator>();
             EventAggregator.GetEvent<CurrentProjectEvent>().Subscribe(CurrentSaveProject);
             EventAggregator.GetEvent<ActiveProjectEvent>().Subscribe(ActiveProject);
+            EventAggregator.GetEvent<ExportDrawingsEvent>().Subscribe(ExportDrawing);
             //EventAggregator.GetEvent<UpdatePropertyWindow>().Subscribe(UpdatePropertyWindowEvent);
             //EventAggregator.GetEvent<ComponentPropertyPubSubEvent>().Subscribe(UpdateCanvasElementEvent);
-            
+
             //DrawingComponentProxys = new List<DrawingComponentProxyModel>();
             LogOutCommand = new DelegateCommand<string>(OpenWindow);
             CreateProjectCommand = new DelegateCommand<string>(OpenWindow);
             ShareProjectCommand = new DelegateCommand<string>(OpenWindow);
-            OpenProjectCommand = new DelegateCommand<string>(OpenWindow);
+            DeleteProjectCommand = new DelegateCommand<string>(OpenWindow);
             SaveProjectCommand = new DelegateCommand<string>(OpenWindow);
             ExportProjectCommand = new DelegateCommand<string>(OpenWindow);
             ImportProjectCommand = new DelegateCommand<string>(OpenWindow);
@@ -67,7 +69,7 @@ namespace View.ViewModels
         public DelegateCommand<string> CreateProjectCommand { get; set; }
         public DelegateCommand<string> SaveProjectCommand { get; set; }
         public DelegateCommand<string> ShareProjectCommand { get; set; }
-        public DelegateCommand<string> OpenProjectCommand { get; set; }
+        public DelegateCommand<string> DeleteProjectCommand { get; set; }
         public DelegateCommand<string> ImportProjectCommand { get; set; }
         public DelegateCommand<string> ExportProjectCommand { get; set; }
         public DelegateCommand<string> ExportXmlCommand { get; set; }
@@ -101,16 +103,19 @@ namespace View.ViewModels
                     shareProject.DataContext = new ShareUserViewModel(CurrentProjectModel);
                     shareProject.ShowDialog();
                     break;
-                case "Open Project":
-
+                case "Delete Project":
+                    ProjectService.DeleteProject(CurrentProjectModel);
+                    MessageBox.Show("Project Deleted Successfully!", "Delete Message", MessageBoxButton.OK);
                     break;
                 case "Save Project":
                     EventAggregator.GetEvent<CanvasComponentEvent>().Publish(CurrentProjectModel);
-
+                    
                     break;
                 case "Log Out":
-                    MainWindow mainWindow = new MainWindow();
+                    LoginPage mainWindow = new LoginPage();
+                    EventAggregator.GetEvent<CloseMainWindowEvent>().Publish();
                     mainWindow.ShowDialog();
+                   
                     break;
                 case "Import":
                     IsOpenImport = true;
@@ -128,11 +133,11 @@ namespace View.ViewModels
             switch (parameter)
             {
                 case "ImportXml":
-                    DrawingComponentProxies = XmlServices.ImportWithXml();
+                    DrawingComponentProxies = XmlService.ImportWithXml();
                     EventAggregator.GetEvent<JsonImportedProxiesEvent>().Publish(DrawingComponentProxies);
                     break;
                 case "ImportJson":
-                    DrawingComponentProxies = JsonServices.ImportWithJson();
+                    DrawingComponentProxies = JsonService.ImportWithJson();
                     EventAggregator.GetEvent<JsonImportedProxiesEvent>().Publish(DrawingComponentProxies);
                     break;
                 default:
@@ -145,10 +150,10 @@ namespace View.ViewModels
             switch (parameter)
             {
                 case "ExportXml":
-                    XmlServices.ExportWithXml(CurrentProjectModel);
+                    XmlService.ExportWithXml(CurrentProjectModel);
                     break;
                 case "ExportJson":
-                    JsonServices.ExportWithJson(CurrentProjectModel);
+                    JsonService.ExportWithJson(CurrentProjectModel);
                     break;
                 default:
                     break;

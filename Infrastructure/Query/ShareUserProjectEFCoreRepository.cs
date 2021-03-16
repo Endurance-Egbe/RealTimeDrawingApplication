@@ -9,10 +9,10 @@ namespace View.Infrastructure.Query
 {
     public class ShareUserProjectEFCoreRepository : EFCoreRepository<ShareUserProject>
     {
-        private UserDbContext userContext;
+        //private UserDbContext userContext;
         public ShareUserProjectEFCoreRepository(UserDbContext _userContext) : base(_userContext)
         {
-            userContext = _userContext;
+            //userContext = _userContext;
         }
         public AccountModel GetCurrentAccountModel(string email)
         {

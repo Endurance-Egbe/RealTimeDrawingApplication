@@ -2,6 +2,7 @@
 using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;
+using Prism.Ioc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +13,8 @@ using View.ViewModels.Common.Event_Container;
 using View.ViewModels.DatabaseServices;
 using View.ViewModels.ProxyModel;
 using View.Wndows;
+using View.ViewModels.Common;
+using View.Helper.Common.Event_Container;
 
 namespace View.ViewModels
 {
@@ -30,6 +33,8 @@ namespace View.ViewModels
         {
 
             CreateAccountCommand = new DelegateCommand(CreateAccount);
+            EventAggregator.GetEvent<CloseWindowEvent>().Publish();
+            EventAggregator = GenericServiceLocator.ShellContainer.Resolve<IEventAggregator>();
         }
         public AccountProxyModel User { get; set; }
         public string Email { get => email; set { email = value; RaisePropertyChanged(); } }
@@ -68,7 +73,7 @@ namespace View.ViewModels
 
                 MessageBox.Show("Account Created Successfully!",
                     "Success Message", MessageBoxButton.OK);
-                //OpenMainWindowProgram();
+                EventAggregator.GetEvent<CloseAccountWindowEvent>().Publish();
                 return;
             }
 
@@ -95,12 +100,12 @@ namespace View.ViewModels
             }
             return false;
         }
-        public void OpenMainWindowProgram()
+        public void OpenLoginWindowProgram()
         {
             
-            var mainWindow = new MainWindowProgram();
-            
-            mainWindow.ShowDialog();
+            var loginPage = new LoginPage();
+
+            loginPage.ShowDialog();
         }
     }
 }

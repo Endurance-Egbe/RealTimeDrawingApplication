@@ -28,7 +28,7 @@ namespace View.ViewModels.DatabaseServices
             accountModel.Email = email;
             var sqlite = new SQLiteEFCore();
             var model = new AccountModelEFCoreRepository(sqlite);
-            var getmodel = model.GetModel(accountModel.Email);
+            var getmodel = model.GetModelByEmail(accountModel.Email);
             if (getmodel != null)
             {
                 return true;
@@ -41,7 +41,7 @@ namespace View.ViewModels.DatabaseServices
             accountModel.Email = email;
             var sqlite = new SQLiteEFCore();
             var model = new AccountModelEFCoreRepository(sqlite);
-            var getmodel = model.GetModel(accountModel.Email);
+            var getmodel = model.GetModelByEmail(accountModel.Email);
             if (getmodel!=null)
             {
                 if (getmodel.Email == email && getmodel.Password == password)
@@ -61,7 +61,7 @@ namespace View.ViewModels.DatabaseServices
 
             var sqlite = new SQLiteEFCore();
             var model = new AccountModelEFCoreRepository(sqlite);
-            var getmodel = model.GetModel(accountModel.Email);
+            var getmodel = model.GetModelByEmail(accountModel.Email);
             if (getmodel!=null)
             {
                 accountProxyModel.FullName = getmodel.FullName;

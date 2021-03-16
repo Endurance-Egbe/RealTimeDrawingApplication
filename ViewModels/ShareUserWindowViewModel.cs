@@ -18,8 +18,8 @@ namespace View.ViewModels
 {
     public class ShareUserWindowViewModel : BindableBase
     {
-        private string userName;
-        private bool isChecked;
+        //private string userName;
+        //private bool isChecked;
 
         public ShareUserWindowViewModel()//AccountProxyModel accountProxy )
         {

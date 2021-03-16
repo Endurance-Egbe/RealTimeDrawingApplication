@@ -35,7 +35,7 @@ namespace View.ViewModels.ComponentServices
 
         public object GetComponent()
         {
-            throw null;
+            return new TextBoxComponent();
         }
     }
 }

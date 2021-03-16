@@ -20,6 +20,7 @@ namespace View.ViewModels.ShapeServices
         private bool _showBorder;
         private SolidColorBrush selectedStroke = Brushes.Blue;
         private SolidColorBrush selectedBorderColor = Brushes.Blue;
+        private int lineThickness = 5;
 
         public ShapeComponent(Geometry geometry, ComponentEnum shape)
         {
@@ -31,7 +32,7 @@ namespace View.ViewModels.ShapeServices
             Shapes = this;
             Title = Shape.ToString();
             Id = Guid.NewGuid();
-            
+
         }
 
         public Geometry Geometry { get; set; }
@@ -47,7 +48,7 @@ namespace View.ViewModels.ShapeServices
         public SolidColorBrush SelectedStroke { get => selectedStroke; set => selectedStroke = value; }
         public SolidColorBrush SelectedFillColor { get { return shapeFill; } set { shapeFill = value; } }
         public SolidColorBrush SelectedBorderColor { get => selectedBorderColor; set => selectedBorderColor = value; }
-        public int LineThickness { get; set; }
+        public int LineThickness { get => lineThickness; set => lineThickness = value; }
         //public ComponentType ComponentType { get; set; }
 
         public ShapeComponent Shapes { get; set; }
@@ -61,12 +62,10 @@ namespace View.ViewModels.ShapeServices
             path.Stretch = Stretch.Fill;
             //var shape = path as ShapeComponent;
             path.Fill = shapeFill;
-            path.Stroke = shapeFill;
-            path.StrokeThickness = LineThickness;
+            path.Stroke = selectedStroke;
+            path.StrokeThickness = lineThickness;
             path.Width = Width;
             path.Height = Height;
-            path.Stroke = SelectedStroke;
-            path.StrokeThickness = LineThickness;
 
             path.Height = Height - 10;
             path.Width = Width - 10;
@@ -74,6 +73,7 @@ namespace View.ViewModels.ShapeServices
             path.VerticalAlignment = VerticalAlignment.Center;
             border.Child = path;
             Shapes.Children.Add(border);
+            
             if (ShowBorder)
             {
                 border.BorderBrush = Brushes.Red;
@@ -117,10 +117,10 @@ namespace View.ViewModels.ShapeServices
         }
         //public event PropertyChangedEventHandler PropertyChanged;
 
-        public bool ShowBorder { get => _showBorder; set { _showBorder = value;  } }
+        public bool ShowBorder { get => _showBorder; set { _showBorder = value; } }
 
-        public ComponentEnum ComponentEnum { get ; set ; }
+        public ComponentEnum ComponentEnum { get; set; }
 
-       
+
     }
 }

@@ -9,12 +9,12 @@ namespace View.Infrastructure
 {
     public class AccountModelEFCoreRepository : EFCoreRepository<AccountModel>
     {
-        private UserDbContext userContext;
+        //private UserDbContext userContext;
         public AccountModelEFCoreRepository(UserDbContext _userContext) : base(_userContext)
         {
-            userContext = _userContext;
+            //userContext = _userContext;
         }
-        public new AccountModel GetModel(string email)
+        public  AccountModel GetModelByEmail(string email)
         {
 
             AccountModel model = userContext.Set<AccountModel>().FirstOrDefault(x => x.Email == email);

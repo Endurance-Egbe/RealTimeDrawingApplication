@@ -1,4 +1,4 @@
-﻿using System;
+﻿    using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
@@ -9,7 +9,7 @@ namespace View.Infrastructure
 {
     public class EFCoreRepository<T> : IRepository<T> where T : class
     {
-        private UserDbContext userContext;
+        public UserDbContext userContext;
         public EFCoreRepository(UserDbContext sqlType)
         {
             userContext = sqlType;
@@ -22,6 +22,7 @@ namespace View.Infrastructure
 
         public void DeleteModel(T model)
         {
+
             userContext.Remove(model);
             userContext.SaveChanges();
         }

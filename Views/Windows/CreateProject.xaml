@@ -12,6 +12,7 @@
             <Setter Property="Foreground" Value="WhiteSmoke" />
             <Setter Property="VerticalAlignment" Value="Center"/>
             <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="FontFamily" Value="Century Gucci"/>
         </Style>
     </Window.Resources>
     <Grid>
@@ -27,11 +28,11 @@
         <TextBlock FontSize="30" FontWeight="DemiBold" Grid.ColumnSpan="2"
                    Text="Create Project" HorizontalAlignment="Center"/>
         <TextBlock Grid.Row="1" Text="Project Name" 
-                   VerticalAlignment="Center" Margin="20,0,0,0" 
+                   VerticalAlignment="Center" Margin="10,0,0,0" 
                    HorizontalAlignment="Left" FontSize="20" 
                    FontWeight="Bold" FontFamily="Century" />
 
-        <TextBox Grid.Row="1" Grid.Column="1" Margin="20,30" FontFamily="Century"
+        <TextBox Grid.Row="1" Grid.Column="1" Margin="0,30,20,30" FontFamily="Century"
                  Text="{Binding ProjectName}"
                  VerticalContentAlignment="Center"/>
         <Button Grid.Row="2" Grid.ColumnSpan="2" Margin="40,10,20,40" 
