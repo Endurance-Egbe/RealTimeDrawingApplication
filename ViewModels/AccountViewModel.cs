@@ -33,7 +33,7 @@ namespace View.ViewModels
         {
 
             CreateAccountCommand = new DelegateCommand(CreateAccount);
-            EventAggregator.GetEvent<CloseWindowEvent>().Publish();
+            //EventAggregator.GetEvent<CloseWindowEvent>().Publish();
             EventAggregator = GenericServiceLocator.ShellContainer.Resolve<IEventAggregator>();
         }
         public AccountProxyModel User { get; set; }
