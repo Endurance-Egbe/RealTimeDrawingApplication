@@ -153,11 +153,7 @@ namespace View.ViewModels
                     }
 
                 }
-                if (component is TextBox)
-                {
-
-                }
-                else if (component != null)
+                if (component != null)
                 {
                     var _component = component as IPropertyWindow;
                     component = _component.GetComponent() as FrameworkElement;
@@ -178,8 +174,8 @@ namespace View.ViewModels
         {
             var item = e.Data.GetData("toolboxitem") as FrameworkElement;
             var currentMousePosition = e.GetPosition(this);
-            var xValue = currentMousePosition.X;
-            var yValue = currentMousePosition.Y;
+            var xValue = currentMousePosition.X-item.Width/2;
+            var yValue = currentMousePosition.Y-item.Height/2;
             Canvas.SetLeft(item, xValue);
             Canvas.SetTop(item, yValue);
             Children.Add(item);
@@ -235,6 +231,7 @@ namespace View.ViewModels
                 if (position.X < ActualWidth - SelectedElement.Width &&
                     position.Y < ActualHeight - SelectedElement.Height)
                 {
+                    
 
                     SetLeft(SelectedElement, position.X);
                     SetTop(SelectedElement, position.Y);
@@ -255,7 +252,7 @@ namespace View.ViewModels
         {
             SelectedElement = e.Source as FrameworkElement;
             //SelectedElement.MouseLeftButtonUp += SelectedElement_MouseLeftButtonUp;
-
+           
             if (GetParent(SelectedElement) is IPropertyWindow component)
             {
 

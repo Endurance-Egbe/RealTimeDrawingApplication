@@ -15,7 +15,7 @@ namespace View.ViewModels.ShapeServices
         {
             if (controlEnum == ComponentEnum.TextBox)
             {
-                return new TextBoxComponent();
+                return new TextBoxComponent(controlEnum);
             }
             else
             {
