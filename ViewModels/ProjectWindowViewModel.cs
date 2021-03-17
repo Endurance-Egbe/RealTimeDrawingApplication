@@ -28,7 +28,7 @@ namespace View.ViewModels
         {
             EventAggregator = GenericServiceLocator.ShellContainer.Resolve<IEventAggregator>();
             EventAggregator.GetEvent<CurrentProjectEvent>().Subscribe(CurrentProjectModel);
-            
+            EventAggregator.GetEvent<RemoveProjectEvent>().Subscribe(RemoveProject);
             ProjectList = new ObservableCollection<ProjectProxyModel>();
             EventAggregator.GetEvent<GetAllUserProjectsEvent>().Subscribe(SetAllProjects);
         }
@@ -44,6 +44,7 @@ namespace View.ViewModels
                 selectedProject = value;
                 EventAggregator.GetEvent<ClearDrawingCanvasEvent>().Publish();
                 EventAggregator.GetEvent<ActiveProjectEvent>().Publish(selectedProject);
+                
                 GetComponents(SelectedProject);
                 RaisePropertyChanged();
             }
@@ -65,8 +66,12 @@ namespace View.ViewModels
         }
         void GetComponents(ProjectProxyModel project)
         {
-           GetDrawingComponents =  DrawingComponentService.GetDrawings(project);
-            EventAggregator.GetEvent<DrawingComponentEvent>().Publish(GetDrawingComponents);
+            if (project!=null)
+            {
+                GetDrawingComponents = DrawingComponentService.GetDrawings(project);
+                EventAggregator.GetEvent<DrawingComponentEvent>().Publish(GetDrawingComponents);
+            }
+          
         }
         void SetAllProjects(ObservableCollection<string> projectNames)
         {
@@ -77,6 +82,10 @@ namespace View.ViewModels
                 projects.ProjectName = item;
                 ProjectList.Add(projects);
             }
+        }
+        void RemoveProject(ProjectProxyModel projectProxyModel)
+        {
+            ProjectList.Remove(projectProxyModel);
         }
     }
     //public class Project

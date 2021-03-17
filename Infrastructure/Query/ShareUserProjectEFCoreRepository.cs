@@ -34,5 +34,23 @@ namespace View.Infrastructure.Query
             }
             return null;
         }
+        
+        public List<ShareUserProject> GetShareUsers(AccountModel accountModel)
+        {
+            var shareUsers = userContext.ShareUserProjects
+                .Where(x => x.Email == accountModel.Email)
+                .ToList();
+
+            return shareUsers;
+        }
+        public void DeleteShareUser(ShareUserProject shareUser)
+        {
+            DeleteModel(shareUser);
+            
+        }
+        public ShareUserProject GetShareUser(AccountModel accountModel)
+        {
+            return userContext.Set<ShareUserProject>().FirstOrDefault(x => x.Email == accountModel.Email);
+        }
     }
 }

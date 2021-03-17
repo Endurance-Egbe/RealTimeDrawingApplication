@@ -225,6 +225,7 @@
     <Compile Include="Helper\Common\Event_Container\CloseWindowEvent.cs" />
     <Compile Include="Helper\Common\Event_Container\ComponentPropertyPubSubEvent.cs" />
     <Compile Include="Helper\Common\Event_Container\CurrentAccountModelEvent.cs" />
+    <Compile Include="Helper\Common\Event_Container\CurrentActiveProjectEvent.cs" />
     <Compile Include="Helper\Common\Event_Container\CurrentProjectEvent.cs" />
     <Compile Include="Helper\Common\Event_Container\DrawingComponentEvent.cs" />
     <Compile Include="Helper\Common\Event_Container\ExportDrawingsEvent.cs" />
@@ -232,6 +233,7 @@
     <Compile Include="Helper\Common\Event_Container\GetAllUserProjectsEvent.cs" />
     <Compile Include="Helper\Common\Event_Container\JsonImportedProxiesEvent.cs" />
     <Compile Include="Helper\Common\Event_Container\OpenWindowEvent.cs" />
+    <Compile Include="Helper\Common\Event_Container\RemoveProjectEvent.cs" />
     <Compile Include="Helper\Common\Event_Container\UpdatePropertyWindow.cs" />
     <Compile Include="Helper\Common\IPropertyWindow.cs" />
     <Compile Include="Helper\ComponentServices\BindablePasswordBox.xaml.cs">

@@ -72,7 +72,7 @@ namespace View.ViewModels
         }
         public bool IsEmailPassworValidated(AccountProxyModel model)
         {
-            if (model!=null||email!=null||password!=null)
+            if (model!=null&&email!=null&&password!=null)
             {
                 if (email == model.Email && password != null)
                 {

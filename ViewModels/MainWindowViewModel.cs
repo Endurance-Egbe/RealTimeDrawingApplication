@@ -53,6 +53,7 @@ namespace View.ViewModels
             EventAggregator = GenericServiceLocator.ShellContainer.Resolve<IEventAggregator>();
             EventAggregator.GetEvent<CanvasComponentEvent>().Subscribe(DrawingComponents);
             EventAggregator.GetEvent<ClearDrawingCanvasEvent>().Subscribe(ClearCanvasElements);
+            EventAggregator.GetEvent<CurrentActiveProjectEvent>().Subscribe(SetCurrentProjectModel);
             EventAggregator.GetEvent<CloseWindowEvent>().Publish();
             GetAllUserProjects();
             //EventAggregator.GetEvent<CurrentAccountModelEvent>().Subscribe(CurrentUser);
@@ -96,6 +97,11 @@ namespace View.ViewModels
         {
             menuPane.Visibility = Visibility.Visible;
             
+        }
+        //public ProjectProxyModel CurrentProject { get; set; }
+        void SetCurrentProjectModel(ProjectProxyModel projectProxyModel)
+        {
+            CurrentProjectModel = projectProxyModel;
         }
         void UpdateWindow(string property)
         {

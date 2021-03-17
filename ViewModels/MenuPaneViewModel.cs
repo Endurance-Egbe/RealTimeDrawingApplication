@@ -104,7 +104,10 @@ namespace View.ViewModels
                     shareProject.ShowDialog();
                     break;
                 case "Delete Project":
-                    ProjectService.DeleteProject(CurrentProjectModel);
+                    ProjectService.DeleteProject(AccountEmail, CurrentProjectModel);
+                    EventAggregator.GetEvent<CurrentActiveProjectEvent>().Publish(CurrentProjectModel);
+                    EventAggregator.GetEvent<ClearDrawingCanvasEvent>().Publish();
+                    EventAggregator.GetEvent<RemoveProjectEvent>().Publish(CurrentProjectModel);
                     MessageBox.Show("Project Deleted Successfully!", "Delete Message", MessageBoxButton.OK);
                     break;
                 case "Save Project":

@@ -42,5 +42,14 @@ namespace View.Infrastructure.Query
 
                 return model;
         }
+        public void DeleteProjectModel(ProjectModel projectModel)
+        {
+            //foreach (var item in projectModel.ShapeComponents)
+            //{
+            //    userContext.Remove(item);
+            //}
+            userContext.Remove(projectModel);
+            userContext.SaveChanges();
+        }
     }
 }

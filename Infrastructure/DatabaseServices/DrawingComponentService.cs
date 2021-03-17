@@ -24,10 +24,7 @@ namespace View.ViewModels.DatabaseServices
             IEnumerable<DrawingComponentModel> drawingComponentModel = model.GetDrawingComponents(projectModel);            
             if (drawingComponentModel!=null)
             {
-                foreach (var item in drawingComponentModel)
-                {
-                    model.DeleteModel(item);
-                }              
+                DeleteDrawings(projectProxy);          
             }
           
                 foreach (var drawing in drawingModels)
@@ -36,11 +33,6 @@ namespace View.ViewModels.DatabaseServices
                     model.CreateModel(drawing);
 
                 }
-            
-
-
-
-
         }
         public static IEnumerable<DrawingComponentProxyModel> GetDrawings(ProjectProxyModel projectProxy)
         {
@@ -106,6 +98,17 @@ namespace View.ViewModels.DatabaseServices
             ProjectModel projectModel = model.GetCurrentProject(projectProxy.ProjectName);
             List<DrawingComponentModel> drawingComponents = model.GetDrawingComponents(projectModel);
             return drawingComponents;
+        }
+        public static void DeleteDrawings(ProjectProxyModel projectProxy)
+        {
+            var sqlite = new SQLiteEFCore();
+            var model = new DrawingComponentEFCoreRepository(sqlite);
+            ProjectModel projectModel = model.GetCurrentProject(projectProxy.ProjectName);
+            List<DrawingComponentModel> drawingComponents = model.GetDrawingComponents(projectModel);
+            foreach (var item in drawingComponents)
+            {
+                model.DeleteModel(item);
+            }
         }
     }
 }
