@@ -23,7 +23,7 @@ namespace View.ViewModels.DatabaseServices
             var model = new ShareUserProjectEFCoreRepository(sqlite);
             AccountModel accountModel =model.GetCurrentAccountModel(email);
             var projectModel = model.GetCurrentProjectModel(projectName);
-            var getShareUser = model.GetShareUser(accountModel);
+            var getShareUser = model.GetShareUser(accountModel.Email);
             if (accountModel != null&& projectModel != null&& getShareUser==null)
             {
                 GetAccountModel = new AccountProxyModel();
@@ -40,19 +40,19 @@ namespace View.ViewModels.DatabaseServices
             GetAccountModel = null;
             isUserVerified = false;
         }
-        public static List<ShareUserProject> GetShareUsers(string email)
+        public static List<ShareUserProject> GetShareUsers(ProjectProxyModel projectProxyModel)
         {
             var sqlite = new SQLiteEFCore();
             var model = new ShareUserProjectEFCoreRepository(sqlite);
-            AccountModel accountModel = model.GetCurrentAccountModel(email);
-            var getShareUsers = model.GetShareUsers(accountModel);
+            var projectModel = ProjectService.GetProject(projectProxyModel.ProjectName);
+            var getShareUsers = model.GetShareUsers(projectModel);
             return getShareUsers;
         }
-        public static void DeleteShareUsers(string email)
+        public static void DeleteShareUsers(ProjectProxyModel projectProxyModel)
         {
             var sqlite = new SQLiteEFCore();
             var model = new ShareUserProjectEFCoreRepository(sqlite);
-            var shareUsers = GetShareUsers(email);
+            var shareUsers = GetShareUsers(projectProxyModel);
             foreach (var item in shareUsers)
             {
                 model.DeleteShareUser(item);

@@ -120,7 +120,6 @@ namespace View.ViewModels.ShapeServices
         public bool ShowBorder { get => _showBorder; set { _showBorder = value; } }
 
         public ComponentEnum ComponentEnum { get; set; }
-
-
+        public int StrokeThickness { get ; set ; }
     }
 }

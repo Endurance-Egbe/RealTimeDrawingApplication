@@ -35,10 +35,10 @@ namespace View.Infrastructure.Query
             return null;
         }
         
-        public List<ShareUserProject> GetShareUsers(AccountModel accountModel)
+        public List<ShareUserProject> GetShareUsers(ProjectModel projectModel)
         {
             var shareUsers = userContext.ShareUserProjects
-                .Where(x => x.Email == accountModel.Email)
+                .Where(x => x.Project == projectModel)
                 .ToList();
 
             return shareUsers;
@@ -48,9 +48,9 @@ namespace View.Infrastructure.Query
             DeleteModel(shareUser);
             
         }
-        public ShareUserProject GetShareUser(AccountModel accountModel)
+        public ShareUserProject GetShareUser(string email)
         {
-            return userContext.Set<ShareUserProject>().FirstOrDefault(x => x.Email == accountModel.Email);
+            return userContext.Set<ShareUserProject>().FirstOrDefault(x => x.Email == email);
         }
     }
 }

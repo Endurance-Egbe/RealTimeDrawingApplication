@@ -43,9 +43,18 @@ namespace View.ViewModels.DatabaseServices
             var sqlite = new SQLiteEFCore();
             var model = new ProjectModelEFCoreRepository(sqlite);
             projectModel = model.GetProjectModel(projectProxyModel.ProjectName);
-            ShareUserService.DeleteShareUsers(email);
             DrawingComponentService.DeleteDrawings(projectProxyModel);
+            ShareUserService.DeleteShareUsers(projectProxyModel);
+            
             model.DeleteProjectModel(projectModel);
+        }
+        public static ProjectModel GetProject(string projectName)
+        {
+            ProjectModel projectModel = new ProjectModel();
+            var sqlite = new SQLiteEFCore();
+            var model = new ProjectModelEFCoreRepository(sqlite);
+            projectModel = model.GetProjectModel(projectName);
+            return projectModel;
         }
     }
 }

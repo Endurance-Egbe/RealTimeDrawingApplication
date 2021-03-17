@@ -17,8 +17,8 @@
     <Grid HorizontalAlignment="Stretch" >
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="auto"/>
+            <ColumnDefinition Width="4*"/>
             <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="auto"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
@@ -132,9 +132,9 @@
             </DockPanel>
 
         </StackPanel>
-        <StackPanel Grid.Row="1" Grid.Column="2" Width="250"
+        <StackPanel Grid.Row="1" Grid.Column="2" 
                     Background="#FF454B84" Grid.RowSpan="2">
-            <Button Background="Transparent" DockPanel.Dock="Left" VerticalAlignment="Top"
+            <Button Background="Transparent"  VerticalAlignment="Top"
                 Name="btnPropertyWindow" Click="BtnPropertyWindow_Click"
                 BorderBrush="Transparent" 
                         HorizontalAlignment="Center" HorizontalContentAlignment="Stretch">
@@ -173,7 +173,7 @@
         
 
         <ContentControl Content="{Binding CustomCanvas}" Grid.Column="1"
-                            Grid.Row="1" Grid.RowSpan="2"
+                            Grid.Row="1" Grid.RowSpan="2" 
                         />
 
         <ContentControl Content="{Binding MenuPane}" Grid.RowSpan="3"

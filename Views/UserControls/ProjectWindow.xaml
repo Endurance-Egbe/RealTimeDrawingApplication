@@ -13,15 +13,15 @@
                       SelectedItem="{Binding SelectedProject}">
             <ListBox.ItemTemplate>
                 <DataTemplate>
-                    <DockPanel>
-                        <Ellipse Fill="Wheat" Width="10" Height="10" DockPanel.Dock="Right"
-                                 HorizontalAlignment="Right"
-                                 VerticalAlignment="Center" Margin="0,5"/>
+                    <StackPanel Orientation="Horizontal">
+                        <Ellipse Fill="Wheat" Width="10" Height="10" 
+                                 HorizontalAlignment="Left"
+                                 VerticalAlignment="Stretch" Margin="0,5"/>
                         <TextBlock Text="{Binding ProjectName}"
                                  FontSize="15" Margin="0,5" Foreground="WhiteSmoke"
-                                 Cursor="Hand" DockPanel.Dock="Left"
-                                   HorizontalAlignment="Left"/>
-                    </DockPanel>
+                                 Cursor="Hand" 
+                                 HorizontalAlignment="Right"/>
+                    </StackPanel>
 
                                  
                 </DataTemplate>

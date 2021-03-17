@@ -18,6 +18,7 @@ namespace View.ViewModels
         double Width { get; set; }
         double Height { get; set; }
         int LineThickness { get; set; }
+        int StrokeThickness { get; set; }
         //ComponentType ComponentType { get; set; }
         SolidColorBrush SelectedStroke { get; set; }
         SolidColorBrush SelectedFillColor { get; set; }

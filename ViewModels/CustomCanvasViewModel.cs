@@ -77,9 +77,11 @@ namespace View.ViewModels
                     var getDefaultComponent = shapeServices.GetDefaultControl(componentEnum);
                     var _component = getDefaultComponent as IPropertyWindow;
                     _component.Title = drawing.Title;
+                    _component.X = drawing.X;
+                    _component.Y = drawing.Y;
                     _component.Width = drawing.Width;
                     _component.Height = drawing.Height;
-                    _component.LineThickness = drawing.LineThickness;
+                    _component.StrokeThickness = drawing.LineThickness;
                     _component.SelectedBorderColor = drawing.SelectedBorderColor.ColorType;
                     _component.SelectedFillColor = drawing.SelectedFillColor.ColorType;
                     _component.SelectedStroke = drawing.SelectedStroke.ColorType;
@@ -151,7 +153,11 @@ namespace View.ViewModels
                     }
 
                 }
-                if (component != null)
+                if (component is TextBox)
+                {
+
+                }
+                else if (component != null)
                 {
                     var _component = component as IPropertyWindow;
                     component = _component.GetComponent() as FrameworkElement;
@@ -226,8 +232,8 @@ namespace View.ViewModels
                 //var item = e.GetData("toolboxitem") as FrameworkElement;
                 var position = e.GetPosition(this);
                 
-                if (position.X < ActualWidth - SelectedElement.ActualWidth &&
-                    position.Y < ActualHeight - SelectedElement.ActualHeight)
+                if (position.X < ActualWidth - SelectedElement.Width &&
+                    position.Y < ActualHeight - SelectedElement.Height)
                 {
 
                     SetLeft(SelectedElement, position.X);
@@ -281,6 +287,16 @@ namespace View.ViewModels
                 CurrentSelectedItem.PropertyType = PropertyType.StrokeThickness;
                 CurrentSelectedItem.Value = (int)component.LineThickness;
                 EventAggregator.GetEvent<UpdatePropertyWindow>().Publish(CurrentSelectedItem);
+                CurrentSelectedItem.PropertyType = PropertyType.LineThickness;
+                CurrentSelectedItem.Value = (int)component.LineThickness;
+                EventAggregator.GetEvent<UpdatePropertyWindow>().Publish(CurrentSelectedItem);
+                CurrentSelectedItem.PropertyType = PropertyType.X;
+                CurrentSelectedItem.Value = (double)component.X;
+                EventAggregator.GetEvent<UpdatePropertyWindow>().Publish(CurrentSelectedItem);
+                CurrentSelectedItem.PropertyType = PropertyType.Y;
+                CurrentSelectedItem.Value = (double)component.Y;
+                EventAggregator.GetEvent<UpdatePropertyWindow>().Publish(CurrentSelectedItem);
+                
                 SelectedElement = component.GetComponent() as FrameworkElement;
                
                

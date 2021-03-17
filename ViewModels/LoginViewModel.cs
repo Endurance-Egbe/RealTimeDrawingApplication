@@ -30,7 +30,8 @@ namespace View.ViewModels
             //EventAggregator = eventAggregator;
             LoginAccountCommand = new DelegateCommand(LoginAccount);
             EventAggregator = GenericServiceLocator.ShellContainer.Resolve<IEventAggregator>();
-            
+            EventAggregator.GetEvent<CloseAccountWindowEvent>().Publish();
+
         }
         public AccountProxyModel User { get; set; }
         public string Email { get => email; set { email = value; RaisePropertyChanged(); } }

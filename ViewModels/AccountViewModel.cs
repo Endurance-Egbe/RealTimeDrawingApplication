@@ -33,8 +33,9 @@ namespace View.ViewModels
         {
 
             CreateAccountCommand = new DelegateCommand(CreateAccount);
-            //EventAggregator.GetEvent<CloseWindowEvent>().Publish();
+           
             EventAggregator = GenericServiceLocator.ShellContainer.Resolve<IEventAggregator>();
+            EventAggregator.GetEvent<CloseWindowEvent>().Publish();
         }
         public AccountProxyModel User { get; set; }
         public string Email { get => email; set { email = value; RaisePropertyChanged(); } }
@@ -50,39 +51,45 @@ namespace View.ViewModels
        
         public void CreateAccount()
         {
-            isPasswordComfirm = PasswordValidation();
-            if (isPasswordComfirm)
+            if (fullName!=null)
             {
-                User = new AccountProxyModel();
-                User.Email = email;
-                User.FullName = fullName;
-                User.Password = password;
-                isEmailValidated = IsEmailValidated();
-
-                if (isEmailValidated)
+                isPasswordComfirm = PasswordValidation();
+                if (isPasswordComfirm)
                 {
-                    MessageBox.Show("Email Already Exist",
-                    "Error Message", MessageBoxButton.OK, MessageBoxImage.Error);
+                    User = new AccountProxyModel();
+                    User.Email = email;
+                    User.FullName = fullName;
+                    User.Password = password;
+                    isEmailValidated = IsEmailValidated();
 
+                    if (isEmailValidated)
+                    {
+                        MessageBox.Show("Email Already Exist",
+                        "Error Message", MessageBoxButton.OK, MessageBoxImage.Error);
+
+                        return;
+                    }
+
+                    EventAggregator = new EventAggregator();
+                    EventAggregator.GetEvent<CurrentAccountModelEvent>().Publish(User);
+                    AccountService.CreateAccount(User);
+
+                    MessageBox.Show("Account Created Successfully!",
+                        "Success Message", MessageBoxButton.OK);
+                   
+                    OpenLoginWindowProgram();
                     return;
                 }
-                
-                EventAggregator = new EventAggregator();
-                EventAggregator.GetEvent<CurrentAccountModelEvent>().Publish(User);
-                AccountService.CreateAccount(User);
-
-                MessageBox.Show("Account Created Successfully!",
-                    "Success Message", MessageBoxButton.OK);
-                EventAggregator.GetEvent<CloseAccountWindowEvent>().Publish();
-                return;
             }
 
-            
+            MessageBox.Show("Enter a valid User Name",
+                       "Error Message", MessageBoxButton.OK, MessageBoxImage.Error);
+
         }
 
         public bool PasswordValidation()
         {
-            if (password != null && comfirmPassword != null)
+            if (password != "" && comfirmPassword != "")
             {
                 if (password == comfirmPassword)
                 {
