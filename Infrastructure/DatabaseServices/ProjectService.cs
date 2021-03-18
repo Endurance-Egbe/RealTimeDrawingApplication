@@ -11,7 +11,7 @@ using System.Collections.ObjectModel;
 
 namespace View.ViewModels.DatabaseServices
 {
-    public class ProjectService
+    public static class ProjectService
     {
         //public static bool isProjectNameInDatabase;
         public static void CreateProject(string email, ProjectProxyModel projectProxyModel)

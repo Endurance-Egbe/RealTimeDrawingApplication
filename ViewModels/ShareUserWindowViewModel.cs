@@ -13,6 +13,7 @@ using View.ViewModels.Common.Event_Container;
 using Prism.Commands;
 using View.ViewModels.DatabaseServices;
 using View.Windows;
+using View.Helper.Common.Event_Container;
 
 namespace View.ViewModels
 {
@@ -27,6 +28,7 @@ namespace View.ViewModels
             EventAggregator = GenericServiceLocator.ShellContainer.Resolve<IEventAggregator>();
             EventAggregator.GetEvent<CurrentProjectEvent>().Subscribe(ProjectModel);
             EventAggregator.GetEvent<CurrentAccountModelEvent>().Subscribe(AccountProxy);
+            EventAggregator.GetEvent<GetAllShareUserEvent>().Subscribe(LoadAllShareUser);
             AddUserCommand = new DelegateCommand(AddUser);
             ShareUser = new ObservableCollection<Users>();
         }
@@ -52,16 +54,14 @@ namespace View.ViewModels
 
             Users = new Users() { UserName = accountProxy.FullName, IsChecked = true };
             ShareUser.Add(Users);
-            //UserName = Users.UserName;
-            //IsChecked = Users.IsChecked;
-            //UserName = accountProxy.FullName;
-
-            //IsChecked = true;
+            
         }
-        //public List<Users> UserCollection(AccountProxyModel accountProxy)
-        //{
-        //    return ShareUser= new List<Users>() { new Users() { UserName = accountProxy.FullName, IsCheckeked = true } };
-        //}
+        void LoadAllShareUser(ObservableCollection<Users> users)
+        {
+            ShareUser = users;
+        }
+
+
     }
     public class Users
     {

@@ -99,16 +99,23 @@ namespace View.ViewModels
                     project.ShowDialog();
                     break;
                 case "Share Project":
-                    ShareProject shareProject = new ShareProject();
-                    shareProject.DataContext = new ShareUserViewModel(CurrentProjectModel);
-                    shareProject.ShowDialog();
+                    if (CurrentProjectModel != null)
+                    {
+                        ShareProject shareProject = new ShareProject();
+                        shareProject.DataContext = new ShareUserViewModel(CurrentProjectModel);
+                        shareProject.ShowDialog();
+                    }
                     break;
                 case "Delete Project":
-                    ProjectService.DeleteProject(AccountEmail, CurrentProjectModel);
-                    EventAggregator.GetEvent<CurrentActiveProjectEvent>().Publish(CurrentProjectModel);
-                    EventAggregator.GetEvent<ClearDrawingCanvasEvent>().Publish();
-                    EventAggregator.GetEvent<RemoveProjectEvent>().Publish(CurrentProjectModel);
-                    MessageBox.Show("Project Deleted Successfully!", "Delete Message", MessageBoxButton.OK);
+                    if (CurrentProjectModel!=null)
+                    {
+                        ProjectService.DeleteProject(AccountEmail, CurrentProjectModel);
+                        EventAggregator.GetEvent<CurrentActiveProjectEvent>().Publish(CurrentProjectModel);
+                        EventAggregator.GetEvent<ClearDrawingCanvasEvent>().Publish();
+                        EventAggregator.GetEvent<RemoveProjectEvent>().Publish(CurrentProjectModel);
+                        MessageBox.Show("Project Deleted Successfully!", "Delete Message", MessageBoxButton.OK);
+                    }
+                   
                     break;
                 case "Save Project":
                     EventAggregator.GetEvent<CanvasComponentEvent>().Publish(CurrentProjectModel);
@@ -121,10 +128,16 @@ namespace View.ViewModels
                    
                     break;
                 case "Import":
-                    IsOpenImport = true;
+                    if (CurrentProjectModel != null)
+                    {
+                        IsOpenImport = true;
+                    }
                     break;
                 case "Export":
-                    IsOpenExport = true;
+                    if (CurrentProjectModel != null)
+                    {
+                        IsOpenExport = true;
+                    }
                     break;
                 default:
                     break;

@@ -230,6 +230,7 @@
     <Compile Include="Helper\Common\Event_Container\DrawingComponentEvent.cs" />
     <Compile Include="Helper\Common\Event_Container\ExportDrawingsEvent.cs" />
     <Compile Include="Helper\Common\Event_Container\GenericServiceLocator.cs" />
+    <Compile Include="Helper\Common\Event_Container\GetAllShareUserEvent.cs" />
     <Compile Include="Helper\Common\Event_Container\GetAllUserProjectsEvent.cs" />
     <Compile Include="Helper\Common\Event_Container\JsonImportedProxiesEvent.cs" />
     <Compile Include="Helper\Common\Event_Container\OpenWindowEvent.cs" />

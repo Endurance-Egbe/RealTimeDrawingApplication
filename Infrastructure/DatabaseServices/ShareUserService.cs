@@ -17,26 +17,30 @@ namespace View.ViewModels.DatabaseServices
         public static void ShareProject(string email, string projectName)
         {
             ShareUserProject shareModel = new ShareUserProject();
-            //shareModel. = projectProxyModel.ProjectName;
-            //string currentProjectName = projectModel.ProjectName;
+            
             var sqlite = new SQLiteEFCore();
             var model = new ShareUserProjectEFCoreRepository(sqlite);
-            AccountModel accountModel =model.GetCurrentAccountModel(email);
+            AccountModel accountModel = model.GetCurrentAccountModel(email);
             var projectModel = model.GetCurrentProjectModel(projectName);
-            var getShareUser = model.GetShareUser(accountModel.Email);
-            if (accountModel != null&& projectModel != null&& getShareUser==null)
+            if (accountModel!=null)
             {
-                GetAccountModel = new AccountProxyModel();
-                GetAccountModel.FullName = accountModel.FullName;
-                GetAccountModel.Email = accountModel.Email;
-                shareModel.Users = accountModel;
-                shareModel.Email = accountModel.Email;
-                shareModel.Project = projectModel;
-                //projectModel.ShareUsers.Add(shareModel);
-                model.CreateModel(shareModel);
-                isUserVerified = true;
-                return;
+                var getShareUser = model.GetShareUser(accountModel.Email);
+                if (projectModel != null&& getShareUser==null)
+                {
+
+                    GetAccountModel = new AccountProxyModel();
+                    GetAccountModel.FullName = accountModel.FullName;
+                    GetAccountModel.Email = accountModel.Email;
+                    shareModel.Users = accountModel;
+                    shareModel.Email = accountModel.Email;
+                    shareModel.Project = projectModel;
+
+                    model.CreateModel(shareModel);
+                    isUserVerified = true;
+                    return;
+                }
             }
+            
             GetAccountModel = null;
             isUserVerified = false;
         }
@@ -57,6 +61,14 @@ namespace View.ViewModels.DatabaseServices
             {
                 model.DeleteShareUser(item);
             }
+        }
+        public static List<ShareUserProject> GetShareUsers(AccountProxyModel accountProxyModel)
+        {
+            var sqlite = new SQLiteEFCore();
+            var model = new ShareUserProjectEFCoreRepository(sqlite);
+            AccountModel accountModel = AccountService.GetAccountModel(accountProxyModel);
+            var getShareUsers = model.GetShareUsers(accountModel);
+            return getShareUsers;
         }
     }
 }

@@ -15,7 +15,7 @@
     <Grid Margin="10,10">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="3*"/>
+            <ColumnDefinition Width="2*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
@@ -44,15 +44,15 @@
                    Foreground="WhiteSmoke" FontSize="15"/>
         <TextBlock Text="Height" Grid.Row="4" VerticalAlignment="Center" HorizontalAlignment="Left"
                    Foreground="WhiteSmoke" FontSize="15"/>
-        <TextBlock Text="Stroke" Grid.Row="5" VerticalAlignment="Center" HorizontalAlignment="Left"
-                   Foreground="WhiteSmoke" FontSize="15"/>
-        <TextBlock Text="Border" Grid.Row="6" VerticalAlignment="Center" HorizontalAlignment="Left"
-                   Foreground="WhiteSmoke" FontSize="15"/>
+        <TextBlock Text="Border Color" Grid.Row="5" VerticalAlignment="Center" HorizontalAlignment="Left"
+                   Foreground="WhiteSmoke" FontSize="15" TextWrapping="Wrap"/>
+        <TextBlock Text="Border Thickness" Grid.Row="6" VerticalAlignment="Center" HorizontalAlignment="Left"
+                   Foreground="WhiteSmoke" FontSize="15" TextWrapping="Wrap"/>
 
         <TextBlock Text="Fill" Grid.Row="7" VerticalAlignment="Center" HorizontalAlignment="Left"
                    Foreground="WhiteSmoke" FontSize="15"/>
-        <TextBlock Text="Border Color" Grid.Row="8" VerticalAlignment="Center" HorizontalAlignment="Left"
-                   Foreground="WhiteSmoke" FontSize="15" TextWrapping="Wrap"/>
+        <!--<TextBlock Text="Border Color" Grid.Row="8" VerticalAlignment="Center" HorizontalAlignment="Left"
+                   Foreground="WhiteSmoke" FontSize="15" TextWrapping="Wrap"/>-->
         <TextBox Grid.Column="2" Grid.Row="1"
                  Text="{Binding X}"/>
         <TextBox Grid.Column="2" Grid.Row="2"
@@ -96,7 +96,7 @@
                 </DataTemplate>
             </ComboBox.ItemTemplate>
         </ComboBox>
-        <ComboBox  Grid.Column="2" Grid.Row="8" Margin="5"
+        <!--<ComboBox  Grid.Column="2" Grid.Row="8" Margin="5"
                    SelectedItem="{Binding SelectedBorderColor}"
                      ItemsSource="{Binding ColorCollections}">
             <ComboBox.ItemTemplate>
@@ -110,7 +110,7 @@
                     </StackPanel>
                 </DataTemplate>
             </ComboBox.ItemTemplate>
-        </ComboBox>
+        </ComboBox>-->
         <!--<DockPanel Grid.Column="2" Grid.Row="7"
                     Margin="5">
             <Border Width="20" DockPanel.Dock="Left" 

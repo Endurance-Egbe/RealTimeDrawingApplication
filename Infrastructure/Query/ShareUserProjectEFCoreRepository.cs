@@ -34,7 +34,15 @@ namespace View.Infrastructure.Query
             }
             return null;
         }
-        
+        public List<ShareUserProject> GetShareUsers(AccountModel accountModel)
+        {
+            var shareUsers = userContext.ShareUserProjects
+                .Where(x => x.Users == accountModel)
+                .ToList();
+
+            return shareUsers;
+        }
+
         public List<ShareUserProject> GetShareUsers(ProjectModel projectModel)
         {
             var shareUsers = userContext.ShareUserProjects

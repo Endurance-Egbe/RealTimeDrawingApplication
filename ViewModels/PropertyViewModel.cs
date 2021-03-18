@@ -74,19 +74,22 @@ namespace View.ViewModels
         public void OnPropertyChanged([CallerMemberName] string propertyName = "")
         {
 
-            //var _value = GetValue(propertyName);
-            var value = GetValue(propertyName);
-            if (value != null)
+            if (CurrentSelectedItem!=null)
             {
-                CurrentSelectedItem.PropertyType = PropertyKeyValuePair[propertyName];
-                //if (value is Brush)
-                //{
-                //    CurrentSelectedItem.Value = (value as Brush);
-                //}
-                CurrentSelectedItem.Value = value;
-                EventAggregator.GetEvent<ComponentPropertyPubSubEvent>().Publish(CurrentSelectedItem);
+                var value = GetValue(propertyName);
+                if (value != null)
+                {
+                    CurrentSelectedItem.PropertyType = PropertyKeyValuePair[propertyName];
+                    //if (value is Brush)
+                    //{
+                    //    CurrentSelectedItem.Value = (value as Brush);
+                    //}
+                    CurrentSelectedItem.Value = value;
+                    EventAggregator.GetEvent<ComponentPropertyPubSubEvent>().Publish(CurrentSelectedItem);
+                }
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
             }
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            
 
         }
         public IEventAggregator EventAggregator { get; set; }

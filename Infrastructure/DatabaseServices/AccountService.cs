@@ -73,5 +73,18 @@ namespace View.ViewModels.DatabaseServices
             //accountProxyModel.ProjectProxyModels = getmodel.Projects;
             return null;
         }
+        public static AccountModel GetAccountModel(AccountProxyModel accountProxyModel)
+        {
+            AccountModel accountModel = new AccountModel();
+
+            accountModel.Email = accountProxyModel.Email;
+            accountModel.Password = accountProxyModel.Password;
+
+            var sqlite = new SQLiteEFCore();
+            var model = new AccountModelEFCoreRepository(sqlite);
+            var getmodel = model.GetModelByEmail(accountModel.Email);
+            
+            return getmodel;
+        }
     }
 }

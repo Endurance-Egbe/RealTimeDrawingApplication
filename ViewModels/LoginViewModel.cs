@@ -19,8 +19,8 @@ namespace View.ViewModels
 {
     public class LoginViewModel:BindableBase
     {
-        private string email= "enduranceegbe@yahoo.com";       
-        private string password="1234";
+        private string email;       
+        private string password;
          
         //private AccountProxyModel user=new AccountProxyModel();
         //private Window window;

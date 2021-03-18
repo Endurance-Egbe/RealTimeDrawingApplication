@@ -56,6 +56,7 @@ namespace View.ViewModels
             EventAggregator.GetEvent<CurrentActiveProjectEvent>().Subscribe(SetCurrentProjectModel);
             EventAggregator.GetEvent<CloseWindowEvent>().Publish();
             GetAllUserProjects();
+            GetAllShareUsers();
             //EventAggregator.GetEvent<CurrentAccountModelEvent>().Subscribe(CurrentUser);
         }
         public string CurrentWindowTitle { get { return _currentWindowTitle; } set { _currentWindowTitle = value; RaisePropertyChanged(); } }
@@ -187,6 +188,23 @@ namespace View.ViewModels
             ObservableCollection<string> getAllUserProjects = new ObservableCollection<string>();
             getAllUserProjects = ProjectService.GetAllProjects(User);
             EventAggregator.GetEvent<GetAllUserProjectsEvent>().Publish(getAllUserProjects);
+        }
+        void GetAllShareUsers()
+        {
+            ObservableCollection<Users> allShareUser = new ObservableCollection<Users>();
+            var getAllShareUser = ShareUserService.GetShareUsers(User);
+            if (getAllShareUser!=null)
+            {
+                foreach (var item in getAllShareUser)
+                {
+                    Users users = new Users();
+                    users.UserName = item.Users.FullName;
+                    allShareUser.Add(users);
+
+                }
+                EventAggregator.GetEvent<GetAllShareUserEvent>().Publish(allShareUser);
+            }
+            
         }
     }
 }
