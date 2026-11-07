@@ -60,5 +60,11 @@ namespace View.Infrastructure.Query
         {
             return userContext.Set<ShareUserProject>().FirstOrDefault(x => x.Email == email);
         }
+
+        public ShareUserProject GetShareUser(string email, ProjectModel project)
+        {
+            return userContext.Set<ShareUserProject>()
+                .FirstOrDefault(x => x.Email == email && x.Project == project);
+        }
     }
 }

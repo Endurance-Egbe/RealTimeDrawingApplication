@@ -1,4 +1,4 @@
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Data.Sqlite;
 using System.Configuration;
 using System;
@@ -17,8 +17,7 @@ namespace View.Infrastructure
 
         protected override void InitialiseDatabase(DbContextOptionsBuilder optionsBuilder)
         {
-            var configuredConnectionString =
-                ConfigurationManager.ConnectionStrings[ConnectionStringName]?.ConnectionString;
+            var configuredConnectionString = GetLocalConnectionString();
             if (string.IsNullOrWhiteSpace(configuredConnectionString))
             {
                 throw new ConfigurationErrorsException(
@@ -52,6 +51,21 @@ namespace View.Infrastructure
 
             connectionString.DataSource = dataSource;
             optionsBuilder.UseSqlite(connectionString.ToString());
+        }
+
+        private static string GetLocalConnectionString()
+        {
+            var localConnection = ConfigurationManager.ConnectionStrings[ConnectionStringName]?.ConnectionString;
+            if (string.IsNullOrWhiteSpace(localConnection))
+            {
+                throw new ConfigurationErrorsException(
+                    string.Format(
+                        "The '{0}' connection string is missing from the application configuration. " +
+                        "Update App.config (or the deployed .exe.config) before starting the application.",
+                        ConnectionStringName));
+            }
+
+            return localConnection;
         }
 
     }

@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using View.ViewModels.Common;
 using View.ViewModels.Common.Event_Container;
+using View.Helper.Common.Event_Container;
 using Prism.Ioc;
 using View.ViewModels.ProxyModel;
 using View.ViewModels.DatabaseServices;
@@ -41,13 +42,18 @@ namespace View.ViewModels
         //}
         private void ShareUser()
         {
+            if (string.IsNullOrWhiteSpace(Email) || CurrentProjectModel == null)
+            {
+                MessageBox.Show("Select a project and enter a user email.", "Validation",
+                    MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
             ShareUserService.ShareProject(email, CurrentProjectModel.ProjectName);
             if (ShareUserService.isUserVerified == true)
             {
                 AccountProxy = ShareUserService.GetAccountModel;
-                MessageBox.Show("Email is Verified...\n\rUser Shared Successfully", 
-                    "Success Message", MessageBoxButton.OK);
-                //EventAggregator.GetEvent<CurrentProjectEvent>().Publish(CurrentProjectModel);
+                EventAggregator.GetEvent<CloseWindowEvent>().Publish();
                 EventAggregator.GetEvent<CurrentAccountModelEvent>().Publish(AccountProxy);
                 return;
             }

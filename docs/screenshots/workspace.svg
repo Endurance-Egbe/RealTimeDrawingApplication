@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="650" viewBox="0 0 1200 650" role="img" aria-labelledby="title desc">
+  <title id="title">RealTimeDrawingApplication workspace</title>
+  <desc id="desc">Illustrative view of the WPF workspace with navigation, project list, canvas, and property editor.</desc>
+  <rect width="1200" height="650" fill="#f3f4f6"/>
+  <rect width="1200" height="48" fill="#dddddd"/>
+  <rect width="52" height="650" fill="#454b84"/>
+  <rect x="52" y="48" width="810" height="602" fill="#ffffff"/>
+  <rect x="862" y="48" width="338" height="602" fill="#454b84"/>
+  <rect x="70" y="70" width="770" height="560" rx="4" fill="#fbfbfb" stroke="#d4d4d4" stroke-width="2"/>
+  <rect x="52" y="48" width="215" height="602" fill="#454b84" opacity=".98"/>
+  <text x="75" y="90" fill="#f5deb3" font-family="Segoe UI" font-size="21" font-weight="700">Alex Johnson</text>
+  <text x="75" y="116" fill="#dbeafe" font-family="Segoe UI" font-size="13">alex@example.com</text>
+  <text x="75" y="170" fill="#ffffff" font-family="Segoe UI" font-size="16">Create Project</text>
+  <text x="75" y="210" fill="#ffffff" font-family="Segoe UI" font-size="16">Share Project</text>
+  <text x="75" y="250" fill="#ffffff" font-family="Segoe UI" font-size="16">Save Project</text>
+  <text x="75" y="290" fill="#ffffff" font-family="Segoe UI" font-size="16">Export</text>
+  <text x="75" y="330" fill="#ffffff" font-family="Segoe UI" font-size="16">Import</text>
+  <text x="75" y="610" fill="#f5deb3" font-family="Segoe UI" font-size="16">Close</text>
+  <text x="296" y="78" fill="#454b84" font-family="Segoe UI" font-size="18" font-weight="700">Project Window</text>
+  <text x="296" y="112" fill="#555555" font-family="Segoe UI" font-size="16">Active project: Marketing Board</text>
+  <circle cx="305" cy="145" r="5" fill="#d4af37"/>
+  <text x="320" y="151" fill="#333333" font-family="Segoe UI" font-size="16">Marketing Board</text>
+  <circle cx="305" cy="180" r="5" fill="#aaa"/>
+  <text x="320" y="186" fill="#333333" font-family="Segoe UI" font-size="16">Personal Ideas</text>
+  <text x="900" y="86" fill="#f5deb3" font-family="Segoe UI" font-size="20" font-weight="700">Property Window</text>
+  <text x="890" y="135" fill="#ffffff" font-family="Segoe UI" font-size="15">Title</text>
+  <rect x="1000" y="118" width="170" height="30" fill="#ffffff" rx="3"/>
+  <text x="1015" y="139" fill="#444" font-family="Segoe UI" font-size="14">Rectangle</text>
+  <text x="890" y="190" fill="#ffffff" font-family="Segoe UI" font-size="15">X</text>
+  <rect x="1000" y="173" width="170" height="30" fill="#ffffff" rx="3"/>
+  <text x="1015" y="194" fill="#444" font-family="Segoe UI" font-size="14">120</text>
+  <text x="890" y="245" fill="#ffffff" font-family="Segoe UI" font-size="15">Width</text>
+  <rect x="1000" y="228" width="170" height="30" fill="#ffffff" rx="3"/>
+  <text x="1015" y="249" fill="#444" font-family="Segoe UI" font-size="14">240</text>
+  <path d="M56 20h40M56 28h40M56 36h40" stroke="#fff" stroke-width="3"/>
+  <text x="1020" y="28" fill="#111" font-family="Segoe UI" font-size="14">Share</text>
+  <text x="1110" y="28" fill="#111" font-family="Segoe UI" font-size="14">Export</text>
+</svg>

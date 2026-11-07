@@ -33,6 +33,7 @@ namespace MainViews.Windows
         public MainWindowProgram()//AccountProxyModel accountProxyModel)
         {
             InitializeComponent();
+            PreviewMouseDown += MainWindowPreviewMouseDown;
 
             //DataContext = new MainWindowViewModel(accountProxyModel);
             //DataContext = GenericServiceLocator.ShellContainer.Resolve<MainWindowViewModel>();
@@ -52,6 +53,39 @@ namespace MainViews.Windows
         private void Menubtn_Click(object sender, RoutedEventArgs e)
         {
             MenuPaneUc.Visibility = Visibility.Visible;
+        }
+
+        private void MenuButton_Click(object sender, RoutedEventArgs e)
+        {
+            MenuPaneUc.Visibility = MenuPaneUc.Visibility == Visibility.Visible
+                ? Visibility.Collapsed
+                : Visibility.Visible;
+            e.Handled = true;
+        }
+
+        private void MainWindowPreviewMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (MenuPaneUc.Visibility == Visibility.Visible &&
+                !IsInsideElement(e.OriginalSource as DependencyObject, MenuPaneUc) &&
+                !IsInsideElement(e.OriginalSource as DependencyObject, Menubtn))
+            {
+                MenuPaneUc.Visibility = Visibility.Collapsed;
+            }
+        }
+
+        private static bool IsInsideElement(DependencyObject source, DependencyObject target)
+        {
+            while (source != null)
+            {
+                if (source == target)
+                {
+                    return true;
+                }
+
+                source = VisualTreeHelper.GetParent(source);
+            }
+
+            return false;
         }
 
         private void Path_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)

@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using View.ViewModels.Common;
 using View.ViewModels.Common.Event_Container;
+using View.Helper.Common.Event_Container;
 using View.ViewModels.DatabaseServices;
 using View.ViewModels.ProxyModel;
 using Prism.Ioc;
@@ -43,15 +44,18 @@ namespace View.ViewModels
         {
             //EventAggregator = new EventAggregator();
            
-            CurrentProject = new ProjectProxyModel();
-            CurrentProject.ProjectName = projectName;
+            if (string.IsNullOrWhiteSpace(projectName))
+            {
+                MessageBox.Show("Enter a project name.", "Validation", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            CurrentProject = new ProjectProxyModel { ProjectName = projectName.Trim() };
            
             ProjectService.CreateProject(CurrentUser.Email, CurrentProject);
             EventAggregator.GetEvent<ClearDrawingCanvasEvent>().Publish();
             EventAggregator.GetEvent<CurrentProjectEvent>().Publish(CurrentProject);
-
-            MessageBox.Show("Project Added to the database",
-                "Success Message", MessageBoxButton.OK);
+            EventAggregator.GetEvent<CloseWindowEvent>().Publish();
             //bool isProjectNameInDatabase = ProjectService.isProjectNameInDatabase;
             //if (isProjectNameInDatabase)
             //{

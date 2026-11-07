@@ -13,6 +13,8 @@ using View.ViewModels.ProxyModel;
 using View.ViewModels.Common;
 using View.Helper.Common.Event_Container;
 using Prism.Ioc;
+using System.Configuration;
+using System.Data.Common;
 
 namespace View.ViewModels
 {
@@ -47,25 +49,37 @@ namespace View.ViewModels
         }
         public void LoginAccount()
         {
+            if (string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(password))
+            {
+                MessageBox.Show("Enter both email and password.", "Validation",
+                    MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            try
+            {
                 bool isEmailPasswordValidated;
                 User = AccountService.Authenticate(email, password);
                 isEmailPasswordValidated = User != null;
 
                 if (isEmailPasswordValidated)
                 {
-                
-                //EventAggregator.GetEvent<CurrentAccountModelEvent>().Publish(User);
-                MessageBox.Show("Account Login Successfully!",
-                    "Success Message", MessageBoxButton.OK);
                     OpenMainWindowProgram();
-
                     return;
                 }
-            
-            MessageBox.Show("Account Unable to Verify\r\nSignUp to Create an Account",
-                "Error Message", MessageBoxButton.OK,MessageBoxImage.Error);
-
-            
+                MessageBox.Show("Account Unable to Verify\r\nSignUp to Create an Account",
+                    "Error Message", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            catch (DbException exception)
+            {
+                MessageBox.Show("The database could not be reached. Check the database configuration.\r\n" +
+                    exception.Message, "Database Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            catch (ConfigurationErrorsException exception)
+            {
+                MessageBox.Show(exception.Message, "Configuration Error",
+                    MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
         public bool IsEmailPassworValidated(AccountProxyModel model)
         {
@@ -73,12 +87,14 @@ namespace View.ViewModels
         }
         public void OpenMainWindowProgram()
         {
+            var mainWindow = new MainWindowProgram
+            {
+                DataContext = new MainWindowViewModel(User)
+            };
 
-            
-            Window mainWindowprogram = new MainWindowProgram();
-            mainWindowprogram.DataContext = new MainWindowViewModel(User);
-            mainWindowprogram.ShowDialog();
-            
+            Application.Current.MainWindow = mainWindow;
+            mainWindow.Show();
+            EventAggregator.GetEvent<CloseWindowEvent>().Publish();
         }
     }
     
