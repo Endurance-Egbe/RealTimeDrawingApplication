@@ -313,9 +313,8 @@ pre-commit install
 pre-commit run --all-files
 ```
 
-The hooks check whitespace, XML, merge conflicts, and run a no-restore build
-when C#, XAML, project, or config files change. Run the initial package restore
-before the build hook.
+The hooks check whitespace, XML, and merge conflicts. The full WPF build and
+test run is performed by GitHub Actions on a Windows runner.
 
 ## Deployment
 
@@ -340,6 +339,35 @@ should install the application under `Program Files` and leave user data in
 The Release output also includes the SQLite native runtime at
 `runtimes\win-x64\native\e_sqlite3.dll`. Keep this folder in the deployment
 package; removing it causes the application to fail during database startup.
+
+### Publishing a downloadable GitHub release
+
+The repository includes a release workflow at
+[`.github/workflows/release.yml`](./.github/workflows/release.yml). It builds
+and tests the application on Windows, packages the complete Release output,
+and publishes a GitHub Release containing:
+
+```text
+RealTimeDrawingApplication-windows.zip
+```
+
+To publish version `1.0.0`:
+
+```powershell
+git tag v1.0.0
+git push origin v1.0.0
+```
+
+GitHub Actions then creates the release automatically. A laptop user downloads
+the ZIP, extracts the complete folder, confirms that .NET Framework 4.7.2 or
+later is installed, and starts `RealTimeDrawingApplication.exe`.
+
+The ZIP is a portable application package, not an MSI installer. It does not
+require administrator permissions when extracted to a user-writable folder.
+For a Start Menu shortcut, uninstall support, or enterprise deployment, use
+the same Release folder as input to an installer tool such as Inno Setup,
+WiX, or MSIX. Keep the executable, `.exe.config`, all managed DLLs, and
+`runtimes\win-x64\native\e_sqlite3.dll` together.
 
 ## Working with WPF in VS Code
 

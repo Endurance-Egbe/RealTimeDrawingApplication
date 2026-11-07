@@ -1,0 +1,55 @@
+name: Release Windows application
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: NuGet/setup-nuget@v2
+      - uses: microsoft/setup-msbuild@v2
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.x
+
+      - name: Restore legacy NuGet packages
+        run: nuget restore RealTimeDrawingApplication.sln
+
+      - name: Build Release
+        run: msbuild RealTimeDrawingApplication.sln /p:Configuration=Release /p:Platform="Any CPU"
+
+      - name: Run tests
+        run: dotnet test tests/RealTimeDrawingApplication.Tests/RealTimeDrawingApplication.Tests.csproj --configuration Release --no-restore
+
+      - name: Create Windows package
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force -Path artifacts\RealTimeDrawingApplication | Out-Null
+          Copy-Item -Path bin\Release\* -Destination artifacts\RealTimeDrawingApplication -Recurse -Force
+          Compress-Archive `
+            -Path artifacts\RealTimeDrawingApplication\* `
+            -DestinationPath artifacts\RealTimeDrawingApplication-windows.zip
+          (Get-FileHash artifacts\RealTimeDrawingApplication-windows.zip -Algorithm SHA256).Hash |
+            Out-File artifacts\RealTimeDrawingApplication-windows.zip.sha256 -Encoding ascii
+
+      - name: Create GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: pwsh
+        run: |
+          $tag = "${{ github.ref_name }}"
+          $notes = "Windows release $tag. Requires .NET Framework 4.7.2 or later."
+          gh release create $tag `
+            artifacts\RealTimeDrawingApplication-windows.zip `
+            artifacts\RealTimeDrawingApplication-windows.zip.sha256 `
+            --title "RealTimeDrawingApplication $tag" `
+            --notes $notes `
+            --verify-tag
