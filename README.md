@@ -86,6 +86,72 @@ automatically before the login window opens. See
 [docs/DATABASE-CONFIGURATION.md](./docs/DATABASE-CONFIGURATION.md) for the
 complete setup and troubleshooting guide.
 
+### Optional online PostgreSQL
+
+Add a reachable PostgreSQL connection string to `OnlineDatabase` in
+`App.config`, or to `RealTimeDrawingApplication.exe.config` beside a deployed
+executable:
+
+```xml
+<add name="OnlineDatabase" providerName="Npgsql"
+     connectionString="Host=localhost;Port=5432;Database=drawing;Username=app;Password=change-me;Timeout=3" />
+```
+
+For deployment, prefer the environment variable
+`REALTIME_DRAWING_POSTGRES_CONNECTION_STRING`. It takes precedence over the
+`OnlineDatabase` config value, so production credentials do not need to be
+written into the deployed `.exe.config`.
+
+PowerShell for the current process:
+
+```powershell
+$env:REALTIME_DRAWING_POSTGRES_CONNECTION_STRING = "Host=localhost;Port=5432;Database=drawing;Username=app;Password=change-me;Timeout=3"
+.\bin\Release\RealTimeDrawingApplication.exe
+```
+
+Persist it for the current Windows user:
+
+```powershell
+[Environment]::SetEnvironmentVariable(
+  "REALTIME_DRAWING_POSTGRES_CONNECTION_STRING",
+  "Host=localhost;Port=5432;Database=drawing;Username=app;Password=change-me;Timeout=3",
+  "User")
+```
+
+[`/.env.example`](./.env.example) contains a safe deployment template. The
+application does not automatically load `.env` files; the installer,
+deployment script, service wrapper, or operating system must set the
+environment variable. Never commit a real `.env` file or production password.
+
+The application checks this connection when creating a context. A reachable
+online database is preferred; an empty or unavailable online connection falls
+back to the configured SQLite database. Keep production credentials out of
+source control.
+
+The PostgreSQL tables are defined in
+[`database/postgresql-schema.sql`](./database/postgresql-schema.sql). Run it
+against a PostgreSQL database when you want to provision the server manually.
+For a new database, the application also creates the tables automatically at
+startup through EF Core `EnsureCreated()`. This project does not currently
+contain EF migration files or a migration history table; schema changes to
+existing production databases should therefore be handled with a reviewed,
+versioned database script before deployment.
+
+## Using the application
+
+1. Start the executable. The database directory and SQLite database are
+   created automatically on first launch.
+2. Select **Sign up**, create an account, and log in.
+3. Use **Create project** to create a project. The project pane displays the
+   active project and all projects owned by the account.
+4. Select another project to load its saved drawings. Place shapes from the
+   toolbox and edit their values in the property pane.
+5. Save the active project from the menu. Use **Share** to share it with
+   another registered account by email.
+6. Use the import/export commands for JSON and XML files. If startup fails,
+   check the connection string and the SQLite native runtime files under
+   `runtimes\win-x64\native`.
+
 For command-line builds on Windows:
 
 ```powershell
