@@ -1,0 +1,42 @@
+name: Build and test
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: NuGet/setup-nuget@v2
+      - uses: microsoft/setup-msbuild@v2
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.x
+      - name: Restore legacy NuGet packages
+        run: nuget restore RealTimeDrawingApplication.sln
+      - name: Build WPF application
+        run: msbuild RealTimeDrawingApplication.sln /p:Configuration=Release /p:Platform="Any CPU"
+      - name: Package Windows application
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force -Path artifacts | Out-Null
+          Compress-Archive -Path bin\Release\* -DestinationPath artifacts\RealTimeDrawingApplication-windows.zip
+      - name: Test
+        run: >-
+          dotnet test tests/RealTimeDrawingApplication.Tests/RealTimeDrawingApplication.Tests.csproj
+          --configuration Release
+          --settings tests/RealTimeDrawingApplication.Tests/coverage.runsettings
+          --collect:"XPlat Code Coverage"
+      - name: Upload coverage report
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: tests/RealTimeDrawingApplication.Tests/TestResults/**/coverage.cobertura.xml
+      - name: Upload Windows package
+        uses: actions/upload-artifact@v4
+        with:
+          name: RealTimeDrawingApplication-windows
+          path: artifacts/RealTimeDrawingApplication-windows.zip
