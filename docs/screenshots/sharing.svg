@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="560" viewBox="0 0 1000 560" role="img" aria-labelledby="title desc">
+  <title id="title">Sharing a drawing project</title>
+  <desc id="desc">Illustrative view of the share project dialog and shared users list.</desc>
+  <rect width="1000" height="560" fill="#f3f4f6"/>
+  <rect x="90" y="50" width="820" height="460" rx="8" fill="#454b84"/>
+  <text x="370" y="105" fill="#f5deb3" font-family="Segoe UI" font-size="28" font-weight="700">Share Project</text>
+  <text x="145" y="165" fill="#ffffff" font-family="Segoe UI" font-size="17">Active project</text>
+  <rect x="365" y="140" width="440" height="38" rx="4" fill="#fff"/>
+  <text x="385" y="165" fill="#444" font-family="Segoe UI" font-size="16">Marketing Board</text>
+  <text x="145" y="235" fill="#ffffff" font-family="Segoe UI" font-size="17">User email</text>
+  <rect x="365" y="210" width="440" height="38" rx="4" fill="#fff"/>
+  <text x="385" y="235" fill="#777" font-family="Segoe UI" font-size="16">teammate@example.com</text>
+  <rect x="365" y="280" width="180" height="46" rx="20" fill="#6874c7"/>
+  <text x="425" y="309" fill="#fff" font-family="Segoe UI" font-size="17" font-weight="700">Share</text>
+  <text x="145" y="390" fill="#f5deb3" font-family="Segoe UI" font-size="20" font-weight="700">Shared users</text>
+  <circle cx="165" cy="430" r="8" fill="#d4af37"/>
+  <text x="185" y="436" fill="#fff" font-family="Segoe UI" font-size="16">teammate@example.com</text>
+  <path d="M30 30h32M30 40h32M30 50h32" stroke="#454b84" stroke-width="4"/>
+</svg>
