@@ -214,6 +214,8 @@ UpgradeLog*.htm
 *.mdf
 *.ldf
 *.db
+.env
+.env.local
 **/TestResults/
 
 # Business Intelligence projects

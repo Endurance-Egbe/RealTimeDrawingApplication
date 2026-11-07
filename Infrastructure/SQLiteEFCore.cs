@@ -9,6 +9,9 @@ namespace View.Infrastructure
     public class SQLiteEFCore : UserDbContext
     {
         private const string ConnectionStringName = "DrawingDatabase";
+        private const string OnlineConnectionStringName = "OnlineDatabase";
+        public const string OnlineConnectionEnvironmentVariable =
+            "REALTIME_DRAWING_POSTGRES_CONNECTION_STRING";
 
         public SQLiteEFCore() : base()
         {
@@ -17,8 +20,14 @@ namespace View.Infrastructure
 
         protected override void InitialiseDatabase(DbContextOptionsBuilder optionsBuilder)
         {
-            var configuredConnectionString =
-                ConfigurationManager.ConnectionStrings[ConnectionStringName]?.ConnectionString;
+            string onlineConnectionString;
+            if (TryGetOnlineConnection(out onlineConnectionString))
+            {
+                optionsBuilder.UseNpgsql(onlineConnectionString);
+                return;
+            }
+
+            var configuredConnectionString = GetLocalConnectionString();
             if (string.IsNullOrWhiteSpace(configuredConnectionString))
             {
                 throw new ConfigurationErrorsException(
@@ -52,6 +61,56 @@ namespace View.Infrastructure
 
             connectionString.DataSource = dataSource;
             optionsBuilder.UseSqlite(connectionString.ToString());
+        }
+
+        private static bool TryGetOnlineConnection(out string connectionString)
+        {
+            connectionString = null;
+            var environmentConnectionString =
+                Environment.GetEnvironmentVariable(OnlineConnectionEnvironmentVariable);
+            var configuredConnectionString = ConfigurationManager.ConnectionStrings[OnlineConnectionStringName];
+            var onlineConnectionString = !string.IsNullOrWhiteSpace(environmentConnectionString)
+                ? environmentConnectionString
+                : configuredConnectionString?.ConnectionString;
+
+            if (!string.IsNullOrWhiteSpace(onlineConnectionString))
+            {
+                try
+                {
+                    using (var connection = new Npgsql.NpgsqlConnection(onlineConnectionString))
+                    {
+                        connection.Open();
+                        connection.Close();
+                        connectionString = onlineConnectionString;
+                        return true;
+                    }
+                }
+                catch (Npgsql.NpgsqlException)
+                {
+                    // The local SQLite database is the supported offline fallback.
+                }
+                catch (TimeoutException)
+                {
+                    // The local SQLite database is the supported offline fallback.
+                }
+            }
+
+            return false;
+        }
+
+        private static string GetLocalConnectionString()
+        {
+            var localConnection = ConfigurationManager.ConnectionStrings[ConnectionStringName]?.ConnectionString;
+            if (string.IsNullOrWhiteSpace(localConnection))
+            {
+                throw new ConfigurationErrorsException(
+                    string.Format(
+                        "The '{0}' connection string is missing from the application configuration. " +
+                        "Update App.config (or the deployed .exe.config) before starting the application.",
+                        ConnectionStringName));
+            }
+
+            return localConnection;
         }
 
     }
