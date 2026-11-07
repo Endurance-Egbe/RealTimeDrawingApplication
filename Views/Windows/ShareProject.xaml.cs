@@ -13,6 +13,9 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using View.ViewModels;
 using View.ViewModels.ProxyModel;
+using Prism.Events;
+using View.Helper.Common.Event_Container;
+using View.ViewModels.Common;
 
 namespace View.Windows
 {
@@ -25,6 +28,8 @@ namespace View.Windows
         {
             InitializeComponent();
             //DataContext = new ShareUserViewModel();
+            GenericServiceLocator.ShellContainer.Resolve<IEventAggregator>()
+                .GetEvent<CloseWindowEvent>().Subscribe(Close);
         }
     }
 }
