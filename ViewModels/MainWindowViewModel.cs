@@ -135,23 +135,23 @@ namespace View.ViewModels
         public ProjectProxyModel CurrentProjectModel { get; set; }
         public void DrawingComponents(ProjectProxyModel currentProject)
         {
-            //FrameworkElement component = null;
-           
-            if (CustomCanvas != null&& currentProject!=null)
+            if (CustomCanvas != null && currentProject != null)
             {
                 CurrentProjectModel = currentProject;
                 DrawingComponentProxies = new List<DrawingComponentProxyModel>();
                 foreach (var item in CustomCanvas.Children)
                 {
-                    var property = (IPropertyWindow)item;
-                    var component = ComponentProxyModel(property);
-                    DrawingComponentProxies.Add(component);
+                    var property = item as IPropertyWindow;
+                    if (property != null)
+                    {
+                        DrawingComponentProxies.Add(ComponentProxyModel(property));
+                    }
                 }
                 SaveProject();
             }
             else
             {
-                MessageBox.Show("You Havn't Created a Project Yet!", "Error Message", MessageBoxButton.OK);
+                MessageBox.Show("Create or select a project before saving.", "Save Project", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
             
         }
@@ -208,4 +208,3 @@ namespace View.ViewModels
         }
     }
 }
-

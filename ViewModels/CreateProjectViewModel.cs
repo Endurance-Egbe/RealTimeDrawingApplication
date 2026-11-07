@@ -43,15 +43,18 @@ namespace View.ViewModels
         {
             //EventAggregator = new EventAggregator();
            
-            CurrentProject = new ProjectProxyModel();
-            CurrentProject.ProjectName = projectName;
+            if (string.IsNullOrWhiteSpace(projectName))
+            {
+                MessageBox.Show("Enter a project name.", "Validation", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            CurrentProject = new ProjectProxyModel { ProjectName = projectName.Trim() };
            
             ProjectService.CreateProject(CurrentUser.Email, CurrentProject);
             EventAggregator.GetEvent<ClearDrawingCanvasEvent>().Publish();
             EventAggregator.GetEvent<CurrentProjectEvent>().Publish(CurrentProject);
-
-            MessageBox.Show("Project Added to the database",
-                "Success Message", MessageBoxButton.OK);
+            EventAggregator.GetEvent<CloseWindowEvent>().Publish();
             //bool isProjectNameInDatabase = ProjectService.isProjectNameInDatabase;
             //if (isProjectNameInDatabase)
             //{

@@ -55,8 +55,12 @@ namespace View.ViewModels
         //public Project Project { get; set; }
         void CurrentProjectModel(ProjectProxyModel projectProxy)
         {
-            SelectedProject = new ProjectProxyModel() { ProjectName = projectProxy.ProjectName};
-            ProjectList.Add(SelectedProject);
+            var existing = ProjectList.FirstOrDefault(x => x.ProjectName == projectProxy.ProjectName);
+            SelectedProject = existing ?? new ProjectProxyModel { ProjectName = projectProxy.ProjectName };
+            if (existing == null)
+            {
+                ProjectList.Add(SelectedProject);
+            }
             //ProjectName = SelectedProject.ProjectName;
             
         }
@@ -75,8 +79,8 @@ namespace View.ViewModels
         }
         void SetAllProjects(ObservableCollection<string> projectNames)
         {
-
-            foreach (var item in projectNames)
+            ProjectList.Clear();
+            foreach (var item in projectNames.Distinct())
             {
                 ProjectProxyModel projects = new ProjectProxyModel();
                 projects.ProjectName = item;

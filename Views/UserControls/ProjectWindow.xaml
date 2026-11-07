@@ -8,7 +8,15 @@
              d:DesignHeight="450" d:DesignWidth="250">
 
     <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <TextBlock Text="{Binding SelectedProject.ProjectName, StringFormat=Active project: {0}}"
+                   Foreground="Wheat" FontWeight="Bold" FontSize="18"
+                   Margin="0,0,0,10"/>
         <ListBox Background="Transparent"
+                     Grid.Row="1"
                      ItemsSource="{Binding ProjectList}"
                       SelectedItem="{Binding SelectedProject}">
             <ListBox.ItemTemplate>

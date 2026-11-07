@@ -33,6 +33,7 @@ namespace MainViews.Windows
         public MainWindowProgram()//AccountProxyModel accountProxyModel)
         {
             InitializeComponent();
+            PreviewMouseDown += MainWindowPreviewMouseDown;
 
             //DataContext = new MainWindowViewModel(accountProxyModel);
             //DataContext = GenericServiceLocator.ShellContainer.Resolve<MainWindowViewModel>();
@@ -52,6 +53,16 @@ namespace MainViews.Windows
         private void Menubtn_Click(object sender, RoutedEventArgs e)
         {
             MenuPaneUc.Visibility = Visibility.Visible;
+        }
+
+        private void MainWindowPreviewMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (MenuPaneUc.Visibility == Visibility.Visible &&
+                !MenuPaneUc.IsMouseOver &&
+                !Menubtn.IsMouseOver)
+            {
+                MenuPaneUc.Visibility = Visibility.Collapsed;
+            }
         }
 
         private void Path_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)

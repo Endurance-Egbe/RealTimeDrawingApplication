@@ -32,11 +32,16 @@ namespace View.Windows
             // DataContext = new CreateProjectViewModel(accountProxy);
             EventAggregator = GenericServiceLocator.ShellContainer.Resolve<IEventAggregator>();
             EventAggregator.GetEvent<OpenWindowEvent>().Subscribe(OpenWindow);
+            EventAggregator.GetEvent<CloseWindowEvent>().Subscribe(CloseWindow);
         }
         public IEventAggregator EventAggregator { get; set; }
         void OpenWindow()
         {
             this.ShowDialog();
+        }
+        void CloseWindow()
+        {
+            Close();
         }
     }
 }
