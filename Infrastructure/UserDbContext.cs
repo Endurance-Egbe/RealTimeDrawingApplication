@@ -11,10 +11,6 @@ namespace View.Infrastructure
 {
     public abstract class UserDbContext : DbContext
     {
-        public UserDbContext()
-        {
-            Database.EnsureCreated();
-        }
         public virtual DbSet<AccountModel> Accounts { get; set; }
         public virtual DbSet<ProjectModel> Projects { get; set; }
         public virtual DbSet<ShareUserProject> ShareUserProjects { get; set; }

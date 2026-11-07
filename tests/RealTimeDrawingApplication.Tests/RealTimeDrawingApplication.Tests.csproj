@@ -1,0 +1,30 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <IsPackable>false</IsPackable>
+    <IsTestProject>true</IsTestProject>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.11.1" />
+    <PackageReference Include="MSTest.TestAdapter" Version="3.6.1" />
+    <PackageReference Include="MSTest.TestFramework" Version="3.6.1" />
+    <PackageReference Include="coverlet.collector" Version="6.0.2">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\..\Security\PasswordHasher.cs" Link="Security\PasswordHasher.cs" />
+    <Compile Include="..\..\Models\AccountModel.cs" Link="Models\AccountModel.cs" />
+    <Compile Include="..\..\Models\ProjectModel.cs" Link="Models\ProjectModel.cs" />
+    <Compile Include="..\..\Models\ShareUserProject.cs" Link="Models\ShareUserProject.cs" />
+    <Compile Include="..\..\Models\DrawingComponentModel.cs" Link="Models\DrawingComponentModel.cs" />
+    <Compile Include="..\..\ProxyModel\AccountProxyModel.cs" Link="ProxyModel\AccountProxyModel.cs" />
+    <Compile Include="..\..\ProxyModel\ProjectProxyModel.cs" Link="ProxyModel\ProjectProxyModel.cs" />
+    <Compile Include="..\..\ProxyModel\ShareUserProjectProxyModel.cs" Link="ProxyModel\ShareUserProjectProxyModel.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+  </ItemGroup>
+</Project>

@@ -8,7 +8,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
-using View.ViewModels.Common.Event_Container;
 using View.ViewModels.DatabaseServices;
 using View.ViewModels.ProxyModel;
 using View.ViewModels.Common;
@@ -29,8 +28,7 @@ namespace View.ViewModels
         {
             //EventAggregator = eventAggregator;
             LoginAccountCommand = new DelegateCommand(LoginAccount);
-            EventAggregator = GenericServiceLocator.ShellContainer.Resolve<IEventAggregator>();
-            EventAggregator.GetEvent<CloseAccountWindowEvent>().Publish();
+            EventAggregator = eventAggregator;
 
         }
         public AccountProxyModel User { get; set; }
@@ -50,10 +48,8 @@ namespace View.ViewModels
         public void LoginAccount()
         {
                 bool isEmailPasswordValidated;
-                User = new AccountProxyModel();
-                User.Email = email;                
-                User = AccountService.GetAccount(User);
-                isEmailPasswordValidated = IsEmailPassworValidated(User);
+                User = AccountService.Authenticate(email, password);
+                isEmailPasswordValidated = User != null;
 
                 if (isEmailPasswordValidated)
                 {
@@ -73,15 +69,7 @@ namespace View.ViewModels
         }
         public bool IsEmailPassworValidated(AccountProxyModel model)
         {
-            if (model!=null&&email!=null&&password!=null)
-            {
-                if (email == model.Email && password != null)
-                {
-                    return true;
-                }
-            }
-            
-            return false;
+            return model != null;
         }
         public void OpenMainWindowProgram()
         {
@@ -95,4 +83,3 @@ namespace View.ViewModels
     }
     
 }
-

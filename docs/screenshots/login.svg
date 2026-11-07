@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="360" viewBox="0 0 900 360">
+  <rect width="900" height="360" fill="#1a1a1a"/>
+  <rect x="80" y="35" width="740" height="290" rx="8" fill="#252525" stroke="#454b84" stroke-width="3"/>
+  <text x="450" y="90" fill="white" text-anchor="middle" font-family="Segoe UI" font-size="42">Login</text>
+  <text x="150" y="155" fill="white" font-family="Segoe UI" font-size="22">Email</text>
+  <rect x="300" y="130" width="430" height="40" fill="white"/>
+  <text x="150" y="225" fill="white" font-family="Segoe UI" font-size="22">Password</text>
+  <rect x="300" y="200" width="430" height="40" fill="white"/>
+  <rect x="300" y="265" width="280" height="42" rx="20" fill="#454b84"/>
+  <text x="440" y="293" fill="white" text-anchor="middle" font-family="Segoe UI" font-size="21">Login</text>
+  <text x="610" y="292" fill="white" font-family="Segoe UI" font-size="16">Sign Up</text>
+</svg>
