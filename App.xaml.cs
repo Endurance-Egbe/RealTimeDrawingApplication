@@ -1,7 +1,9 @@
 ﻿using Prism.Ioc;
 using Prism.Unity;
+using System;
 using System.ComponentModel;
 using System.Windows;
+using View.Infrastructure;
 using View.ViewModels.Common;
 
 namespace View
@@ -11,9 +13,25 @@ namespace View
     /// </summary>
     public partial class App : PrismApplication
     {
-        public App()
+        protected override void OnStartup(StartupEventArgs e)
         {
+            try
+            {
+                DatabaseInitializer.Initialize();
+            }
+            catch (Exception exception)
+            {
+                MessageBox.Show(
+                    "The application database could not be initialized.\r\n\r\n" +
+                    exception.Message,
+                    "Database initialization failed",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error);
+                Shutdown(1);
+                return;
+            }
 
+            base.OnStartup(e);
         }
 
         protected override Window CreateShell()

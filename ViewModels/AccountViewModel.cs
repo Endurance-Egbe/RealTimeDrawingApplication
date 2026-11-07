@@ -35,7 +35,6 @@ namespace View.ViewModels
             CreateAccountCommand = new DelegateCommand(CreateAccount);
            
             EventAggregator = GenericServiceLocator.ShellContainer.Resolve<IEventAggregator>();
-            EventAggregator.GetEvent<CloseWindowEvent>().Publish();
         }
         public AccountProxyModel User { get; set; }
         public string Email { get => email; set { email = value; RaisePropertyChanged(); } }
@@ -51,7 +50,7 @@ namespace View.ViewModels
        
         public void CreateAccount()
         {
-            if (fullName!=null)
+            if (!string.IsNullOrWhiteSpace(fullName) && !string.IsNullOrWhiteSpace(email))
             {
                 isPasswordComfirm = PasswordValidation();
                 if (isPasswordComfirm)
@@ -70,14 +69,12 @@ namespace View.ViewModels
                         return;
                     }
 
-                    EventAggregator = new EventAggregator();
-                    EventAggregator.GetEvent<CurrentAccountModelEvent>().Publish(User);
                     AccountService.CreateAccount(User);
 
                     MessageBox.Show("Account Created Successfully!",
                         "Success Message", MessageBoxButton.OK);
                    
-                    OpenLoginWindowProgram();
+                    EventAggregator.GetEvent<CloseAccountWindowEvent>().Publish();
                     return;
                 }
             }
@@ -89,15 +86,9 @@ namespace View.ViewModels
 
         public bool PasswordValidation()
         {
-            if (password != "" && comfirmPassword != "")
-            {
-                if (password == comfirmPassword)
-                {
-                    return true;
-                }
-            }
-
-            return false;
+            return !string.IsNullOrWhiteSpace(password)
+                && !string.IsNullOrWhiteSpace(comfirmPassword)
+                && password == comfirmPassword;
         }
         public bool IsEmailValidated()
         {
@@ -106,13 +97,6 @@ namespace View.ViewModels
                 return AccountService.EmailValidations(email);
             }
             return false;
-        }
-        public void OpenLoginWindowProgram()
-        {
-            
-            var loginPage = new LoginPage();
-
-            loginPage.ShowDialog();
         }
     }
 }
