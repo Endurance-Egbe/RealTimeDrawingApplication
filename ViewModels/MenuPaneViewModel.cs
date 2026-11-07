@@ -166,18 +166,37 @@ namespace View.ViewModels
             switch (parameter)
             {
                 case "ExportXml":
-                    XmlService.ExportWithXml(CurrentProjectModel);
+                    ExportDrawingIfContentExists(XmlService.ExportWithXml);
                     break;
                 case "ExportJson":
-                    JsonService.ExportWithJson(CurrentProjectModel);
+                    ExportDrawingIfContentExists(JsonService.ExportWithJson);
                     break;
                 default:
                     break;
             }
+        }
+
+        private void ExportDrawingIfContentExists(Action<ProjectProxyModel> export)
+        {
+            if (CurrentProjectModel == null)
+            {
+                MessageBox.Show("Select or create a project before exporting.",
+                    "Project required", MessageBoxButton.OK, MessageBoxImage.Information);
+                return;
+            }
+
+            var drawings = DrawingComponentService.GetDrawingComponentModels(CurrentProjectModel);
+            if (drawings == null || drawings.Count == 0)
+            {
+                MessageBox.Show("Add at least one drawing object before exporting.",
+                    "Nothing to export", MessageBoxButton.OK, MessageBoxImage.Information);
+                return;
+            }
+
+            export(CurrentProjectModel);
         }
         
     }
 }
 
     
-

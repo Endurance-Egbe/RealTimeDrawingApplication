@@ -54,6 +54,7 @@ namespace View.ViewModels
             EventAggregator.GetEvent<CanvasComponentEvent>().Subscribe(DrawingComponents);
             EventAggregator.GetEvent<ClearDrawingCanvasEvent>().Subscribe(ClearCanvasElements);
             EventAggregator.GetEvent<CurrentActiveProjectEvent>().Subscribe(SetCurrentProjectModel);
+            EventAggregator.GetEvent<UpdatePropertyWindow>().Subscribe(ActivatePropertyWindow);
             GetAllUserProjects();
             GetAllShareUsers();
             //EventAggregator.GetEvent<CurrentAccountModelEvent>().Subscribe(CurrentUser);
@@ -135,7 +136,18 @@ namespace View.ViewModels
             {
                 CustomCanvas.Children.Clear();
             }
-            
+
+        }
+
+        private void ActivatePropertyWindow(ComponentModel component)
+        {
+            if (component == null)
+            {
+                return;
+            }
+
+            CurrentWindow = PropertyWindow;
+            CurrentWindowTitle = "Property Window";
         }
         public List<DrawingComponentProxyModel> DrawingComponentProxies { get; set; }
         public ProjectProxyModel CurrentProjectModel { get; set; }

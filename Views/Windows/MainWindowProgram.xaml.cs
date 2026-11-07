@@ -66,11 +66,26 @@ namespace MainViews.Windows
         private void MainWindowPreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
             if (MenuPaneUc.Visibility == Visibility.Visible &&
-                !MenuPaneUc.IsMouseOver &&
-                !Menubtn.IsMouseOver)
+                !IsInsideElement(e.OriginalSource as DependencyObject, MenuPaneUc) &&
+                !IsInsideElement(e.OriginalSource as DependencyObject, Menubtn))
             {
                 MenuPaneUc.Visibility = Visibility.Collapsed;
             }
+        }
+
+        private static bool IsInsideElement(DependencyObject source, DependencyObject target)
+        {
+            while (source != null)
+            {
+                if (source == target)
+                {
+                    return true;
+                }
+
+                source = VisualTreeHelper.GetParent(source);
+            }
+
+            return false;
         }
 
         private void Path_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
