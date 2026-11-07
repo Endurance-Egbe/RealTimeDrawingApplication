@@ -24,7 +24,7 @@ namespace View.ViewModels.DatabaseServices
             var projectModel = model.GetCurrentProjectModel(projectName);
             if (accountModel!=null)
             {
-                var getShareUser = model.GetShareUser(accountModel.Email);
+                var getShareUser = model.GetShareUser(accountModel.Email, projectModel);
                 if (projectModel != null&& getShareUser==null)
                 {
 

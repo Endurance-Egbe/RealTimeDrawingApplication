@@ -16,6 +16,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\..\Security\PasswordHasher.cs" Link="Security\PasswordHasher.cs" />
+    <Compile Include="..\..\Infrastructure\ApplicationOperationException.cs" Link="Infrastructure\ApplicationOperationException.cs" />
     <Compile Include="..\..\Models\AccountModel.cs" Link="Models\AccountModel.cs" />
     <Compile Include="..\..\Models\ProjectModel.cs" Link="Models\ProjectModel.cs" />
     <Compile Include="..\..\Models\ShareUserProject.cs" Link="Models\ShareUserProject.cs" />
