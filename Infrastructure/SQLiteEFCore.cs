@@ -1,4 +1,4 @@
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Data.Sqlite;
 using System.Configuration;
 using System;
@@ -9,9 +9,6 @@ namespace View.Infrastructure
     public class SQLiteEFCore : UserDbContext
     {
         private const string ConnectionStringName = "DrawingDatabase";
-        private const string OnlineConnectionStringName = "OnlineDatabase";
-        public const string OnlineConnectionEnvironmentVariable =
-            "REALTIME_DRAWING_POSTGRES_CONNECTION_STRING";
 
         public SQLiteEFCore() : base()
         {
@@ -20,13 +17,6 @@ namespace View.Infrastructure
 
         protected override void InitialiseDatabase(DbContextOptionsBuilder optionsBuilder)
         {
-            string onlineConnectionString;
-            if (TryGetOnlineConnection(out onlineConnectionString))
-            {
-                optionsBuilder.UseNpgsql(onlineConnectionString);
-                return;
-            }
-
             var configuredConnectionString = GetLocalConnectionString();
             if (string.IsNullOrWhiteSpace(configuredConnectionString))
             {
@@ -61,41 +51,6 @@ namespace View.Infrastructure
 
             connectionString.DataSource = dataSource;
             optionsBuilder.UseSqlite(connectionString.ToString());
-        }
-
-        private static bool TryGetOnlineConnection(out string connectionString)
-        {
-            connectionString = null;
-            var environmentConnectionString =
-                Environment.GetEnvironmentVariable(OnlineConnectionEnvironmentVariable);
-            var configuredConnectionString = ConfigurationManager.ConnectionStrings[OnlineConnectionStringName];
-            var onlineConnectionString = !string.IsNullOrWhiteSpace(environmentConnectionString)
-                ? environmentConnectionString
-                : configuredConnectionString?.ConnectionString;
-
-            if (!string.IsNullOrWhiteSpace(onlineConnectionString))
-            {
-                try
-                {
-                    using (var connection = new Npgsql.NpgsqlConnection(onlineConnectionString))
-                    {
-                        connection.Open();
-                        connection.Close();
-                        connectionString = onlineConnectionString;
-                        return true;
-                    }
-                }
-                catch (Npgsql.NpgsqlException)
-                {
-                    // The local SQLite database is the supported offline fallback.
-                }
-                catch (TimeoutException)
-                {
-                    // The local SQLite database is the supported offline fallback.
-                }
-            }
-
-            return false;
         }
 
         private static string GetLocalConnectionString()

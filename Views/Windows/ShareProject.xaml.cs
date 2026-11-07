@@ -14,6 +14,7 @@ using System.Windows.Shapes;
 using View.ViewModels;
 using View.ViewModels.ProxyModel;
 using Prism.Events;
+using Prism.Ioc;
 using View.Helper.Common.Event_Container;
 using View.ViewModels.Common;
 

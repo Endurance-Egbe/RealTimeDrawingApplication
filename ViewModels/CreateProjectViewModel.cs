@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using View.ViewModels.Common;
 using View.ViewModels.Common.Event_Container;
+using View.Helper.Common.Event_Container;
 using View.ViewModels.DatabaseServices;
 using View.ViewModels.ProxyModel;
 using Prism.Ioc;

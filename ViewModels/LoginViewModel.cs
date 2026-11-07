@@ -64,7 +64,6 @@ namespace View.ViewModels
 
                 if (isEmailPasswordValidated)
                 {
-                    EventAggregator.GetEvent<CloseWindowEvent>().Publish();
                     OpenMainWindowProgram();
                     return;
                 }
@@ -88,12 +87,14 @@ namespace View.ViewModels
         }
         public void OpenMainWindowProgram()
         {
+            var mainWindow = new MainWindowProgram
+            {
+                DataContext = new MainWindowViewModel(User)
+            };
 
-            
-            Window mainWindowprogram = new MainWindowProgram();
-            mainWindowprogram.DataContext = new MainWindowViewModel(User);
-            mainWindowprogram.ShowDialog();
-            
+            Application.Current.MainWindow = mainWindow;
+            mainWindow.Show();
+            EventAggregator.GetEvent<CloseWindowEvent>().Publish();
         }
     }
     
