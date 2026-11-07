@@ -24,8 +24,8 @@ namespace View.ViewModels
 {
     public class MainWindowViewModel : BindableBase
     {
-        private string _currentWindowTitle = "Property Window";
-        private UserControl s_currentWindow = new PropertyWindow();
+        private string _currentWindowTitle = "Project Window";
+        private UserControl s_currentWindow = new ProjectWindow();
         private CustomCanvasViewModel customCanvas = new CustomCanvasViewModel();
         private FrameworkElement menuPane;
         private UserControl propertyWindow ;
@@ -54,7 +54,6 @@ namespace View.ViewModels
             EventAggregator.GetEvent<CanvasComponentEvent>().Subscribe(DrawingComponents);
             EventAggregator.GetEvent<ClearDrawingCanvasEvent>().Subscribe(ClearCanvasElements);
             EventAggregator.GetEvent<CurrentActiveProjectEvent>().Subscribe(SetCurrentProjectModel);
-            EventAggregator.GetEvent<CloseWindowEvent>().Publish();
             GetAllUserProjects();
             GetAllShareUsers();
             //EventAggregator.GetEvent<CurrentAccountModelEvent>().Subscribe(CurrentUser);
@@ -92,11 +91,18 @@ namespace View.ViewModels
                 shareProject.DataContext = new ShareUserViewModel(CurrentProjectModel);
                 shareProject.ShowDialog();
             }
+            else
+            {
+                MessageBox.Show("Select or create a project before adding users.",
+                    "Active project required", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
             
         }
         private void OpenMenuPane()
         {
-            menuPane.Visibility = Visibility.Visible;
+            menuPane.Visibility = menuPane.Visibility == Visibility.Visible
+                ? Visibility.Collapsed
+                : Visibility.Visible;
             
         }
         //public ProjectProxyModel CurrentProject { get; set; }

@@ -55,6 +55,14 @@ namespace MainViews.Windows
             MenuPaneUc.Visibility = Visibility.Visible;
         }
 
+        private void MenuButton_Click(object sender, RoutedEventArgs e)
+        {
+            MenuPaneUc.Visibility = MenuPaneUc.Visibility == Visibility.Visible
+                ? Visibility.Collapsed
+                : Visibility.Visible;
+            e.Handled = true;
+        }
+
         private void MainWindowPreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
             if (MenuPaneUc.Visibility == Visibility.Visible &&

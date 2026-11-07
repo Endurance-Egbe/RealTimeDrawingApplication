@@ -86,6 +86,10 @@ namespace View.ViewModels
                 projects.ProjectName = item;
                 ProjectList.Add(projects);
             }
+            if (SelectedProject == null && ProjectList.Count > 0)
+            {
+                SelectedProject = ProjectList[0];
+            }
         }
         void RemoveProject(ProjectProxyModel projectProxyModel)
         {
