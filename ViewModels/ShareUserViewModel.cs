@@ -49,10 +49,10 @@ namespace View.ViewModels
                 return;
             }
 
-            ShareUserService.ShareProject(email, CurrentProjectModel.ProjectName);
-            if (ShareUserService.isUserVerified == true)
+            ShareUserServiceProvider.Current.ShareProject(email, CurrentProjectModel.ProjectName);
+            if (ShareUserServiceProvider.Current.IsUserVerified == true)
             {
-                AccountProxy = ShareUserService.GetAccountModel;
+                AccountProxy = ShareUserServiceProvider.Current.SharedAccount;
                 EventAggregator.GetEvent<CloseWindowEvent>().Publish();
                 EventAggregator.GetEvent<CurrentAccountModelEvent>().Publish(AccountProxy);
                 return;

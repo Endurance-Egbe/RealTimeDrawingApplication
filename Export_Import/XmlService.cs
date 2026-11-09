@@ -17,7 +17,8 @@ namespace View.Export_Import
        
         public static void ExportWithXml(ProjectProxyModel projectProxyModel)
         {
-            List<DrawingComponentModel>drawingComponents = DrawingComponentService.GetDrawingComponentModels(projectProxyModel);
+            List<DrawingComponentModel> drawingComponents =
+                DrawingComponentServiceProvider.Current.GetDrawingComponentModels(projectProxyModel);
             XmlSerializer xmlSerializer = new XmlSerializer(typeof(List<DrawingComponentModel>));
             SaveFileDialog saveFile = new SaveFileDialog()
             {

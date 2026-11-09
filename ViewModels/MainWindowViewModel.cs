@@ -195,7 +195,8 @@ namespace View.ViewModels
         {
             if (CurrentProjectModel!=null)
             {
-                DrawingComponentService.CreateDrawings(CurrentProjectModel, DrawingComponentProxies);
+                DrawingComponentServiceProvider.Current.CreateDrawings(
+                    CurrentProjectModel, DrawingComponentProxies);
                 MessageBox.Show("Project Saved Successfully!", "Success Message", MessageBoxButton.OK);
                 return;
             }
@@ -204,13 +205,13 @@ namespace View.ViewModels
         void GetAllUserProjects()
         {
             ObservableCollection<string> getAllUserProjects = new ObservableCollection<string>();
-            getAllUserProjects = ProjectService.GetAllProjects(User);
+            getAllUserProjects = ProjectServiceProvider.Current.GetAllProjects(User);
             EventAggregator.GetEvent<GetAllUserProjectsEvent>().Publish(getAllUserProjects);
         }
         void GetAllShareUsers()
         {
             ObservableCollection<Users> allShareUser = new ObservableCollection<Users>();
-            var getAllShareUser = ShareUserService.GetShareUsers(User);
+            var getAllShareUser = ShareUserServiceProvider.Current.GetShareUsers(User);
             if (getAllShareUser!=null)
             {
                 foreach (var item in getAllShareUser)

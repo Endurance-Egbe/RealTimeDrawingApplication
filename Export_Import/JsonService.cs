@@ -14,7 +14,7 @@ namespace View.Export_Import
     {
         private  static string JsonSerializedObject (ProjectProxyModel projectProxyModel)
         {
-            var drawingComponents = DrawingComponentService.GetDrawingComponentModels(projectProxyModel);
+            var drawingComponents = DrawingComponentServiceProvider.Current.GetDrawingComponentModels(projectProxyModel);
             string serializedDrawings = JsonConvert.SerializeObject(drawingComponents);
             return serializedDrawings;
         }

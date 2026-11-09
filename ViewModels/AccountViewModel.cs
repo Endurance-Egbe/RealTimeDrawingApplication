@@ -69,7 +69,7 @@ namespace View.ViewModels
                         return;
                     }
 
-                    AccountService.CreateAccount(User);
+                    AccountServiceProvider.Current.CreateAccount(User);
 
                     MessageBox.Show("Account Created Successfully!",
                         "Success Message", MessageBoxButton.OK);
@@ -94,7 +94,7 @@ namespace View.ViewModels
         {
             if (email != null)
             {
-                return AccountService.EmailValidations(email);
+                return AccountServiceProvider.Current.EmailValidations(email);
             }
             return false;
         }

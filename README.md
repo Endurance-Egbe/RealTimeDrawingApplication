@@ -1,5 +1,8 @@
 # RealTimeDrawingApplication
 
+> **Project category:** Desktop WPF Application (C#/.NET Framework, EF Core,
+> SQLite/PostgreSQL).
+
 RealTimeDrawingApplication is a desktop collaborative drawing application built
 with WPF, Prism, Entity Framework Core 3.1, and SQLite. Users can create an
 account, sign in, create drawing projects, share projects, and export/import
@@ -72,13 +75,16 @@ flowchart LR
 - **Views** contain XAML layout and only presentation-specific code-behind.
 - **ViewModels** expose bindable state and commands to the views.
 - **Application services** coordinate account, project, sharing, and file operations.
-- **Infrastructure** contains the EF Core context and repository implementations.
+- **Infrastructure** contains the EF Core context, repository implementations, and
+  injectable account, project, sharing, and drawing-component repository
+  boundaries used by the application services.
 - **Models/ProxyModel** separate persistence entities from view-facing data.
 - **Security** contains password hashing and verification.
 
 The current solution is a .NET Framework 4.7.2 WPF application. The test project
-targets .NET 8 and links only to framework-independent security code so it can
-run in CI without starting a WPF window or database.
+targets .NET 8 with Windows desktop support and tests framework-independent
+services and mapping logic without starting a WPF window or requiring a live
+database.
 
 ## Requirements
 
@@ -87,6 +93,7 @@ run in CI without starting a WPF window or database.
 - Visual Studio 2019/2022 with the **.NET desktop development** workload, or
   MSBuild and NuGet available on `PATH`.
 - .NET 8 SDK for the unit test project.
+- Docker Desktop, if using the optional PostgreSQL development container.
 
 ## Installation and first run
 
@@ -105,6 +112,29 @@ database location or provider:
      providerName="System.Data.SQLite"
      connectionString="Data Source={LocalAppData}\RealTimeDrawingApplication\DrawingShapeApplication.db;foreign keys=true;"/>
 ```
+
+     ### Optional PostgreSQL development container
+
+     The WPF executable runs natively on Windows and is not launched inside Docker.
+     The repository includes [`docker-compose.yml`](./docker-compose.yml) to provide
+     the PostgreSQL backing service for local development:
+
+     ```powershell
+     docker compose up -d postgres
+     $env:REALTIME_DRAWING_POSTGRES_CONNECTION_STRING =
+       "Host=localhost;Port=5432;Database=drawing;Username=drawing_app;Password=drawing_dev_password"
+     ```
+
+     Start the WPF application normally from Visual Studio, then stop the database
+     when finished:
+
+     ```powershell
+     docker compose down
+     ```
+
+     The compose file is intentionally PostgreSQL-only because Docker cannot provide
+     the normal Windows WPF desktop experience. SQLite remains the zero-setup
+     default for users who do not need a shared database.
 
 For a different location, edit only the `connectionString` value. A relative
 `{LocalAppData}` is resolved automatically to the current user's local
@@ -210,6 +240,13 @@ buttons for rectangles, ellipses, triangles, lines, and text. Drag a tool onto
 the white canvas to create an object. New objects can be moved by dragging
 them, and selecting an object activates the **Property Window**.
 
+To resize a selected shape, drag one of its purple corner handles. Dragging a
+corner expands or reduces the shape while keeping the opposite corner anchored.
+Shapes cannot be reduced below the minimum readable size. Text objects also
+support bottom-right corner resizing. The Property Window updates the X, Y,
+Width, and Height values while resizing, so the exact dimensions can be
+reviewed before saving.
+
 The property editor lets you adjust values such as:
 
 - Title
@@ -271,8 +308,38 @@ For command-line builds on Windows:
 ```powershell
 nuget restore RealTimeDrawingApplication.sln
 msbuild RealTimeDrawingApplication.sln /p:Configuration=Release /p:Platform="Any CPU"
-dotnet test tests\RealTimeDrawingApplication.Tests\RealTimeDrawingApplication.Tests.csproj
+dotnet restore tests\RealTimeDrawingApplication.Tests\RealTimeDrawingApplication.Tests.csproj
+dotnet test tests\RealTimeDrawingApplication.Tests\RealTimeDrawingApplication.Tests.csproj --no-restore
 ```
+
+`nuget restore` is required for the legacy WPF project because it uses
+`packages.config`. The SDK-style test project has a committed
+`packages.lock.json`; use `--locked-mode` in CI or when you need to verify
+reproducible test dependencies. The WPF project cannot use an SDK-style
+NuGet lock file without being migrated from `packages.config`.
+
+### Fresh-clone verification
+
+From a new clone on Windows:
+
+1. Install the .NET Framework 4.7.2 Developer Pack, Visual Studio with the
+   **.NET desktop development** workload, and the .NET 8 SDK.
+2. Ensure `nuget.exe` and Visual Studio `msbuild.exe` are available, or run the
+   commands from a Visual Studio Developer PowerShell.
+3. Run:
+
+   ```powershell
+   nuget restore RealTimeDrawingApplication.sln
+   msbuild RealTimeDrawingApplication.sln /p:Configuration=Release /p:Platform="Any CPU"
+   dotnet restore tests\RealTimeDrawingApplication.Tests\RealTimeDrawingApplication.Tests.csproj --locked-mode
+   dotnet test tests\RealTimeDrawingApplication.Tests\RealTimeDrawingApplication.Tests.csproj --no-restore
+   ```
+
+4. Start `bin\Release\RealTimeDrawingApplication.exe`.
+
+The application creates the default SQLite database under
+`%LOCALAPPDATA%\RealTimeDrawingApplication` during first startup. No external
+database is required for the default local workflow.
 
 ## Authentication workflow
 
@@ -283,21 +350,35 @@ password against the stored hash. Plaintext passwords are never persisted.
 
 ## Testing
 
-The test project currently contains 14 unit tests covering password hashing,
+The test project currently contains 50 unit tests covering password hashing,
 salt uniqueness, malformed input, empty values, successful/failed verification,
 model relationships, and JSON persistence-field exclusions. Coverage is
-collected in Cobertura XML and uploaded as a GitHub Actions artifact.
+collected in Cobertura XML, checked against a 40% minimum line-coverage gate,
+and uploaded as a GitHub Actions artifact. The CI workflow also runs
+`git diff --check` as a lint step.
 
 The WPF application is a legacy .NET Framework executable, so not every line
 can be covered by headless unit tests. Window creation, message boxes, native
 file dialogs, Prism composition, and EF Core/SQLite access require UI or
 integration tests. The current unit suite deliberately covers the
-framework-independent security and model boundaries; database and WPF tests
-should be added after extracting those dependencies behind interfaces.
+framework-independent security, service, mapping, and ViewModel boundaries;
+database and direct WPF-window tests should be added after extracting those
+dependencies behind interfaces.
+
+Application errors are logged as structured JSON lines under
+`%LOCALAPPDATA%\RealTimeDrawingApplication\logs\application.log`. Service
+boundaries preserve the original exception inside an
+`ApplicationOperationException`, while ViewModels continue to show concise
+user-facing messages.
 
 The current scoped coverage gate requires at least 90% line and branch coverage
 for the isolated `View.*` production code included in the test project. The
 latest local run achieved 96.77% line coverage and 92.85% branch coverage.
+
+The SVG files in `docs/screenshots` are labeled illustrative diagrams rather
+than runtime captures. Real screenshots should be captured from a Windows
+session after launching the WPF application; they are not fabricated as
+evidence of runtime behavior.
 
 ## CI and pre-commit
 

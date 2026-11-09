@@ -1,114 +1,68 @@
-﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using View.Infrastructure;
-using View.Infrastructure.Query;
 using View.Models;
-using View.ViewModels.Common.CustomColor;
 using View.ViewModels.ProxyModel;
 
 namespace View.ViewModels.DatabaseServices
 {
     public class DrawingComponentService
     {
-        
-        public static void CreateDrawings(ProjectProxyModel projectProxy, List<DrawingComponentProxyModel> drawingComponent)
-        {
-            List<DrawingComponentModel> drawingModels = new List<DrawingComponentModel>();
-            drawingModels= ComponentValidationToDatabase(drawingComponent);
-            var sqlite = new SQLiteEFCore();
-            var model = new DrawingComponentEFCoreRepository(sqlite);
-            ProjectModel projectModel = model.GetCurrentProject(projectProxy.ProjectName);
-            IEnumerable<DrawingComponentModel> drawingComponentModel = model.GetDrawingComponents(projectModel);            
-            if (drawingComponentModel!=null)
-            {
-                DeleteDrawings(projectProxy);          
-            }
-          
-                foreach (var drawing in drawingModels)
-                {
-                    drawing.Project = projectModel;
-                    model.CreateModel(drawing);
+        private readonly IDrawingComponentRepository repository;
 
-                }
-        }
-        public static IEnumerable<DrawingComponentProxyModel> GetDrawings(ProjectProxyModel projectProxy)
+        public DrawingComponentService(IDrawingComponentRepository repository)
         {
-            List<DrawingComponentProxyModel> drawingModel = new List<DrawingComponentProxyModel>();
-            var sqlite = new SQLiteEFCore();
-            var model = new DrawingComponentEFCoreRepository(sqlite);
-            ProjectModel projectModel = model.GetCurrentProject(projectProxy.ProjectName);
-            List<DrawingComponentModel> drawingComponents  = model.GetDrawingComponents(projectModel);
-            drawingModel=ComponentValidationFromDatabase(drawingComponents);
-            //component.
-            return drawingModel;
+            this.repository = repository;
         }
-        public static List<DrawingComponentModel> ComponentValidationToDatabase(List<DrawingComponentProxyModel> drawingComponentProxy)
+
+        public void CreateDrawings(ProjectProxyModel projectProxy, List<DrawingComponentProxyModel> drawingComponents)
         {
-            List<DrawingComponentModel> drawingModel = new List<DrawingComponentModel>();
-            foreach (var drawing in drawingComponentProxy)
+            var drawingModels = ComponentValidationToDatabase(drawingComponents);
+            var project = repository.GetCurrentProject(projectProxy.ProjectName);
+            var existingDrawings = repository.GetDrawingComponents(project);
+
+            if (existingDrawings != null)
             {
-                drawingModel.Add(new DrawingComponentModel()
-                {
-                    Title = drawing.Title,
-                    X = drawing.X,
-                    Y = drawing.Y,
-                    Width = drawing.Width,
-                    Height = drawing.Height,
-                    SelectedBorderColor = drawing.SelectedBorderColor.ColorName,
-                    SelectedFillColor = drawing.SelectedFillColor.ColorName,
-                    SelectedStroke = drawing.SelectedStroke.ColorName,
-                    StrokeThickness = drawing.StrokeThickness,
-                    LineThickness = drawing.LineThickness
-                });
+                DeleteDrawings(projectProxy);
             }
-            
-            return drawingModel;
-        }
-        public static List<DrawingComponentProxyModel> ComponentValidationFromDatabase(List<DrawingComponentModel> drawingComponents)
-        {
-            List<DrawingComponentProxyModel> drawingComponentModel = new List<DrawingComponentProxyModel>();
-            foreach (var drawing in drawingComponents)
+
+            foreach (var drawing in drawingModels)
             {
-                
-                drawingComponentModel.Add(new DrawingComponentProxyModel()
-                {
-                    Title = drawing.Title,
-                    X = drawing.X,
-                    Y = drawing.Y,
-                    Width = drawing.Width,
-                    Height = drawing.Height,
-                    LineThickness = drawing.LineThickness,
-                    SelectedBorderColor = ColorCollectionsClass.ColorCollections.FirstOrDefault(x => x.ColorName == drawing.SelectedBorderColor),
-                    SelectedFillColor = ColorCollectionsClass.ColorCollections.FirstOrDefault(x => x.ColorName == drawing.SelectedFillColor),
-                    SelectedStroke= ColorCollectionsClass.ColorCollections.FirstOrDefault(x => x.ColorName == drawing.SelectedStroke),
-                    StrokeThickness= drawing.StrokeThickness
-                }); ;
+                drawing.Project = project;
+                repository.Create(drawing);
             }
-           
-            return drawingComponentModel;
         }
-        public static List<DrawingComponentModel> GetDrawingComponentModels(ProjectProxyModel projectProxy)
+
+        public IEnumerable<DrawingComponentProxyModel> GetDrawings(ProjectProxyModel projectProxy)
         {
-            List<DrawingComponentProxyModel> drawingModel = new List<DrawingComponentProxyModel>();
-            var sqlite = new SQLiteEFCore();
-            var model = new DrawingComponentEFCoreRepository(sqlite);
-            ProjectModel projectModel = model.GetCurrentProject(projectProxy.ProjectName);
-            List<DrawingComponentModel> drawingComponents = model.GetDrawingComponents(projectModel);
-            return drawingComponents;
+            var project = repository.GetCurrentProject(projectProxy.ProjectName);
+            return ComponentValidationFromDatabase(repository.GetDrawingComponents(project));
         }
-        public static void DeleteDrawings(ProjectProxyModel projectProxy)
+
+        public List<DrawingComponentModel> GetDrawingComponentModels(ProjectProxyModel projectProxy)
         {
-            var sqlite = new SQLiteEFCore();
-            var model = new DrawingComponentEFCoreRepository(sqlite);
-            ProjectModel projectModel = model.GetCurrentProject(projectProxy.ProjectName);
-            List<DrawingComponentModel> drawingComponents = model.GetDrawingComponents(projectModel);
-            foreach (var item in drawingComponents)
+            var project = repository.GetCurrentProject(projectProxy.ProjectName);
+            return repository.GetDrawingComponents(project);
+        }
+
+        public void DeleteDrawings(ProjectProxyModel projectProxy)
+        {
+            var project = repository.GetCurrentProject(projectProxy.ProjectName);
+            var drawings = repository.GetDrawingComponents(project);
+            foreach (var drawing in drawings)
             {
-                model.DeleteModel(item);
+                repository.Delete(drawing);
             }
+        }
+
+        public static List<DrawingComponentModel> ComponentValidationToDatabase(
+            List<DrawingComponentProxyModel> drawingComponents)
+        {
+            return DrawingComponentMapper.ToDatabaseModels(drawingComponents);
+        }
+
+        public static List<DrawingComponentProxyModel> ComponentValidationFromDatabase(
+            List<DrawingComponentModel> drawingComponents)
+        {
+            return DrawingComponentMapper.ToProxyModels(drawingComponents);
         }
     }
 }

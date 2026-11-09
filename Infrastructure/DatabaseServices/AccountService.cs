@@ -1,87 +1,76 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using View.Infrastructure;
 using View.Models;
 using View.ViewModels.ProxyModel;
 using View.Security;
+using View.Infrastructure;
+using View.Infrastructure.Logging;
 
 namespace View.ViewModels.DatabaseServices
 {
     public class AccountService
     {
-        public static void CreateAccount(AccountProxyModel accountProxyModel)
-        {
-            AccountModel accountModel = new AccountModel();
-            accountModel.FullName = accountProxyModel.FullName;
-            accountModel.Email = accountProxyModel.Email;
-            accountModel.PasswordHash = PasswordHasher.Hash(accountProxyModel.Password);
+        private readonly IAccountRepository accountRepository;
 
-            var sqlite = new SQLiteEFCore();
-            var model = new AccountModelEFCoreRepository(sqlite);
-            model.CreateModel(accountModel);
-        }
-        public static bool EmailValidations(string email)
+        public AccountService(IAccountRepository accountRepository)
         {
-            AccountModel accountModel = new AccountModel();
-            accountModel.Email = email;
-            var sqlite = new SQLiteEFCore();
-            var model = new AccountModelEFCoreRepository(sqlite);
-            var getmodel = model.GetModelByEmail(accountModel.Email);
-            if (getmodel != null)
-            {
-                return true;
-            }
-            return false;
+            this.accountRepository = accountRepository;
         }
-        public static bool EmailPasswordValidation(string email, string password)
+
+        public void CreateAccount(AccountProxyModel accountProxyModel)
         {
-            AccountModel accountModel = new AccountModel();
-            accountModel.Email = email;
-            var sqlite = new SQLiteEFCore();
-            var model = new AccountModelEFCoreRepository(sqlite);
-            var getmodel = model.GetModelByEmail(accountModel.Email);
-            if (getmodel!=null)
+            try
             {
-                if (getmodel.Email == email && PasswordHasher.Verify(password, getmodel.PasswordHash))
+                accountRepository.Create(new AccountModel
                 {
-                    return true;
-                }
+                    FullName = accountProxyModel.FullName,
+                    Email = accountProxyModel.Email,
+                    PasswordHash = PasswordHasher.Hash(accountProxyModel.Password)
+                });
+                ApplicationLoggerProvider.Current.LogInformation(
+                    "Account.Create", "Account created successfully.");
             }
-            
-            return false;
-        }
-        public static AccountProxyModel GetAccount(AccountProxyModel accountProxyModel)
-        {
-            AccountModel accountModel = new AccountModel();
-            
-            accountModel.Email = accountProxyModel.Email;
-            var sqlite = new SQLiteEFCore();
-            var model = new AccountModelEFCoreRepository(sqlite);
-            var getmodel = model.GetModelByEmail(accountModel.Email);
-            if (getmodel!=null)
+            catch (Exception exception)
             {
-                accountProxyModel.FullName = getmodel.FullName;
-                accountProxyModel.Email = getmodel.Email;
+                ApplicationLoggerProvider.Current.LogError("Account.Create", exception);
+                throw new ApplicationOperationException(
+                    "The account could not be created.", exception);
+            }
+        }
+
+        public bool EmailValidations(string email)
+        {
+            return accountRepository.GetByEmail(email) != null;
+        }
+
+        public bool EmailPasswordValidation(string email, string password)
+        {
+            var account = accountRepository.GetByEmail(email);
+            return account != null
+                && account.Email == email
+                && PasswordHasher.Verify(password, account.PasswordHash);
+        }
+
+        public AccountProxyModel GetAccount(AccountProxyModel accountProxyModel)
+        {
+            var account = accountRepository.GetByEmail(accountProxyModel.Email);
+            if (account != null)
+            {
+                accountProxyModel.FullName = account.FullName;
+                accountProxyModel.Email = account.Email;
                 return accountProxyModel;
             }
-            
-            //accountProxyModel.ProjectProxyModels = getmodel.Projects;
+
             return null;
         }
 
-        public static AccountProxyModel Authenticate(string email, string password)
+        public AccountProxyModel Authenticate(string email, string password)
         {
             if (string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(password))
             {
                 return null;
             }
 
-            var sqlite = new SQLiteEFCore();
-            var model = new AccountModelEFCoreRepository(sqlite);
-            var account = model.GetModelByEmail(email.Trim());
+            var account = accountRepository.GetByEmail(email.Trim());
             if (account == null || !PasswordHasher.Verify(password, account.PasswordHash))
             {
                 return null;
@@ -93,16 +82,10 @@ namespace View.ViewModels.DatabaseServices
                 FullName = account.FullName
             };
         }
-        public static AccountModel GetAccountModel(AccountProxyModel accountProxyModel)
-        {
-            AccountModel accountModel = new AccountModel();
 
-            accountModel.Email = accountProxyModel.Email;
-            var sqlite = new SQLiteEFCore();
-            var model = new AccountModelEFCoreRepository(sqlite);
-            var getmodel = model.GetModelByEmail(accountModel.Email);
-            
-            return getmodel;
+        public AccountModel GetAccountModel(AccountProxyModel accountProxyModel)
+        {
+            return accountRepository.GetByEmail(accountProxyModel.Email);
         }
     }
 }

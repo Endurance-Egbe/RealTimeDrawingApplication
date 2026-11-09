@@ -4,6 +4,7 @@ using System;
 using System.ComponentModel;
 using System.Windows;
 using View.Infrastructure;
+using View.ViewModels.DatabaseServices;
 using View.ViewModels.Common;
 
 namespace View
@@ -42,7 +43,22 @@ namespace View
 
         protected override void RegisterTypes(IContainerRegistry containerRegistry)
         {
-
+            var accountService = new AccountService(new SqliteAccountRepository());
+            containerRegistry.RegisterInstance(accountService);
+            AccountServiceProvider.SetCurrent(accountService);
+            var drawingComponentService =
+                new DrawingComponentService(new SqliteDrawingComponentRepository());
+            containerRegistry.RegisterInstance(drawingComponentService);
+            DrawingComponentServiceProvider.SetCurrent(drawingComponentService);
+            var shareUserService = new ShareUserService(new SqliteShareUserRepository());
+            containerRegistry.RegisterInstance(shareUserService);
+            ShareUserServiceProvider.SetCurrent(shareUserService);
+            var projectService = new ProjectService(
+                new SqliteProjectRepository(),
+                drawingComponentService,
+                shareUserService);
+            containerRegistry.RegisterInstance(projectService);
+            ProjectServiceProvider.SetCurrent(projectService);
         }
     }
 }

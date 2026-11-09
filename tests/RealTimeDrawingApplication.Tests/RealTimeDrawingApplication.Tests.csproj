@@ -1,9 +1,11 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF>
     <IsPackable>false</IsPackable>
     <IsTestProject>true</IsTestProject>
     <Nullable>enable</Nullable>
+    <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.11.1" />
@@ -17,6 +19,18 @@
   <ItemGroup>
     <Compile Include="..\..\Security\PasswordHasher.cs" Link="Security\PasswordHasher.cs" />
     <Compile Include="..\..\Infrastructure\ApplicationOperationException.cs" Link="Infrastructure\ApplicationOperationException.cs" />
+    <Compile Include="..\..\Infrastructure\Logging\IApplicationLogger.cs" Link="Infrastructure\Logging\IApplicationLogger.cs" />
+    <Compile Include="..\..\Infrastructure\Logging\FileApplicationLogger.cs" Link="Infrastructure\Logging\FileApplicationLogger.cs" />
+    <Compile Include="..\..\Infrastructure\Logging\ApplicationLoggerProvider.cs" Link="Infrastructure\Logging\ApplicationLoggerProvider.cs" />
+    <Compile Include="..\..\Infrastructure\DatabaseServices\DrawingComponentMapper.cs" Link="Infrastructure\DatabaseServices\DrawingComponentMapper.cs" />
+    <Compile Include="..\..\Infrastructure\DatabaseServices\IAccountRepository.cs" Link="Infrastructure\DatabaseServices\IAccountRepository.cs" />
+    <Compile Include="..\..\Infrastructure\DatabaseServices\AccountService.cs" Link="Infrastructure\DatabaseServices\AccountService.cs" />
+    <Compile Include="..\..\Infrastructure\DatabaseServices\IDrawingComponentRepository.cs" Link="Infrastructure\DatabaseServices\IDrawingComponentRepository.cs" />
+    <Compile Include="..\..\Infrastructure\DatabaseServices\DrawingComponentService.cs" Link="Infrastructure\DatabaseServices\DrawingComponentService.cs" />
+    <Compile Include="..\..\Infrastructure\DatabaseServices\IProjectRepository.cs" Link="Infrastructure\DatabaseServices\IProjectRepository.cs" />
+    <Compile Include="..\..\Infrastructure\DatabaseServices\ProjectService.cs" Link="Infrastructure\DatabaseServices\ProjectService.cs" />
+    <Compile Include="..\..\Infrastructure\DatabaseServices\IShareUserRepository.cs" Link="Infrastructure\DatabaseServices\IShareUserRepository.cs" />
+    <Compile Include="..\..\Infrastructure\DatabaseServices\ShareUserService.cs" Link="Infrastructure\DatabaseServices\ShareUserService.cs" />
     <Compile Include="..\..\Models\AccountModel.cs" Link="Models\AccountModel.cs" />
     <Compile Include="..\..\Models\ProjectModel.cs" Link="Models\ProjectModel.cs" />
     <Compile Include="..\..\Models\ShareUserProject.cs" Link="Models\ShareUserProject.cs" />
@@ -24,8 +38,17 @@
     <Compile Include="..\..\ProxyModel\AccountProxyModel.cs" Link="ProxyModel\AccountProxyModel.cs" />
     <Compile Include="..\..\ProxyModel\ProjectProxyModel.cs" Link="ProxyModel\ProjectProxyModel.cs" />
     <Compile Include="..\..\ProxyModel\ShareUserProjectProxyModel.cs" Link="ProxyModel\ShareUserProjectProxyModel.cs" />
+    <Compile Include="..\..\ProxyModel\DrawingComponentProxyModel.cs" Link="ProxyModel\DrawingComponentProxyModel.cs" />
+    <Compile Include="..\..\Helper\Common\CustomColor\CustomColor.cs" Link="Helper\Common\CustomColor\CustomColor.cs" />
+    <Compile Include="..\..\Helper\Common\CustomColor\ColorCollectionsClass.cs" Link="Helper\Common\CustomColor\ColorCollectionsClass.cs" />
+    <Compile Include="..\..\Helper\Common\ComponentModel.cs" Link="Helper\Common\ComponentModel.cs" />
+    <Compile Include="..\..\Helper\Common\IPropertyWindow.cs" Link="Helper\Common\IPropertyWindow.cs" />
+    <Compile Include="..\..\Helper\Common\Event_Container\UpdatePropertyWindow.cs" Link="Helper\Common\Event_Container\UpdatePropertyWindow.cs" />
+    <Compile Include="..\..\Helper\Common\Event_Container\ComponentPropertyPubSubEvent.cs" Link="Helper\Common\Event_Container\ComponentPropertyPubSubEvent.cs" />
+    <Compile Include="..\..\ViewModels\PropertyViewModel.cs" Link="ViewModels\PropertyViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="Prism.Core" Version="8.0.0.1909" />
   </ItemGroup>
 </Project>

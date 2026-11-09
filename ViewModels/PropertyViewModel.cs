@@ -57,6 +57,8 @@ namespace View.ViewModels
                     return Width;
                 case nameof(Height):
                     return Height;
+                case nameof(Title):
+                    return Title;
                 case nameof(SelectedBorderColor):
                     return SelectedBorderColor.ColorType;
                 case nameof(SelectedFillColor):
