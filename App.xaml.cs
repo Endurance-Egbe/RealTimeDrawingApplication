@@ -50,6 +50,15 @@ namespace View
                 new DrawingComponentService(new SqliteDrawingComponentRepository());
             containerRegistry.RegisterInstance(drawingComponentService);
             DrawingComponentServiceProvider.SetCurrent(drawingComponentService);
+            var shareUserService = new ShareUserService(new SqliteShareUserRepository());
+            containerRegistry.RegisterInstance(shareUserService);
+            ShareUserServiceProvider.SetCurrent(shareUserService);
+            var projectService = new ProjectService(
+                new SqliteProjectRepository(),
+                drawingComponentService,
+                shareUserService);
+            containerRegistry.RegisterInstance(projectService);
+            ProjectServiceProvider.SetCurrent(projectService);
         }
     }
 }

@@ -76,8 +76,8 @@ flowchart LR
 - **ViewModels** expose bindable state and commands to the views.
 - **Application services** coordinate account, project, sharing, and file operations.
 - **Infrastructure** contains the EF Core context, repository implementations, and
-  injectable account and drawing-component repository boundaries used by the
-  application services.
+  injectable account, project, sharing, and drawing-component repository
+  boundaries used by the application services.
 - **Models/ProxyModel** separate persistence entities from view-facing data.
 - **Security** contains password hashing and verification.
 
@@ -343,7 +343,7 @@ password against the stored hash. Plaintext passwords are never persisted.
 
 ## Testing
 
-The test project currently contains 44 unit tests covering password hashing,
+The test project currently contains 50 unit tests covering password hashing,
 salt uniqueness, malformed input, empty values, successful/failed verification,
 model relationships, and JSON persistence-field exclusions. Coverage is
 collected in Cobertura XML, checked against a 40% minimum line-coverage gate,
@@ -358,9 +358,20 @@ framework-independent security, service, mapping, and ViewModel boundaries;
 database and direct WPF-window tests should be added after extracting those
 dependencies behind interfaces.
 
+Application errors are logged as structured JSON lines under
+`%LOCALAPPDATA%\RealTimeDrawingApplication\logs\application.log`. Service
+boundaries preserve the original exception inside an
+`ApplicationOperationException`, while ViewModels continue to show concise
+user-facing messages.
+
 The current scoped coverage gate requires at least 90% line and branch coverage
 for the isolated `View.*` production code included in the test project. The
 latest local run achieved 96.77% line coverage and 92.85% branch coverage.
+
+The SVG files in `docs/screenshots` are labeled illustrative diagrams rather
+than runtime captures. Real screenshots should be captured from a Windows
+session after launching the WPF application; they are not fabricated as
+evidence of runtime behavior.
 
 ## CI and pre-commit
 

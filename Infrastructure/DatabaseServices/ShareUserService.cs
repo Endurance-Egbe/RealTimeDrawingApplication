@@ -1,74 +1,81 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using View.Infrastructure;
-using View.Infrastructure.Query;
 using View.Models;
 using View.ViewModels.ProxyModel;
+using View.Infrastructure;
+using View.Infrastructure.Logging;
 
 namespace View.ViewModels.DatabaseServices
 {
     public class ShareUserService
     {
-        public static bool isUserVerified;
-        public static AccountProxyModel GetAccountModel;
-        public static void ShareProject(string email, string projectName)
+        private readonly IShareUserRepository repository;
+
+        public bool IsUserVerified { get; private set; }
+        public AccountProxyModel SharedAccount { get; private set; }
+
+        public ShareUserService(IShareUserRepository repository)
         {
-            ShareUserProject shareModel = new ShareUserProject();
-            
-            var sqlite = new SQLiteEFCore();
-            var model = new ShareUserProjectEFCoreRepository(sqlite);
-            AccountModel accountModel = model.GetCurrentAccountModel(email);
-            var projectModel = model.GetCurrentProjectModel(projectName);
-            if (accountModel!=null)
+            this.repository = repository;
+        }
+
+        public void ShareProject(string email, string projectName)
+        {
+            try
             {
-                var getShareUser = model.GetShareUser(accountModel.Email, projectModel);
-                if (projectModel != null&& getShareUser==null)
+                var account = repository.GetAccount(email);
+                var project = repository.GetProject(projectName);
+                var existingShare = account == null || project == null
+                    ? null
+                    : repository.GetShare(account.Email, project);
+
+                if (account == null || project == null || existingShare != null)
                 {
-
-                    GetAccountModel = new AccountProxyModel();
-                    GetAccountModel.FullName = accountModel.FullName;
-                    GetAccountModel.Email = accountModel.Email;
-                    shareModel.Users = accountModel;
-                    shareModel.Email = accountModel.Email;
-                    shareModel.Project = projectModel;
-
-                    model.CreateModel(shareModel);
-                    isUserVerified = true;
+                    SharedAccount = null;
+                    IsUserVerified = false;
                     return;
                 }
+
+                repository.Create(new ShareUserProject
+                {
+                    Users = account,
+                    Email = account.Email,
+                    Project = project
+                });
+                SharedAccount = new AccountProxyModel
+                {
+                    FullName = account.FullName,
+                    Email = account.Email
+                };
+                IsUserVerified = true;
+                ApplicationLoggerProvider.Current.LogInformation(
+                    "Project.Share", "Project shared successfully.");
             }
-            
-            GetAccountModel = null;
-            isUserVerified = false;
-        }
-        public static List<ShareUserProject> GetShareUsers(ProjectProxyModel projectProxyModel)
-        {
-            var sqlite = new SQLiteEFCore();
-            var model = new ShareUserProjectEFCoreRepository(sqlite);
-            var projectModel = ProjectService.GetProject(projectProxyModel.ProjectName);
-            var getShareUsers = model.GetShareUsers(projectModel);
-            return getShareUsers;
-        }
-        public static void DeleteShareUsers(ProjectProxyModel projectProxyModel)
-        {
-            var sqlite = new SQLiteEFCore();
-            var model = new ShareUserProjectEFCoreRepository(sqlite);
-            var shareUsers = GetShareUsers(projectProxyModel);
-            foreach (var item in shareUsers)
+            catch (Exception exception)
             {
-                model.DeleteShareUser(item);
+                ApplicationLoggerProvider.Current.LogError("Project.Share", exception);
+                throw new ApplicationOperationException(
+                    "The project could not be shared.", exception);
             }
         }
-        public static List<ShareUserProject> GetShareUsers(AccountProxyModel accountProxyModel)
+
+        public List<ShareUserProject> GetShareUsers(ProjectProxyModel projectProxyModel)
         {
-            var sqlite = new SQLiteEFCore();
-            var model = new ShareUserProjectEFCoreRepository(sqlite);
-            AccountModel accountModel = AccountServiceProvider.Current.GetAccountModel(accountProxyModel);
-            var getShareUsers = model.GetShareUsers(accountModel);
-            return getShareUsers;
+            return repository.GetByProject(
+                repository.GetProject(projectProxyModel.ProjectName));
+        }
+
+        public void DeleteShareUsers(ProjectProxyModel projectProxyModel)
+        {
+            foreach (var share in GetShareUsers(projectProxyModel))
+            {
+                repository.Delete(share);
+            }
+        }
+
+        public List<ShareUserProject> GetShareUsers(AccountProxyModel accountProxyModel)
+        {
+            return repository.GetByAccount(repository.GetAccount(accountProxyModel.Email));
         }
     }
 }

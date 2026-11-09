@@ -109,7 +109,7 @@ namespace View.ViewModels
                 case "Delete Project":
                     if (CurrentProjectModel!=null)
                     {
-                        ProjectService.DeleteProject(AccountEmail, CurrentProjectModel);
+                        ProjectServiceProvider.Current.DeleteProject(AccountEmail, CurrentProjectModel);
                         EventAggregator.GetEvent<CurrentActiveProjectEvent>().Publish(CurrentProjectModel);
                         EventAggregator.GetEvent<ClearDrawingCanvasEvent>().Publish();
                         EventAggregator.GetEvent<RemoveProjectEvent>().Publish(CurrentProjectModel);

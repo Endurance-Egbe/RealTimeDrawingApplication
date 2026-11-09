@@ -62,6 +62,24 @@ safe to run for a new database because it uses `IF NOT EXISTS`. The application
 also calls `EnsureCreated()` during startup, so a newly created PostgreSQL
 database is provisioned automatically when the connection is reachable.
 
+## Schema changes and migrations
+
+The current .NET Framework application uses EF Core 3.1 with
+`Database.EnsureCreated()` rather than EF migration history. This is suitable
+for first-run provisioning but does not safely upgrade an existing production
+database after model changes. Until the application is migrated to a modern
+SDK-style project and a versioned EF migration workflow, schema changes must
+be handled as follows:
+
+1. Add a numbered SQL script under `database/migrations/`.
+2. Make the script idempotent where possible.
+3. Test it against a copy of the target PostgreSQL database.
+4. Record the applied script version in deployment notes.
+5. Never delete or recreate a production database to apply a schema change.
+
+The existing [`postgresql-schema.sql`](../database/postgresql-schema.sql) is
+the baseline provisioning script, not an upgrade migration.
+
 For local PostgreSQL development, run the repository's compose service:
 
 ```powershell

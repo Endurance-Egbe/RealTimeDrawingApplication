@@ -205,13 +205,13 @@ namespace View.ViewModels
         void GetAllUserProjects()
         {
             ObservableCollection<string> getAllUserProjects = new ObservableCollection<string>();
-            getAllUserProjects = ProjectService.GetAllProjects(User);
+            getAllUserProjects = ProjectServiceProvider.Current.GetAllProjects(User);
             EventAggregator.GetEvent<GetAllUserProjectsEvent>().Publish(getAllUserProjects);
         }
         void GetAllShareUsers()
         {
             ObservableCollection<Users> allShareUser = new ObservableCollection<Users>();
-            var getAllShareUser = ShareUserService.GetShareUsers(User);
+            var getAllShareUser = ShareUserServiceProvider.Current.GetShareUsers(User);
             if (getAllShareUser!=null)
             {
                 foreach (var item in getAllShareUser)
