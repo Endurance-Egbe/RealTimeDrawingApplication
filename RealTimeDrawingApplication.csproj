@@ -256,6 +256,9 @@
     <Compile Include="Infrastructure\UserDbContext.cs" />
     <Compile Include="Infrastructure\DatabaseInitializer.cs" />
     <Compile Include="Infrastructure\DatabaseServices\DrawingComponentMapper.cs" />
+    <Compile Include="Infrastructure\DatabaseServices\IDrawingComponentRepository.cs" />
+    <Compile Include="Infrastructure\DatabaseServices\SqliteDrawingComponentRepository.cs" />
+    <Compile Include="Infrastructure\DatabaseServices\DrawingComponentServiceProvider.cs" />
     <Compile Include="Infrastructure\DatabaseServices\IAccountRepository.cs" />
     <Compile Include="Infrastructure\DatabaseServices\SqliteAccountRepository.cs" />
     <Compile Include="Infrastructure\DatabaseServices\AccountServiceProvider.cs" />

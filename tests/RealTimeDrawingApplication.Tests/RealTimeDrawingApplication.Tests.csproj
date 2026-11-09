@@ -22,6 +22,8 @@
     <Compile Include="..\..\Infrastructure\DatabaseServices\DrawingComponentMapper.cs" Link="Infrastructure\DatabaseServices\DrawingComponentMapper.cs" />
     <Compile Include="..\..\Infrastructure\DatabaseServices\IAccountRepository.cs" Link="Infrastructure\DatabaseServices\IAccountRepository.cs" />
     <Compile Include="..\..\Infrastructure\DatabaseServices\AccountService.cs" Link="Infrastructure\DatabaseServices\AccountService.cs" />
+    <Compile Include="..\..\Infrastructure\DatabaseServices\IDrawingComponentRepository.cs" Link="Infrastructure\DatabaseServices\IDrawingComponentRepository.cs" />
+    <Compile Include="..\..\Infrastructure\DatabaseServices\DrawingComponentService.cs" Link="Infrastructure\DatabaseServices\DrawingComponentService.cs" />
     <Compile Include="..\..\Models\AccountModel.cs" Link="Models\AccountModel.cs" />
     <Compile Include="..\..\Models\ProjectModel.cs" Link="Models\ProjectModel.cs" />
     <Compile Include="..\..\Models\ShareUserProject.cs" Link="Models\ShareUserProject.cs" />

@@ -72,7 +72,7 @@ namespace View.ViewModels
         {
             if (project!=null)
             {
-                GetDrawingComponents = DrawingComponentService.GetDrawings(project);
+                GetDrawingComponents = DrawingComponentServiceProvider.Current.GetDrawings(project);
                 EventAggregator.GetEvent<DrawingComponentEvent>().Publish(GetDrawingComponents);
             }
           

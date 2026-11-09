@@ -43,7 +43,7 @@ namespace View.ViewModels.DatabaseServices
             var sqlite = new SQLiteEFCore();
             var model = new ProjectModelEFCoreRepository(sqlite);
             projectModel = model.GetProjectModel(projectProxyModel.ProjectName);
-            DrawingComponentService.DeleteDrawings(projectProxyModel);
+            DrawingComponentServiceProvider.Current.DeleteDrawings(projectProxyModel);
             ShareUserService.DeleteShareUsers(projectProxyModel);
             
             model.DeleteProjectModel(projectModel);

@@ -195,7 +195,8 @@ namespace View.ViewModels
         {
             if (CurrentProjectModel!=null)
             {
-                DrawingComponentService.CreateDrawings(CurrentProjectModel, DrawingComponentProxies);
+                DrawingComponentServiceProvider.Current.CreateDrawings(
+                    CurrentProjectModel, DrawingComponentProxies);
                 MessageBox.Show("Project Saved Successfully!", "Success Message", MessageBoxButton.OK);
                 return;
             }

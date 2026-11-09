@@ -46,6 +46,10 @@ namespace View
             var accountService = new AccountService(new SqliteAccountRepository());
             containerRegistry.RegisterInstance(accountService);
             AccountServiceProvider.SetCurrent(accountService);
+            var drawingComponentService =
+                new DrawingComponentService(new SqliteDrawingComponentRepository());
+            containerRegistry.RegisterInstance(drawingComponentService);
+            DrawingComponentServiceProvider.SetCurrent(drawingComponentService);
         }
     }
 }

@@ -185,7 +185,8 @@ namespace View.ViewModels
                 return;
             }
 
-            var drawings = DrawingComponentService.GetDrawingComponentModels(CurrentProjectModel);
+            var drawings =
+                DrawingComponentServiceProvider.Current.GetDrawingComponentModels(CurrentProjectModel);
             if (drawings == null || drawings.Count == 0)
             {
                 MessageBox.Show("Add at least one drawing object before exporting.",

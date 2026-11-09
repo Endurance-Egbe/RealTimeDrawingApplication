@@ -76,7 +76,8 @@ flowchart LR
 - **ViewModels** expose bindable state and commands to the views.
 - **Application services** coordinate account, project, sharing, and file operations.
 - **Infrastructure** contains the EF Core context, repository implementations, and
-  injectable account repository boundary used by the account service.
+  injectable account and drawing-component repository boundaries used by the
+  application services.
 - **Models/ProxyModel** separate persistence entities from view-facing data.
 - **Security** contains password hashing and verification.
 
@@ -342,7 +343,7 @@ password against the stored hash. Plaintext passwords are never persisted.
 
 ## Testing
 
-The test project currently contains 41 unit tests covering password hashing,
+The test project currently contains 44 unit tests covering password hashing,
 salt uniqueness, malformed input, empty values, successful/failed verification,
 model relationships, and JSON persistence-field exclusions. Coverage is
 collected in Cobertura XML, checked against a 40% minimum line-coverage gate,
