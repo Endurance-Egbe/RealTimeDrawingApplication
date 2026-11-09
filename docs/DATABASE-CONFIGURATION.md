@@ -71,14 +71,19 @@ database after model changes. Until the application is migrated to a modern
 SDK-style project and a versioned EF migration workflow, schema changes must
 be handled as follows:
 
-1. Add a numbered SQL script under `database/migrations/`.
+1. Apply the baseline schema, then add or apply a numbered SQL script under
+   `database/migrations/`.
 2. Make the script idempotent where possible.
 3. Test it against a copy of the target PostgreSQL database.
-4. Record the applied script version in deployment notes.
+4. Record the applied script version in the `"SchemaMigrations"` table and
+   deployment notes.
 5. Never delete or recreate a production database to apply a schema change.
 
 The existing [`postgresql-schema.sql`](../database/postgresql-schema.sql) is
-the baseline provisioning script, not an upgrade migration.
+the baseline provisioning script. The first ledger migration is
+[`001_add_schema_migrations.sql`](../database/migrations/001_add_schema_migrations.sql).
+Detailed application instructions are in
+[`database/migrations/README.md`](../database/migrations/README.md).
 
 For local PostgreSQL development, run the repository's compose service:
 
