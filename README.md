@@ -240,6 +240,13 @@ buttons for rectangles, ellipses, triangles, lines, and text. Drag a tool onto
 the white canvas to create an object. New objects can be moved by dragging
 them, and selecting an object activates the **Property Window**.
 
+To resize a selected shape, drag one of its purple corner handles. Dragging a
+corner expands or reduces the shape while keeping the opposite corner anchored.
+Shapes cannot be reduced below the minimum readable size. Text objects also
+support bottom-right corner resizing. The Property Window updates the X, Y,
+Width, and Height values while resizing, so the exact dimensions can be
+reviewed before saving.
+
 The property editor lets you adjust values such as:
 
 - Title
