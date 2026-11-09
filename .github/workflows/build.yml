@@ -17,6 +17,8 @@ jobs:
           dotnet-version: 8.x
       - name: Restore legacy NuGet packages
         run: nuget restore RealTimeDrawingApplication.sln
+      - name: Restore locked test dependencies
+        run: dotnet restore tests/RealTimeDrawingApplication.Tests/RealTimeDrawingApplication.Tests.csproj --locked-mode
       - name: Build WPF application
         run: msbuild RealTimeDrawingApplication.sln /p:Configuration=Release /p:Platform="Any CPU"
       - name: Package Windows application
@@ -28,6 +30,7 @@ jobs:
         run: >-
           dotnet test tests/RealTimeDrawingApplication.Tests/RealTimeDrawingApplication.Tests.csproj
           --configuration Release
+          --no-restore
           --settings tests/RealTimeDrawingApplication.Tests/coverage.runsettings
           --collect:"XPlat Code Coverage"
       - name: Upload coverage report
