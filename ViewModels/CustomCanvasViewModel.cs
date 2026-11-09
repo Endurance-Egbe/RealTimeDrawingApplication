@@ -25,6 +25,14 @@ namespace View.ViewModels
     {
         private FrameworkElement selectedElement;
         private ComponentModel currentSelectedItem;
+        private bool isResizing;
+        private string resizeDirection;
+        private Point resizeStartPoint;
+        private double resizeStartWidth;
+        private double resizeStartHeight;
+        private double resizeStartLeft;
+        private double resizeStartTop;
+        private const double MinimumComponentSize = 20;
 
         public CustomCanvasViewModel()
         {
@@ -222,39 +230,73 @@ namespace View.ViewModels
         }
         protected override void OnMouseMove(MouseEventArgs e)
         {
-           
+            var source = e.OriginalSource as DependencyObject;
+            var componentElement = GetPropertyWindowElement(source);
+
+            if (e.LeftButton != MouseButtonState.Pressed)
+            {
+                UpdateCursor(componentElement);
+                return;
+            }
+
             if (SelectedElement != null)
             {
-                //var item = e.GetData("toolboxitem") as FrameworkElement;
                 var position = e.GetPosition(this);
-                
-                if (position.X < ActualWidth - SelectedElement.Width &&
+
+                if (isResizing)
+                {
+                    ResizeSelectedElement(position);
+                }
+                else if (position.X < ActualWidth - SelectedElement.Width &&
                     position.Y < ActualHeight - SelectedElement.Height)
                 {
-                    
-
                     SetLeft(SelectedElement, position.X);
                     SetTop(SelectedElement, position.Y);
-                    CurrentSelectedItem.PropertyType = PropertyType.X;
-                    CurrentSelectedItem.Value = (double)position.X;
-                    EventAggregator.GetEvent<UpdatePropertyWindow>().Publish(CurrentSelectedItem);
-                    CurrentSelectedItem.PropertyType = PropertyType.Y;
-                    CurrentSelectedItem.Value = (double)position.Y;
-                    EventAggregator.GetEvent<UpdatePropertyWindow>().Publish(CurrentSelectedItem);
-                    
-
+                    PublishProperty(PropertyType.X, position.X);
+                    PublishProperty(PropertyType.Y, position.Y);
                 }
-                ResetPreviousComponent();
             }
-            
         }
         protected override void OnMouseLeftButtonDown(MouseButtonEventArgs e)
         {
-            SelectedElement = e.Source as FrameworkElement;
-            //SelectedElement.MouseLeftButtonUp += SelectedElement_MouseLeftButtonUp;
-           
-            if (GetParent(SelectedElement) is IPropertyWindow component)
+            var source = e.OriginalSource as DependencyObject;
+            var componentElement = GetPropertyWindowElement(source);
+            var direction = GetResizeDirection(source);
+            if (direction == null && componentElement != null)
             {
+                direction = GetResizeDirection(componentElement, e.GetPosition(componentElement));
+            }
+            if (componentElement != null && direction != null)
+            {
+                SelectedElement = componentElement;
+                resizeDirection = direction;
+                BeginResize(e.GetPosition(this));
+                e.Handled = true;
+                return;
+            }
+
+            if (componentElement == null)
+            {
+                ResetPreviousComponent();
+                SelectedElement = null;
+                Cursor = Cursors.Arrow;
+                CaptureMouse();
+                base.OnMouseLeftButtonDown(e);
+                return;
+            }
+
+            if (SelectedElement != componentElement)
+            {
+                ResetPreviousComponent();
+            }
+            SelectedElement = componentElement;
+           
+            if (SelectedElement != null &&
+                GetParent(SelectedElement) is IPropertyWindow component)
+            {
+                component.ShowBorder = true;
+                component.GetComponent();
+                UpdateCursor(componentElement);
 
                 CurrentSelectedItem = new ComponentModel()
                 {
@@ -294,23 +336,202 @@ namespace View.ViewModels
                 CurrentSelectedItem.Value = (double)component.Y;
                 EventAggregator.GetEvent<UpdatePropertyWindow>().Publish(CurrentSelectedItem);
                 
-                SelectedElement = component.GetComponent() as FrameworkElement;
-               
-               
                 EventAggregator.GetEvent<UpdatePropertyWindow>().Publish(CurrentSelectedItem);
                
                
             }
             
+            CaptureMouse();
             base.OnMouseLeftButtonDown(e);
         }
 
         protected override void OnMouseLeftButtonUp(MouseButtonEventArgs e)
         {
-            SelectedElement = null;
-            ResetPreviousComponent();
+            if (IsMouseCaptured)
+            {
+                ReleaseMouseCapture();
+            }
+            isResizing = false;
+            resizeDirection = null;
+            UpdateCursor(SelectedElement);
             base.OnMouseLeftButtonUp(e);
         }
+
+        private void BeginResize(Point startPoint)
+        {
+            resizeStartPoint = startPoint;
+            resizeStartWidth = SelectedElement.Width;
+            resizeStartHeight = SelectedElement.Height;
+            resizeStartLeft = GetLeft(SelectedElement);
+            resizeStartTop = GetTop(SelectedElement);
+            if (double.IsNaN(resizeStartLeft))
+            {
+                resizeStartLeft = 0;
+            }
+            if (double.IsNaN(resizeStartTop))
+            {
+                resizeStartTop = 0;
+            }
+
+            isResizing = true;
+            CaptureMouse();
+        }
+
+        private void ResizeSelectedElement(Point currentPoint)
+        {
+            var deltaX = currentPoint.X - resizeStartPoint.X;
+            var deltaY = currentPoint.Y - resizeStartPoint.Y;
+            var newWidth = resizeStartWidth;
+            var newHeight = resizeStartHeight;
+            var newLeft = resizeStartLeft;
+            var newTop = resizeStartTop;
+
+            if (resizeDirection.Contains("Right"))
+            {
+                newWidth = Math.Max(MinimumComponentSize, resizeStartWidth + deltaX);
+            }
+            if (resizeDirection.Contains("Left"))
+            {
+                newWidth = Math.Max(MinimumComponentSize, resizeStartWidth - deltaX);
+                newLeft = resizeStartLeft + resizeStartWidth - newWidth;
+            }
+            if (resizeDirection.Contains("Bottom"))
+            {
+                newHeight = Math.Max(MinimumComponentSize, resizeStartHeight + deltaY);
+            }
+            if (resizeDirection.Contains("Top"))
+            {
+                newHeight = Math.Max(MinimumComponentSize, resizeStartHeight - deltaY);
+                newTop = resizeStartTop + resizeStartHeight - newHeight;
+            }
+
+            SelectedElement.Width = newWidth;
+            SelectedElement.Height = newHeight;
+            SetLeft(SelectedElement, newLeft);
+            SetTop(SelectedElement, newTop);
+            var propertyWindow = SelectedElement as IPropertyWindow;
+            if (propertyWindow != null)
+            {
+                propertyWindow.GetComponent();
+            }
+            PublishProperty(PropertyType.Width, newWidth);
+            PublishProperty(PropertyType.Height, newHeight);
+            PublishProperty(PropertyType.X, newLeft);
+            PublishProperty(PropertyType.Y, newTop);
+        }
+
+        private void PublishProperty(PropertyType propertyType, object value)
+        {
+            CurrentSelectedItem.PropertyType = propertyType;
+            CurrentSelectedItem.Value = value;
+            EventAggregator.GetEvent<UpdatePropertyWindow>().Publish(CurrentSelectedItem);
+        }
+
+        private string GetResizeDirection(DependencyObject source)
+        {
+            var border = source as Border;
+            return border == null ? null : border.Tag as string;
+        }
+
+        private string GetResizeDirection(FrameworkElement element, Point point)
+        {
+            if (element == null || !element.IsMouseOver)
+            {
+                return null;
+            }
+
+            const double edgeSize = 10;
+            var left = point.X <= edgeSize;
+            var right = point.X >= element.ActualWidth - edgeSize;
+            var top = point.Y <= edgeSize;
+            var bottom = point.Y >= element.ActualHeight - edgeSize;
+
+            if (top && left)
+            {
+                return "TopLeft";
+            }
+            if (top && right)
+            {
+                return "TopRight";
+            }
+            if (bottom && left)
+            {
+                return "BottomLeft";
+            }
+            if (bottom && right)
+            {
+                return "BottomRight";
+            }
+            if (left)
+            {
+                return "Left";
+            }
+            if (right)
+            {
+                return "Right";
+            }
+            if (top)
+            {
+                return "Top";
+            }
+            if (bottom)
+            {
+                return "Bottom";
+            }
+
+            return null;
+        }
+
+        private void UpdateCursor(FrameworkElement componentElement)
+        {
+            if (componentElement == null || componentElement != SelectedElement)
+            {
+                Cursor = Cursors.Arrow;
+                return;
+            }
+
+            var direction = GetResizeDirection(componentElement, Mouse.GetPosition(componentElement));
+            var cursor = GetResizeCursor(direction) ?? Cursors.SizeAll;
+            componentElement.Cursor = cursor;
+            Cursor = cursor;
+        }
+
+        private Cursor GetResizeCursor(string direction)
+        {
+            switch (direction)
+            {
+                case "TopLeft":
+                case "BottomRight":
+                    return Cursors.SizeNWSE;
+                case "TopRight":
+                case "BottomLeft":
+                    return Cursors.SizeNESW;
+                case "Left":
+                case "Right":
+                    return Cursors.SizeWE;
+                case "Top":
+                case "Bottom":
+                    return Cursors.SizeNS;
+                default:
+                    return null;
+            }
+        }
+
+        private FrameworkElement GetPropertyWindowElement(DependencyObject source)
+        {
+            var current = source;
+            while (current != null)
+            {
+                var element = current as FrameworkElement;
+                if (element is IPropertyWindow)
+                {
+                    return element;
+                }
+                current = VisualTreeHelper.GetParent(current);
+            }
+            return null;
+        }
+
         private void SelectedElement_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
             SelectedElement = null;
