@@ -75,13 +75,15 @@ flowchart LR
 - **Views** contain XAML layout and only presentation-specific code-behind.
 - **ViewModels** expose bindable state and commands to the views.
 - **Application services** coordinate account, project, sharing, and file operations.
-- **Infrastructure** contains the EF Core context and repository implementations.
+- **Infrastructure** contains the EF Core context, repository implementations, and
+  injectable account repository boundary used by the account service.
 - **Models/ProxyModel** separate persistence entities from view-facing data.
 - **Security** contains password hashing and verification.
 
 The current solution is a .NET Framework 4.7.2 WPF application. The test project
-targets .NET 8 and links only to framework-independent security code so it can
-run in CI without starting a WPF window or database.
+targets .NET 8 with Windows desktop support and tests framework-independent
+services and mapping logic without starting a WPF window or requiring a live
+database.
 
 ## Requirements
 
@@ -316,7 +318,7 @@ password against the stored hash. Plaintext passwords are never persisted.
 
 ## Testing
 
-The test project currently contains 17 unit tests covering password hashing,
+The test project currently contains 30 unit tests covering password hashing,
 salt uniqueness, malformed input, empty values, successful/failed verification,
 model relationships, and JSON persistence-field exclusions. Coverage is
 collected in Cobertura XML and uploaded as a GitHub Actions artifact.
