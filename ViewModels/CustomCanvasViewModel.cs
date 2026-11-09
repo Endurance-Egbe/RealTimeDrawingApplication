@@ -32,6 +32,7 @@ namespace View.ViewModels
         private double resizeStartHeight;
         private double resizeStartLeft;
         private double resizeStartTop;
+        private Point dragOffset;
         private const double MinimumComponentSize = 20;
 
         public CustomCanvasViewModel()
@@ -247,13 +248,18 @@ namespace View.ViewModels
                 {
                     ResizeSelectedElement(position);
                 }
-                else if (position.X < ActualWidth - SelectedElement.Width &&
-                    position.Y < ActualHeight - SelectedElement.Height)
+                else
                 {
-                    SetLeft(SelectedElement, position.X);
-                    SetTop(SelectedElement, position.Y);
-                    PublishProperty(PropertyType.X, position.X);
-                    PublishProperty(PropertyType.Y, position.Y);
+                    var left = position.X - dragOffset.X;
+                    var top = position.Y - dragOffset.Y;
+                    var maximumLeft = Math.Max(0, ActualWidth - SelectedElement.Width);
+                    var maximumTop = Math.Max(0, ActualHeight - SelectedElement.Height);
+                    left = Math.Max(0, Math.Min(left, maximumLeft));
+                    top = Math.Max(0, Math.Min(top, maximumTop));
+                    SetLeft(SelectedElement, left);
+                    SetTop(SelectedElement, top);
+                    PublishProperty(PropertyType.X, left);
+                    PublishProperty(PropertyType.Y, top);
                 }
             }
         }
@@ -294,6 +300,18 @@ namespace View.ViewModels
             if (SelectedElement != null &&
                 GetParent(SelectedElement) is IPropertyWindow component)
             {
+                var selectedLeft = GetLeft(SelectedElement);
+                var selectedTop = GetTop(SelectedElement);
+                if (double.IsNaN(selectedLeft))
+                {
+                    selectedLeft = 0;
+                }
+                if (double.IsNaN(selectedTop))
+                {
+                    selectedTop = 0;
+                }
+                var pointerPosition = e.GetPosition(this);
+                dragOffset = new Point(pointerPosition.X - selectedLeft, pointerPosition.Y - selectedTop);
                 component.ShowBorder = true;
                 component.GetComponent();
                 UpdateCursor(componentElement);
@@ -389,20 +407,42 @@ namespace View.ViewModels
             if (resizeDirection.Contains("Right"))
             {
                 newWidth = Math.Max(MinimumComponentSize, resizeStartWidth + deltaX);
+                if (ActualWidth > 0)
+                {
+                    newWidth = Math.Min(newWidth, Math.Max(MinimumComponentSize, ActualWidth - resizeStartLeft));
+                }
             }
             if (resizeDirection.Contains("Left"))
             {
-                newWidth = Math.Max(MinimumComponentSize, resizeStartWidth - deltaX);
-                newLeft = resizeStartLeft + resizeStartWidth - newWidth;
+                var oppositeEdge = resizeStartLeft + resizeStartWidth;
+                var maximumLeft = oppositeEdge - MinimumComponentSize;
+                if (ActualWidth > 0)
+                {
+                    maximumLeft = Math.Min(maximumLeft, ActualWidth - MinimumComponentSize);
+                }
+
+                newLeft = Math.Max(0, Math.Min(resizeStartLeft + deltaX, maximumLeft));
+                newWidth = oppositeEdge - newLeft;
             }
             if (resizeDirection.Contains("Bottom"))
             {
                 newHeight = Math.Max(MinimumComponentSize, resizeStartHeight + deltaY);
+                if (ActualHeight > 0)
+                {
+                    newHeight = Math.Min(newHeight, Math.Max(MinimumComponentSize, ActualHeight - resizeStartTop));
+                }
             }
             if (resizeDirection.Contains("Top"))
             {
-                newHeight = Math.Max(MinimumComponentSize, resizeStartHeight - deltaY);
-                newTop = resizeStartTop + resizeStartHeight - newHeight;
+                var oppositeEdge = resizeStartTop + resizeStartHeight;
+                var maximumTop = oppositeEdge - MinimumComponentSize;
+                if (ActualHeight > 0)
+                {
+                    maximumTop = Math.Min(maximumTop, ActualHeight - MinimumComponentSize);
+                }
+
+                newTop = Math.Max(0, Math.Min(resizeStartTop + deltaY, maximumTop));
+                newHeight = oppositeEdge - newTop;
             }
 
             SelectedElement.Width = newWidth;
@@ -412,6 +452,8 @@ namespace View.ViewModels
             var propertyWindow = SelectedElement as IPropertyWindow;
             if (propertyWindow != null)
             {
+                propertyWindow.X = newLeft;
+                propertyWindow.Y = newTop;
                 propertyWindow.GetComponent();
             }
             PublishProperty(PropertyType.Width, newWidth);
