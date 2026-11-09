@@ -84,7 +84,9 @@ namespace View.ViewModels.ShapeServices
                     VerticalAlignment = VerticalAlignment.Top,
                     Width = 5,
                     Height = 5,
-                    Background = Brushes.Purple
+                    Background = Brushes.Purple,
+                    Tag = "TopLeft",
+                    Cursor = System.Windows.Input.Cursors.SizeNWSE
                 });
                 Shapes.Children.Add(new Border
                 {
@@ -92,7 +94,9 @@ namespace View.ViewModels.ShapeServices
                     VerticalAlignment = VerticalAlignment.Top,
                     Width = 5,
                     Height = 5,
-                    Background = Brushes.Purple
+                    Background = Brushes.Purple,
+                    Tag = "TopRight",
+                    Cursor = System.Windows.Input.Cursors.SizeNESW
                 });
                 Shapes.Children.Add(new Border
                 {
@@ -100,7 +104,9 @@ namespace View.ViewModels.ShapeServices
                     VerticalAlignment = VerticalAlignment.Bottom,
                     Width = 5,
                     Height = 5,
-                    Background = Brushes.Purple
+                    Background = Brushes.Purple,
+                    Tag = "BottomLeft",
+                    Cursor = System.Windows.Input.Cursors.SizeNESW
                 });
                 Shapes.Children.Add(new Border
                 {
@@ -108,7 +114,9 @@ namespace View.ViewModels.ShapeServices
                     VerticalAlignment = VerticalAlignment.Bottom,
                     Width = 5,
                     Height = 5,
-                    Background = Brushes.Purple
+                    Background = Brushes.Purple,
+                    Tag = "BottomRight",
+                    Cursor = System.Windows.Input.Cursors.SizeNWSE
                 });
             }
 
