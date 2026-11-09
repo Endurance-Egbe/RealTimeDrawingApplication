@@ -52,7 +52,7 @@ namespace View.ViewModels
 
             CurrentProject = new ProjectProxyModel { ProjectName = projectName.Trim() };
            
-            ProjectService.CreateProject(CurrentUser.Email, CurrentProject);
+            ProjectServiceProvider.Current.CreateProject(CurrentUser.Email, CurrentProject);
             EventAggregator.GetEvent<ClearDrawingCanvasEvent>().Publish();
             EventAggregator.GetEvent<CurrentProjectEvent>().Publish(CurrentProject);
             EventAggregator.GetEvent<CloseWindowEvent>().Publish();

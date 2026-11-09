@@ -1,6 +1,9 @@
+using System;
 using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using View.Models;
+using View.Infrastructure;
+using View.Infrastructure.Logging;
 using View.Security;
 using View.ViewModels.DatabaseServices;
 using View.ViewModels.ProxyModel;
@@ -98,6 +101,24 @@ namespace RealTimeDrawingApplication.Tests
             Assert.IsNull(service.Authenticate("missing@example.com", "secret"));
         }
 
+        [TestMethod]
+        public void CreateAccount_WrapsRepositoryFailureInApplicationOperationException()
+        {
+            var service = new AccountService(
+                new InMemoryAccountRepository.FailingAccountRepository());
+
+            var exception = Assert.ThrowsException<ApplicationOperationException>(
+                () => service.CreateAccount(new AccountProxyModel
+                {
+                    Email = "user@example.com",
+                    FullName = "Test User",
+                    Password = "secret"
+                }));
+
+            Assert.AreEqual("The account could not be created.", exception.Message);
+            Assert.IsNotNull(exception.InnerException);
+        }
+
         private sealed class InMemoryAccountRepository : IAccountRepository
         {
             private readonly Dictionary<string, AccountModel> accounts =
@@ -126,6 +147,19 @@ namespace RealTimeDrawingApplication.Tests
                 AccountModel account;
                 accounts.TryGetValue(email, out account);
                 return account;
+            }
+
+            public sealed class FailingAccountRepository : IAccountRepository
+            {
+                public void Create(AccountModel account)
+                {
+                    throw new InvalidOperationException("database unavailable");
+                }
+
+                public AccountModel GetByEmail(string email)
+                {
+                    return null;
+                }
             }
         }
     }

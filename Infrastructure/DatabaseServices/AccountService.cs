@@ -2,6 +2,8 @@
 using View.Models;
 using View.ViewModels.ProxyModel;
 using View.Security;
+using View.Infrastructure;
+using View.Infrastructure.Logging;
 
 namespace View.ViewModels.DatabaseServices
 {
@@ -16,12 +18,23 @@ namespace View.ViewModels.DatabaseServices
 
         public void CreateAccount(AccountProxyModel accountProxyModel)
         {
-            accountRepository.Create(new AccountModel
+            try
             {
-                FullName = accountProxyModel.FullName,
-                Email = accountProxyModel.Email,
-                PasswordHash = PasswordHasher.Hash(accountProxyModel.Password)
-            });
+                accountRepository.Create(new AccountModel
+                {
+                    FullName = accountProxyModel.FullName,
+                    Email = accountProxyModel.Email,
+                    PasswordHash = PasswordHasher.Hash(accountProxyModel.Password)
+                });
+                ApplicationLoggerProvider.Current.LogInformation(
+                    "Account.Create", "Account created successfully.");
+            }
+            catch (Exception exception)
+            {
+                ApplicationLoggerProvider.Current.LogError("Account.Create", exception);
+                throw new ApplicationOperationException(
+                    "The account could not be created.", exception);
+            }
         }
 
         public bool EmailValidations(string email)

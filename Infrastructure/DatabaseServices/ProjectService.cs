@@ -1,60 +1,74 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using View.Infrastructure;
-using View.Infrastructure.Query;
+using System;
+using System.Collections.ObjectModel;
 using View.Models;
 using View.ViewModels.ProxyModel;
-using System.Collections.ObjectModel;
+using View.Infrastructure;
+using View.Infrastructure.Logging;
 
 namespace View.ViewModels.DatabaseServices
 {
-    public static class ProjectService
+    public class ProjectService
     {
-        //public static bool isProjectNameInDatabase;
-        public static void CreateProject(string email, ProjectProxyModel projectProxyModel)
+        private readonly IProjectRepository repository;
+        private readonly DrawingComponentService drawingComponentService;
+        private readonly ShareUserService shareUserService;
+
+        public ProjectService(
+            IProjectRepository repository,
+            DrawingComponentService drawingComponentService = null,
+            ShareUserService shareUserService = null)
         {
-            ProjectModel projectModel = new ProjectModel();
-            projectModel.ProjectName = projectProxyModel.ProjectName;
-            //string currentProjectName = projectModel.ProjectName;
-            var sqlite = new SQLiteEFCore();
-            var model = new ProjectModelEFCoreRepository(sqlite);
-            model.CreateProjectModel(email, projectModel);
-            
+            this.repository = repository;
+            this.drawingComponentService = drawingComponentService;
+            this.shareUserService = shareUserService;
         }
-       public static ObservableCollection<string> GetAllProjects(AccountProxyModel accountProxy)
-       {
-            ObservableCollection<string> projects = new ObservableCollection<string>();
-            List<ProjectModel> projectModels = new List<ProjectModel>();
-            var sqlite = new SQLiteEFCore();
-            var model = new ProjectModelEFCoreRepository(sqlite);
-            projectModels = model.GetProjectModels(accountProxy.Email);
-            foreach (var item in projectModels)
+
+        public void CreateProject(string email, ProjectProxyModel projectProxyModel)
+        {
+            try
             {
-                projects.Add(item.ProjectName);
+                repository.Create(email, new ProjectModel
+                {
+                    ProjectName = projectProxyModel.ProjectName
+                });
+                ApplicationLoggerProvider.Current.LogInformation(
+                    "Project.Create", "Project created successfully.");
             }
-            return projects;
-       }
-        public static void DeleteProject(string email,ProjectProxyModel projectProxyModel)
-        {
-            ProjectModel projectModel = new ProjectModel();
-            var sqlite = new SQLiteEFCore();
-            var model = new ProjectModelEFCoreRepository(sqlite);
-            projectModel = model.GetProjectModel(projectProxyModel.ProjectName);
-            DrawingComponentService.DeleteDrawings(projectProxyModel);
-            ShareUserService.DeleteShareUsers(projectProxyModel);
-            
-            model.DeleteProjectModel(projectModel);
+            catch (Exception exception)
+            {
+                ApplicationLoggerProvider.Current.LogError("Project.Create", exception);
+                throw new ApplicationOperationException(
+                    "The project could not be created.", exception);
+            }
         }
-        public static ProjectModel GetProject(string projectName)
+
+        public ObservableCollection<string> GetAllProjects(AccountProxyModel accountProxy)
         {
-            ProjectModel projectModel = new ProjectModel();
-            var sqlite = new SQLiteEFCore();
-            var model = new ProjectModelEFCoreRepository(sqlite);
-            projectModel = model.GetProjectModel(projectName);
-            return projectModel;
+            var projects = new ObservableCollection<string>();
+            var projectModels = repository.GetByAccountEmail(accountProxy.Email);
+            if (projectModels == null)
+            {
+                return projects;
+            }
+
+            foreach (var project in projectModels)
+            {
+                projects.Add(project.ProjectName);
+            }
+
+            return projects;
+        }
+
+        public void DeleteProject(string email, ProjectProxyModel projectProxyModel)
+        {
+            drawingComponentService?.DeleteDrawings(projectProxyModel);
+            shareUserService?.DeleteShareUsers(projectProxyModel);
+            repository.Delete(repository.GetByName(projectProxyModel.ProjectName));
+        }
+
+        public ProjectModel GetProject(string projectName)
+        {
+            return repository.GetByName(projectName);
         }
     }
 }

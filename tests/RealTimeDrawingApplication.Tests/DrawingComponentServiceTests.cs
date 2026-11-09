@@ -1,5 +1,6 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.Generic;
+using System.Linq;
 using View.Infrastructure;
 using View.Models;
 using View.ViewModels.Common.CustomColor;
@@ -69,6 +70,111 @@ namespace RealTimeDrawingApplication.Tests
             Assert.AreEqual("Black", result[0].SelectedBorderColor.ColorName);
             Assert.AreEqual("Yellow", result[0].SelectedFillColor.ColorName);
             Assert.AreEqual("Blue", result[0].SelectedStroke.ColorName);
+        }
+
+        [TestMethod]
+        public void GetDrawings_MapsRepositoryModelsToProxyModels()
+        {
+            var project = new ProjectModel { ProjectName = "Sketch" };
+            var repository = new InMemoryDrawingRepository(project);
+            repository.Drawings.Add(new DrawingComponentModel
+            {
+                Title = "Rectangle",
+                Width = 100,
+                Height = 50,
+                SelectedStroke = "Black",
+                SelectedFillColor = "Red",
+                SelectedBorderColor = "Blue"
+            });
+
+            var service = new DrawingComponentService(repository);
+            var drawings = service.GetDrawings(new ProjectProxyModel { ProjectName = "Sketch" })
+                .ToList();
+
+            Assert.AreEqual(1, drawings.Count);
+            Assert.AreEqual("Rectangle", drawings[0].Title);
+            Assert.AreEqual("Red", drawings[0].SelectedFillColor.ColorName);
+        }
+
+        [TestMethod]
+        public void DeleteDrawings_DeletesEveryDrawingInProject()
+        {
+            var project = new ProjectModel { ProjectName = "Sketch" };
+            var repository = new InMemoryDrawingRepository(project);
+            repository.Drawings.Add(new DrawingComponentModel());
+            repository.Drawings.Add(new DrawingComponentModel());
+
+            new DrawingComponentService(repository).DeleteDrawings(
+                new ProjectProxyModel { ProjectName = "Sketch" });
+
+            Assert.AreEqual(2, repository.Deleted.Count);
+        }
+
+        [TestMethod]
+        public void CreateDrawings_ReplacesExistingDrawingsAndAssignsProject()
+        {
+            ColorCollectionsClass.LoadColorCollection();
+            var project = new ProjectModel { ProjectName = "Sketch" };
+            var repository = new InMemoryDrawingRepository(project);
+            repository.Drawings.Add(new DrawingComponentModel());
+
+            new DrawingComponentService(repository).CreateDrawings(
+                new ProjectProxyModel { ProjectName = "Sketch" },
+                new List<DrawingComponentProxyModel>
+                {
+                    new DrawingComponentProxyModel
+                    {
+                        Title = "New shape",
+                        SelectedStroke = ColorCollectionsClass.ColorCollections
+                            .First(color => color.ColorName == "Black"),
+                        SelectedFillColor = ColorCollectionsClass.ColorCollections
+                            .First(color => color.ColorName == "Red"),
+                        SelectedBorderColor = ColorCollectionsClass.ColorCollections
+                            .First(color => color.ColorName == "Blue")
+                    }
+                });
+
+            Assert.AreEqual(1, repository.Deleted.Count);
+            Assert.AreEqual(1, repository.Created.Count);
+            Assert.AreSame(project, repository.Created[0].Project);
+            Assert.AreEqual("New shape", repository.Created[0].Title);
+        }
+
+        private sealed class InMemoryDrawingRepository : IDrawingComponentRepository
+        {
+            private readonly ProjectModel project;
+
+            public InMemoryDrawingRepository(ProjectModel project)
+            {
+                this.project = project;
+            }
+
+            public List<DrawingComponentModel> Drawings { get; } =
+                new List<DrawingComponentModel>();
+            public List<DrawingComponentModel> Created { get; } =
+                new List<DrawingComponentModel>();
+            public List<DrawingComponentModel> Deleted { get; } =
+                new List<DrawingComponentModel>();
+
+            public ProjectModel GetCurrentProject(string projectName)
+            {
+                return project.ProjectName == projectName ? project : null;
+            }
+
+            public List<DrawingComponentModel> GetDrawingComponents(ProjectModel currentProject)
+            {
+                return Drawings.ToList();
+            }
+
+            public void Create(DrawingComponentModel drawing)
+            {
+                Created.Add(drawing);
+            }
+
+            public void Delete(DrawingComponentModel drawing)
+            {
+                Deleted.Add(drawing);
+            }
         }
     }
 }
