@@ -55,12 +55,12 @@ jobs:
             throw "Line coverage $percentage% is below the required 40% threshold."
           }
       - name: Upload coverage report
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: coverage-report
           path: tests/RealTimeDrawingApplication.Tests/TestResults/**/coverage.cobertura.xml
       - name: Upload Windows package
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: RealTimeDrawingApplication-windows
           path: artifacts/RealTimeDrawingApplication-windows.zip
