@@ -1,0 +1,20 @@
+services:
+  postgres:
+    image: postgres:16
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: drawing
+      POSTGRES_USER: drawing_app
+      POSTGRES_PASSWORD: drawing_dev_password
+    ports:
+      - "5432:5432"
+    volumes:
+      - drawing-postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U drawing_app -d drawing"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  drawing-postgres-data:
