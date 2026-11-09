@@ -1,5 +1,8 @@
 # RealTimeDrawingApplication
 
+> **Project category:** Desktop WPF Application (C#/.NET Framework, EF Core,
+> SQLite/PostgreSQL).
+
 RealTimeDrawingApplication is a desktop collaborative drawing application built
 with WPF, Prism, Entity Framework Core 3.1, and SQLite. Users can create an
 account, sign in, create drawing projects, share projects, and export/import
@@ -271,8 +274,38 @@ For command-line builds on Windows:
 ```powershell
 nuget restore RealTimeDrawingApplication.sln
 msbuild RealTimeDrawingApplication.sln /p:Configuration=Release /p:Platform="Any CPU"
-dotnet test tests\RealTimeDrawingApplication.Tests\RealTimeDrawingApplication.Tests.csproj
+dotnet restore tests\RealTimeDrawingApplication.Tests\RealTimeDrawingApplication.Tests.csproj
+dotnet test tests\RealTimeDrawingApplication.Tests\RealTimeDrawingApplication.Tests.csproj --no-restore
 ```
+
+`nuget restore` is required for the legacy WPF project because it uses
+`packages.config`. The SDK-style test project has a committed
+`packages.lock.json`; use `--locked-mode` in CI or when you need to verify
+reproducible test dependencies. The WPF project cannot use an SDK-style
+NuGet lock file without being migrated from `packages.config`.
+
+### Fresh-clone verification
+
+From a new clone on Windows:
+
+1. Install the .NET Framework 4.7.2 Developer Pack, Visual Studio with the
+   **.NET desktop development** workload, and the .NET 8 SDK.
+2. Ensure `nuget.exe` and Visual Studio `msbuild.exe` are available, or run the
+   commands from a Visual Studio Developer PowerShell.
+3. Run:
+
+   ```powershell
+   nuget restore RealTimeDrawingApplication.sln
+   msbuild RealTimeDrawingApplication.sln /p:Configuration=Release /p:Platform="Any CPU"
+   dotnet restore tests\RealTimeDrawingApplication.Tests\RealTimeDrawingApplication.Tests.csproj --locked-mode
+   dotnet test tests\RealTimeDrawingApplication.Tests\RealTimeDrawingApplication.Tests.csproj --no-restore
+   ```
+
+4. Start `bin\Release\RealTimeDrawingApplication.exe`.
+
+The application creates the default SQLite database under
+`%LOCALAPPDATA%\RealTimeDrawingApplication` during first startup. No external
+database is required for the default local workflow.
 
 ## Authentication workflow
 
@@ -283,7 +316,7 @@ password against the stored hash. Plaintext passwords are never persisted.
 
 ## Testing
 
-The test project currently contains 14 unit tests covering password hashing,
+The test project currently contains 15 unit tests covering password hashing,
 salt uniqueness, malformed input, empty values, successful/failed verification,
 model relationships, and JSON persistence-field exclusions. Coverage is
 collected in Cobertura XML and uploaded as a GitHub Actions artifact.
