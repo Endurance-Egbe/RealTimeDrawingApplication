@@ -102,6 +102,33 @@ namespace RealTimeDrawingApplication.Tests
             Assert.AreEqual(180d, viewModel.Height);
         }
 
+        [DataTestMethod]
+        [DataRow(nameof(PropertyViewModel.X), PropertyType.X)]
+        [DataRow(nameof(PropertyViewModel.Y), PropertyType.Y)]
+        [DataRow(nameof(PropertyViewModel.Width), PropertyType.Width)]
+        [DataRow(nameof(PropertyViewModel.Height), PropertyType.Height)]
+        [DataRow(nameof(PropertyViewModel.Title), PropertyType.Title)]
+        [DataRow(nameof(PropertyViewModel.StrokeThickness), PropertyType.StrokeThickness)]
+        [DataRow(nameof(PropertyViewModel.LineThickness), PropertyType.LineThickness)]
+        [DataRow(nameof(PropertyViewModel.SelectedStrokeColor), PropertyType.Stroke)]
+        [DataRow(nameof(PropertyViewModel.SelectedFillColor), PropertyType.FillColor)]
+        [DataRow(nameof(PropertyViewModel.SelectedBorderColor), PropertyType.BorderColor)]
+        public void PropertyKeyValuePair_ContainsEveryEditableProperty(
+            string propertyName, PropertyType expectedPropertyType)
+        {
+            var viewModel = CreateViewModel();
+
+            Assert.AreEqual(expectedPropertyType, viewModel.PropertyKeyValuePair[propertyName]);
+        }
+
+        [TestMethod]
+        public void GetValue_ReturnsNullForUnknownProperty()
+        {
+            var viewModel = CreateViewModel();
+
+            Assert.IsNull(viewModel.GetValue("UnknownProperty"));
+        }
+
         private static PropertyViewModel CreateViewModel()
         {
             return new PropertyViewModel(new EventAggregator());
