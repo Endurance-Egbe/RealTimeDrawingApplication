@@ -59,7 +59,7 @@ namespace View.ViewModels
             try
             {
                 bool isEmailPasswordValidated;
-                User = AccountService.Authenticate(email, password);
+                User = AccountServiceProvider.Current.Authenticate(email, password);
                 isEmailPasswordValidated = User != null;
 
                 if (isEmailPasswordValidated)

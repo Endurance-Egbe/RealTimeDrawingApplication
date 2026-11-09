@@ -66,7 +66,7 @@ namespace View.ViewModels.DatabaseServices
         {
             var sqlite = new SQLiteEFCore();
             var model = new ShareUserProjectEFCoreRepository(sqlite);
-            AccountModel accountModel = AccountService.GetAccountModel(accountProxyModel);
+            AccountModel accountModel = AccountServiceProvider.Current.GetAccountModel(accountProxyModel);
             var getShareUsers = model.GetShareUsers(accountModel);
             return getShareUsers;
         }
