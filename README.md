@@ -92,6 +92,7 @@ database.
 - Visual Studio 2019/2022 with the **.NET desktop development** workload, or
   MSBuild and NuGet available on `PATH`.
 - .NET 8 SDK for the unit test project.
+- Docker Desktop, if using the optional PostgreSQL development container.
 
 ## Installation and first run
 
@@ -110,6 +111,29 @@ database location or provider:
      providerName="System.Data.SQLite"
      connectionString="Data Source={LocalAppData}\RealTimeDrawingApplication\DrawingShapeApplication.db;foreign keys=true;"/>
 ```
+
+     ### Optional PostgreSQL development container
+
+     The WPF executable runs natively on Windows and is not launched inside Docker.
+     The repository includes [`docker-compose.yml`](./docker-compose.yml) to provide
+     the PostgreSQL backing service for local development:
+
+     ```powershell
+     docker compose up -d postgres
+     $env:REALTIME_DRAWING_POSTGRES_CONNECTION_STRING =
+       "Host=localhost;Port=5432;Database=drawing;Username=drawing_app;Password=drawing_dev_password"
+     ```
+
+     Start the WPF application normally from Visual Studio, then stop the database
+     when finished:
+
+     ```powershell
+     docker compose down
+     ```
+
+     The compose file is intentionally PostgreSQL-only because Docker cannot provide
+     the normal Windows WPF desktop experience. SQLite remains the zero-setup
+     default for users who do not need a shared database.
 
 For a different location, edit only the `connectionString` value. A relative
 `{LocalAppData}` is resolved automatically to the current user's local
@@ -318,17 +342,20 @@ password against the stored hash. Plaintext passwords are never persisted.
 
 ## Testing
 
-The test project currently contains 30 unit tests covering password hashing,
+The test project currently contains 41 unit tests covering password hashing,
 salt uniqueness, malformed input, empty values, successful/failed verification,
 model relationships, and JSON persistence-field exclusions. Coverage is
-collected in Cobertura XML and uploaded as a GitHub Actions artifact.
+collected in Cobertura XML, checked against a 40% minimum line-coverage gate,
+and uploaded as a GitHub Actions artifact. The CI workflow also runs
+`git diff --check` as a lint step.
 
 The WPF application is a legacy .NET Framework executable, so not every line
 can be covered by headless unit tests. Window creation, message boxes, native
 file dialogs, Prism composition, and EF Core/SQLite access require UI or
 integration tests. The current unit suite deliberately covers the
-framework-independent security and model boundaries; database and WPF tests
-should be added after extracting those dependencies behind interfaces.
+framework-independent security, service, mapping, and ViewModel boundaries;
+database and direct WPF-window tests should be added after extracting those
+dependencies behind interfaces.
 
 The current scoped coverage gate requires at least 90% line and branch coverage
 for the isolated `View.*` production code included in the test project. The

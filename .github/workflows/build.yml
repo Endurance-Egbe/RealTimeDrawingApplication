@@ -19,6 +19,9 @@ jobs:
         run: nuget restore RealTimeDrawingApplication.sln
       - name: Restore locked test dependencies
         run: dotnet restore tests/RealTimeDrawingApplication.Tests/RealTimeDrawingApplication.Tests.csproj --locked-mode
+      - name: Lint changed files
+        shell: pwsh
+        run: git diff --check
       - name: Build WPF application
         run: msbuild RealTimeDrawingApplication.sln /p:Configuration=Release /p:Platform="Any CPU"
       - name: Package Windows application
@@ -33,6 +36,24 @@ jobs:
           --no-restore
           --settings tests/RealTimeDrawingApplication.Tests/coverage.runsettings
           --collect:"XPlat Code Coverage"
+      - name: Enforce 40 percent line coverage
+        shell: pwsh
+        run: |
+          $coverageFile = Get-ChildItem `
+            -Path "tests\RealTimeDrawingApplication.Tests\TestResults" `
+            -Filter coverage.cobertura.xml -Recurse |
+            Sort-Object LastWriteTime -Descending |
+            Select-Object -First 1
+          if ($null -eq $coverageFile) {
+            throw "Coverage report was not generated."
+          }
+          [xml]$coverage = Get-Content $coverageFile.FullName
+          $lineRate = [double]$coverage.coverage.'line-rate'
+          $percentage = [math]::Round($lineRate * 100, 2)
+          Write-Host "Measured line coverage: $percentage%"
+          if ($lineRate -lt 0.40) {
+            throw "Line coverage $percentage% is below the required 40% threshold."
+          }
       - name: Upload coverage report
         uses: actions/upload-artifact@v4
         with:
