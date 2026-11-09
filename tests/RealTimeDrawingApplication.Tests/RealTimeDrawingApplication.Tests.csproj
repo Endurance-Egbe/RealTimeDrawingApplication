@@ -1,6 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF>
     <IsPackable>false</IsPackable>
     <IsTestProject>true</IsTestProject>
     <Nullable>enable</Nullable>
@@ -18,6 +19,7 @@
   <ItemGroup>
     <Compile Include="..\..\Security\PasswordHasher.cs" Link="Security\PasswordHasher.cs" />
     <Compile Include="..\..\Infrastructure\ApplicationOperationException.cs" Link="Infrastructure\ApplicationOperationException.cs" />
+    <Compile Include="..\..\Infrastructure\DatabaseServices\DrawingComponentMapper.cs" Link="Infrastructure\DatabaseServices\DrawingComponentMapper.cs" />
     <Compile Include="..\..\Models\AccountModel.cs" Link="Models\AccountModel.cs" />
     <Compile Include="..\..\Models\ProjectModel.cs" Link="Models\ProjectModel.cs" />
     <Compile Include="..\..\Models\ShareUserProject.cs" Link="Models\ShareUserProject.cs" />
@@ -25,6 +27,9 @@
     <Compile Include="..\..\ProxyModel\AccountProxyModel.cs" Link="ProxyModel\AccountProxyModel.cs" />
     <Compile Include="..\..\ProxyModel\ProjectProxyModel.cs" Link="ProxyModel\ProjectProxyModel.cs" />
     <Compile Include="..\..\ProxyModel\ShareUserProjectProxyModel.cs" Link="ProxyModel\ShareUserProjectProxyModel.cs" />
+    <Compile Include="..\..\ProxyModel\DrawingComponentProxyModel.cs" Link="ProxyModel\DrawingComponentProxyModel.cs" />
+    <Compile Include="..\..\Helper\Common\CustomColor\CustomColor.cs" Link="Helper\Common\CustomColor\CustomColor.cs" />
+    <Compile Include="..\..\Helper\Common\CustomColor\ColorCollectionsClass.cs" Link="Helper\Common\CustomColor\ColorCollectionsClass.cs" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />

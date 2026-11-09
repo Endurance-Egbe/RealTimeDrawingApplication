@@ -255,6 +255,7 @@
     <Compile Include="Infrastructure\SQLiteEFCore.cs" />
     <Compile Include="Infrastructure\UserDbContext.cs" />
     <Compile Include="Infrastructure\DatabaseInitializer.cs" />
+    <Compile Include="Infrastructure\DatabaseServices\DrawingComponentMapper.cs" />
     <Compile Include="Infrastructure\ApplicationOperationException.cs" />
     <Compile Include="Security\PasswordHasher.cs" />
     <Compile Include="Models\AccountModel.cs" />
