@@ -62,6 +62,16 @@ safe to run for a new database because it uses `IF NOT EXISTS`. The application
 also calls `EnsureCreated()` during startup, so a newly created PostgreSQL
 database is provisioned automatically when the connection is reachable.
 
+For local PostgreSQL development, run the repository's compose service:
+
+```powershell
+docker compose up -d postgres
+$env:REALTIME_DRAWING_POSTGRES_CONNECTION_STRING = "Host=localhost;Port=5432;Database=drawing;Username=drawing_app;Password=drawing_dev_password"
+```
+
+The WPF desktop application itself runs on Windows outside Docker. The compose
+file provides PostgreSQL only.
+
 `{LocalAppData}` is resolved by the application to the current user's local
 application-data folder. This is the recommended client-installation default:
 the application can write there even when installed under `Program Files`.
