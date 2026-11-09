@@ -316,7 +316,7 @@ password against the stored hash. Plaintext passwords are never persisted.
 
 ## Testing
 
-The test project currently contains 15 unit tests covering password hashing,
+The test project currently contains 17 unit tests covering password hashing,
 salt uniqueness, malformed input, empty values, successful/failed verification,
 model relationships, and JSON persistence-field exclusions. Coverage is
 collected in Cobertura XML and uploaded as a GitHub Actions artifact.
